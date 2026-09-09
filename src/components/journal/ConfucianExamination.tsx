@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { FieldLabel } from '@/components/ui/Input';
 
 interface ConfucianExaminationProps {
   data: {
@@ -94,6 +95,11 @@ export const ConfucianExamination: React.FC<ConfucianExaminationProps> = ({ data
                 </div>
               </div>
 
+              <FieldLabel
+                label="Reflection"
+                hint="What did you do well? Where can you improve?"
+                hasValue={((data[notesKey] as string) || '').trim().length > 0}
+              />
               <textarea
                 value={(data[notesKey] as string) || ''}
                 onChange={(e) => updateField(notesKey, e.target.value || undefined)}

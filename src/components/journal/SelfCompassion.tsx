@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { FieldLabel } from '@/components/ui/Input';
 
 interface SelfCompassionProps {
   data: {
@@ -76,9 +77,11 @@ export const SelfCompassion: React.FC<SelfCompassionProps> = ({ data, onChange }
 
         {fields.map((field) => (
           <div key={field.key}>
-            <label className="block text-sm font-medium text-card-foreground mb-2">
-              {field.label}
-            </label>
+            <FieldLabel
+              label={field.label}
+              hint={field.placeholder}
+              hasValue={data[field.key].trim().length > 0}
+            />
             <p className="text-xs text-muted-foreground mb-2">{field.description}</p>
             <textarea
               value={data[field.key]}

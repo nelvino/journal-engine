@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { FieldLabel } from '@/components/ui/Input';
 
 interface GratitudeEntryProps {
   data: {
@@ -105,9 +106,11 @@ export const GratitudeEntry: React.FC<GratitudeEntryProps> = ({ data, onChange }
         </button>
 
         <div>
-          <label className="block text-sm font-medium text-card-foreground mb-2">
-            Gratitude Letter Recipient (optional)
-          </label>
+          <FieldLabel
+            label="Gratitude Letter Recipient (optional)"
+            hint="Someone you want to express gratitude toward"
+            hasValue={(data.recipient || '').trim().length > 0}
+          />
           <input
             type="text"
             value={data.recipient || ''}

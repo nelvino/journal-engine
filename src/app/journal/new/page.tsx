@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { InputHint } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { useLanguage } from '@/context/LanguageContext';
 import { frameworks } from '@/data/frameworks';
@@ -82,6 +83,27 @@ const defaultMood = {
 };
 
 const topEntryTypeValues: EntryType[] = ['expressive', 'future_self', 'cbt', 'gratitude'];
+
+function getContentPlaceholder(entryType: EntryType): string {
+  switch (entryType) {
+    case 'future_self':
+      return 'Use this space to write a free-form reflection or summary based on the prompts above. This is what gets saved as your main journal entry.';
+    case 'cbt':
+      return 'Summarize the situation and what you learned from the thought record. This is what gets saved as your main journal entry.';
+    case 'gratitude':
+      return 'Write a free-form gratitude reflection, or summarize the items above. This is what gets saved as your main journal entry.';
+    case 'self_compassion':
+      return 'Write a free-form reflection on the difficulty and your kind response. This is what gets saved as your main journal entry.';
+    case 'stoic_morning':
+    case 'stoic_evening':
+      return 'Write a free-form reflection on your Stoic practice. This is what gets saved as your main journal entry.';
+    case 'confucian':
+      return 'Write a free-form reflection on your Confucian self-examination. This is what gets saved as your main journal entry.';
+    case 'expressive':
+    default:
+      return 'Start writing your thoughts here...';
+  }
+}
 
 function NewEntryPageContent() {
   const { t } = useLanguage();
@@ -179,8 +201,7 @@ function NewEntryPageContent() {
         updatedAt: new Date(),
       };
 
-      const existingEntries = await storage.get<JournalEntry[]>('journal_entries') || [];
-      await storage.set('journal_entries', [entry, ...existingEntries]);
+      await storage.addToArray<JournalEntry>('journal_entries', entry);
 
       resetForm();
       window.location.href = '/journal';
@@ -373,7 +394,10 @@ function NewEntryPageContent() {
       <Card variant="elevated">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Your Entry</CardTitle>
+            <CardTitle className="flex items-center">
+              Your Entry
+              <InputHint hint={getContentPlaceholder(entryType)} visible={content.trim().length > 0} />
+            </CardTitle>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="h-4 w-4" />
               <span>{wordCount} words</span>
@@ -384,7 +408,7 @@ function NewEntryPageContent() {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Start writing your thoughts here..."
+            placeholder={getContentPlaceholder(entryType)}
             className="w-full min-h-[300px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 resize-none"
           />
         </CardContent>

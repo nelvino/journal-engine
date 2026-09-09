@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { FieldLabel } from '@/components/ui/Input';
 
 interface FutureSelfVisionProps {
   data: {
@@ -93,9 +94,11 @@ export const FutureSelfVision: React.FC<FutureSelfVisionProps> = ({ data, onChan
 
         {fields.map((field) => (
           <div key={field.key}>
-            <label className="block text-sm font-medium text-card-foreground mb-2">
-              {field.label}
-            </label>
+            <FieldLabel
+              label={field.label}
+              hint={field.placeholder}
+              hasValue={data[field.key].trim().length > 0}
+            />
             <textarea
               value={data[field.key]}
               onChange={(e) => updateField(field.key, e.target.value)}

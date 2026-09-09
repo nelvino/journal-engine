@@ -1,7 +1,49 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Modal } from './Modal';
+
+interface InputHintProps {
+  hint: string;
+  visible: boolean;
+}
+
+const InputHint: React.FC<InputHintProps> = ({ hint, visible }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  if (!visible || !hint) return null;
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="ml-2 text-muted-foreground hover:text-primary transition-colors"
+        aria-label="Show hint"
+      >
+        <Info className="h-4 w-4" />
+      </button>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Hint" className="max-w-sm">
+        <p className="text-sm text-muted-foreground">{hint}</p>
+      </Modal>
+    </>
+  );
+};
+
+interface FieldLabelProps {
+  label: string;
+  hint?: string;
+  hasValue: boolean;
+}
+
+export const FieldLabel: React.FC<FieldLabelProps> = ({ label, hint, hasValue }) => (
+  <label className="block text-sm font-medium text-card-foreground mb-2">
+    <span className="flex items-center">
+      {label}
+      {hint && <InputHint hint={hint} visible={hasValue} />}
+    </span>
+  </label>
+);
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -14,13 +56,20 @@ export const Input: React.FC<InputProps> = ({
   error,
   icon,
   className = '',
+  placeholder,
   ...props
 }) => {
+  const value = typeof props.value === 'string' ? props.value : '';
+  const hasValue = value.trim().length > 0;
+
   return (
     <div className="w-full">
       {label && (
         <label className="block text-sm font-medium text-card-foreground mb-2">
-          {label}
+          <span className="flex items-center">
+            {label}
+            <InputHint hint={placeholder || ''} visible={hasValue} />
+          </span>
         </label>
       )}
       <div className="relative">
@@ -39,6 +88,7 @@ export const Input: React.FC<InputProps> = ({
             'disabled:opacity-50 disabled:cursor-not-allowed',
             className
           )}
+          placeholder={placeholder}
           {...props}
         />
       </div>
@@ -48,3 +98,5 @@ export const Input: React.FC<InputProps> = ({
     </div>
   );
 };
+
+export { InputHint };

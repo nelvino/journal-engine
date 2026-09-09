@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
+import { Input, FieldLabel } from '@/components/ui/Input';
 
 interface CBTThoughtRecordProps {
   data: {
@@ -46,7 +46,11 @@ export const CBTThoughtRecord: React.FC<CBTThoughtRecordProps> = ({ data, onChan
     placeholder: string
   ) => (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-card-foreground">{label}</label>
+      <FieldLabel
+        label={label}
+        hint={placeholder}
+        hasValue={items.some((item) => item.trim().length > 0)}
+      />
       {items.map((item, index) => (
         <div key={index} className="flex gap-2">
           <input
@@ -86,9 +90,11 @@ export const CBTThoughtRecord: React.FC<CBTThoughtRecordProps> = ({ data, onChan
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-card-foreground mb-2">
-            Situation
-          </label>
+          <FieldLabel
+            label="Situation"
+            hint="Describe what happened, where you were, and who was involved..."
+            hasValue={data.situation.trim().length > 0}
+          />
           <textarea
             value={data.situation}
             onChange={(e) => updateField('situation', e.target.value)}
@@ -159,9 +165,11 @@ export const CBTThoughtRecord: React.FC<CBTThoughtRecordProps> = ({ data, onChan
         )}
 
         <div>
-          <label className="block text-sm font-medium text-card-foreground mb-2">
-            Balanced Perspective
-          </label>
+          <FieldLabel
+            label="Balanced Perspective"
+            hint="Given the evidence for and against, what is a more balanced way to view this situation?"
+            hasValue={data.balancedPerspective.trim().length > 0}
+          />
           <textarea
             value={data.balancedPerspective}
             onChange={(e) => updateField('balancedPerspective', e.target.value)}

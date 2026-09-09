@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { FieldLabel } from '@/components/ui/Input';
 
 interface ExpressiveWritingProps {
   data: {
@@ -44,9 +45,11 @@ export const ExpressiveWriting: React.FC<ExpressiveWritingProps> = ({ data, onCh
         </p>
 
         <div>
-          <label className="block text-sm font-medium text-card-foreground mb-2">
-            Topic or Focus
-          </label>
+          <FieldLabel
+            label="Topic or Focus"
+            hint="e.g., A recent challenge, a memory, a fear..."
+            hasValue={data.topic.trim().length > 0}
+          />
           <input
             type="text"
             value={data.topic}

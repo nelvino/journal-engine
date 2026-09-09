@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { FieldLabel } from '@/components/ui/Input';
 
 interface StoicPracticeProps {
   data: {
@@ -30,7 +31,11 @@ export const StoicPractice: React.FC<StoicPracticeProps> = ({ data, onChange }) 
     placeholder: string
   ) => (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-card-foreground">{label}</label>
+      <FieldLabel
+        label={label}
+        hint={placeholder}
+        hasValue={items.some((item) => item.trim().length > 0)}
+      />
       {items.map((item, index) => (
         <div key={index} className="flex gap-2">
           <input
@@ -137,9 +142,11 @@ export const StoicPractice: React.FC<StoicPracticeProps> = ({ data, onChange }) 
             )}
 
             <div>
-              <label className="block text-sm font-medium text-card-foreground mb-2">
-                Lessons for Tomorrow
-              </label>
+              <FieldLabel
+                label="Lessons for Tomorrow"
+                hint="What will you do differently tomorrow?"
+                hasValue={(data.lessons || '').trim().length > 0}
+              />
               <textarea
                 value={data.lessons || ''}
                 onChange={(e) => updateField('lessons', e.target.value || undefined)}
