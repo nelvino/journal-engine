@@ -5,12 +5,13 @@
 ### Core Infrastructure
 - ✅ Next.js 16 with App Router and TypeScript
 - ✅ Tailwind CSS 4 with custom design system
-- ✅ Storage abstraction layer (localStorage, with Firebase migration path)
-- ✅ Firebase configuration (ready for credentials)
+- ✅ Storage abstraction layer (localStorage and Firestore adapters)
+- ✅ Firebase Auth with Google sign-in
+- ✅ Firestore persistence adapter with lazy Firebase initialization
 - ✅ Complete TypeScript types based on database schema
 - ✅ Theme system (light/dark/system) - WORKING
 - ✅ Internationalization (English/Spanish) - WORKING
-- ✅ Modern UI components (Button, Input, Card, Toggle, Select, ProgressBar, Typography)
+- ✅ Modern UI components (Button, Input, Card, Toggle, Select, ProgressBar, Typography, Modal)
 - ✅ Testing infrastructure (Jest, React Testing Library)
 
 ### Design System
@@ -90,18 +91,24 @@
 - ✅ Mood Chart tests
 - ✅ Framework Usage tests
 - ✅ Achievements tests
+- ✅ AuthContext tests
+- ✅ OnboardingContext tests
+- ✅ GuidanceContext tests
+- ✅ Modal tests
 
 ---
 
 ## ⏳ Still Missing (Future Phases)
 
 ### Firebase Integration
-- ❌ Firebase authentication (Google Auth)
-- ❌ Firestore data persistence
-- ❌ Offline support implementation
-- ❌ Data synchronization
-- ❌ Conflict resolution
-- ❌ Security rules implementation
+- ✅ Firebase project configuration abstraction
+- ✅ Google Authentication (sign-in / sign-out)
+- ✅ Firestore data persistence adapter
+- ✅ Lazy Firebase initialization (safe for static builds)
+- ✅ Netlify deployment config
+- ⏳ Firestore security rules must be configured in console
+- ⏳ Offline conflict resolution beyond Firestore local cache
+- ⏳ Data migration utilities
 
 ### Onboarding & Guidance
 - ✅ First-time user onboarding flow
@@ -120,29 +127,36 @@
 - ❌ Advanced adaptive prompt selection engine
 
 ### Advanced Features
-- ❌ Quote library integration with evidence-based attribution
-- ❌ Export functionality (JSON/CSV)
-- ❌ Data migration utilities
-- ❌ Onboarding flow
-- ❌ PWA support
-- ❌ Push notifications for reminders
-- ❌ Advanced analytics and insights
-- ❌ Voice/audio journaling
-- ❌ Photo/media journaling
+- ✅ First-time user onboarding flow
+- ✅ Daily prompt / adaptive guidance engine
+- ✅ Framework info modals with evidence references
+- ✅ User profile section in settings
+- ⏳ Quote library integration with evidence-based attribution
+- ⏳ Export functionality (JSON/CSV)
+- ⏳ Data migration utilities
+- ⏳ PWA support
+- ⏳ Push notifications for reminders
+- ⏳ Advanced analytics and insights
+- ⏳ Voice/audio journaling
+- ⏳ Photo/media journaling
 
 ### User Experience Enhancements
-- ❌ Better mobile navigation gestures
-- ❌ Empty states with guided next steps
-- ❌ Accessibility audit (screen reader, keyboard navigation)
-- ❌ Performance optimization
-- ❌ E2E tests
-- ❌ Comprehensive error boundaries
+- ✅ Quick Start journey cards on journal page
+- ✅ Entry type selector with search and descriptions
+- ✅ Empty states with guided next steps
+- ✅ Three-step journal entry wizard
+- ✅ Framework info modals
+- ⏳ Better mobile navigation gestures
+- ⏳ Accessibility audit (screen reader, keyboard navigation)
+- ⏳ Performance optimization
+- ⏳ E2E tests
+- ⏳ Comprehensive error boundaries
 
 ---
 
 ## 📊 Implementation Progress
 
-**Overall Progress: ~80%**
+**Overall Progress: ~90%**
 
 | Area | Status | Progress |
 |------|--------|----------|
@@ -153,10 +167,10 @@
 | Framework-Specific Forms | ✅ Complete | 100% |
 | Goal System | ✅ Complete | 100% |
 | Progress System | ✅ Complete | 90% (needs advanced analytics) |
-| Onboarding & Guidance | ✅ Complete | 80% (basic engine in place) |
-| Advanced Features | ❌ Not Started | 0% |
-| Firebase Integration | ✅ Foundation complete, needs env vars | 60% |
-| Testing | ✅ Good Coverage | 80% |
+| Onboarding & Guidance | ✅ Complete | 85% (basic engine in place) |
+| Advanced Features | ✅ In progress | 40% |
+| Firebase Integration | ✅ Foundation complete, needs env vars | 80% |
+| Testing | ✅ Good Coverage | 85% |
 
 ---
 
@@ -170,26 +184,25 @@
 - Set SMART goals with milestones
 - View progress, streaks, framework usage, and achievements
 - Switch themes and languages
+- Test with Firebase Auth and Firestore by setting `NEXT_PUBLIC_USE_FIREBASE=true`
 
 ### Is it ready for production deployment?
 
-**No, not yet.**
+**Mostly, with caveats.**
 
-The remaining blockers for production use are:
-1. **Firebase Auth / Firestore foundation implemented**: needs environment variables and Firebase project setup
-2. **No data export**: users cannot back up or migrate their data
-3. **No security rules deployed**: Firestore rules must be configured in the Firebase console
-4. **No offline sync strategy**: Firestore local cache is enabled but conflict resolution is basic
-5. **No accessibility audit**: may not meet WCAG standards
-6. **No E2E tests**: manual testing only so far
+The Firebase foundation is implemented and the app is deployed to Netlify. Remaining blockers for full production use:
+1. **No data export**: users cannot back up or migrate their data
+2. **No security rules deployed**: Firestore rules must be configured in the Firebase console
+3. **No offline sync strategy**: Firestore local cache is enabled but conflict resolution is basic
+4. **No accessibility audit**: may not meet WCAG standards
+5. **No E2E tests**: manual testing only so far
 
 ### Recommended Next Steps
 
-1. **Add Firebase authentication and Firestore persistence**
+1. **Verify Firestore security rules are published in Firebase console**
 2. **Implement data export (JSON/CSV) before real use**
-3. **Add onboarding flow for first-time users**
-4. **Implement the adaptive guidance system**
-5. **Conduct accessibility review**
-6. **Deploy to Vercel for beta testing**
+3. **Conduct accessibility review**
+4. **Add E2E tests**
+5. **Add push notifications for reminders**
 
-The app is ready for **local beta testing and Vercel preview deployment** with a clear "beta" label and export warnings.
+The app is ready for **Netlify preview deployment** with a clear "beta" label and export warnings.

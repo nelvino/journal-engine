@@ -1,44 +1,55 @@
 # Journal Engine
 ## Evidence-Based Personal Development Platform
 
-A comprehensive, research-backed journaling application that combines modern scientific research with ancient wisdom traditions to create an adaptive personal development system.
+A private, evidence-based journaling application that combines modern scientific research with timeless wisdom traditions to create an adaptive personal development system.
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Local)
 
 ```bash
-# Install dependencies (already done)
+# Install dependencies
 npm install
 
 # Start development server
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at `http://localhost:3000`.
+
+By default it uses `localStorage`. To test with Firebase, copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_USE_FIREBASE=true` with your Firebase config.
 
 ## 🎯 Features
 
-- **Multiple Journaling Frameworks**: Expressive writing, CBT, gratitude, Stoic, Confucian, self-compassion
-- **Evidence-Based Prompts**: All prompts backed by research or traditional wisdom
-- **Progressive Evolution**: System adapts to your pace and readiness
-- **Goal Tracking**: SMART goals with progress monitoring
-- **Progress Analytics**: Visualizations of growth and patterns
-- **Offline Support**: Journal anywhere, sync when connected
+- **Multiple Journaling Frameworks**: Expressive writing, CBT, gratitude, Stoic, Confucian, self-compassion, Future Self Vision
+- **Quick Start Journeys**: Morning Check-In, Process Something Difficult, Build Your Future Self, Evening Review
+- **Three-Step Entry Wizard**: Select type, review description, write with guided prompts
+- **Evidence-Based Prompts**: All prompts backed by research or traditional wisdom, with info modals for frameworks
+- **Adaptive Guidance**: Daily prompt recommendations based on time of day, mood, and active goals
+- **Goal Tracking**: SMART goals with milestones and progress monitoring
+- **Progress Analytics**: Mood trends, framework usage, streaks, and achievements
+- **Onboarding**: First-time user flow with replay from Settings
+- **User Profile**: View Google account details and UID in Settings
+- **Cloud Sync**: Firebase Auth + Firestore persistence via environment variables
 
 ## 🏗️ Tech Stack
 
 - **Framework**: Next.js 16 with App Router
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Backend**: Firebase (ready for integration)
-- **Storage**: Session storage (MVP) → Firebase (production)
+- **Styling**: Tailwind CSS v4
+- **Auth**: Firebase Authentication (Google sign-in)
+- **Storage**: localStorage (dev default) or Firestore (production)
+- **Testing**: Jest + React Testing Library
+- **Deployment**: Netlify (configured via `netlify.toml`)
 
 ## 📚 Documentation
 
-- [Evidence-Based Framework](./EVIDENCE_BASED_JOURNALING_FRAMEWORK.md) - Complete research database
-- [Database Schema](./DATABASE_SCHEMA.md) - Firebase schema design
+- [Feature Status](./FEATURE_STATUS.md) - What is implemented and what is next
+- [Implementation Plan](../IMPLEMENTATION_PLAN.md) - Complete roadmap and evidence references
+- [Firebase Setup](./FIREBASE_SETUP.md) - Step-by-step Firebase configuration
+- [Deployment](./DEPLOYMENT.md) - How to push to GitHub and deploy to Netlify
+- [Evidence-Based Framework](./EVIDENCE_BASED_JOURNALING_FRAMEWORK.md) - Research database
+- [Database Schema](./DATABASE_SCHEMA.md) - Data model design
 - [Technical Architecture](./TECHNICAL_ARCHITECTURE.md) - Architecture details
 - [Progressive Evolution](./PROGRESSIVE_EVOLUTION_SYSTEM.md) - Adaptive learning system
-- [Implementation Plan](./IMPLEMENTATION_PLAN.md) - Complete roadmap
 
 ## 🔒 Principles
 
@@ -50,23 +61,23 @@ The application will be available at `http://localhost:3000`
 
 ## 📖 Current Status
 
-✅ Next.js 16 initialized with TypeScript and Tailwind
-✅ Core UI components created (Button, Input, Card)
-✅ Storage abstraction layer implemented
-✅ Firebase configuration ready
+✅ Next.js 16 with TypeScript and Tailwind CSS v4
+✅ Core UI components (Button, Input, Card, Toggle, Select, Modal, ProgressBar, Typography)
+✅ Storage abstraction layer with localStorage and Firestore adapters
+✅ Firebase Auth and Firestore integration (env-driven)
 ✅ Complete TypeScript types based on database schema
 ✅ Framework and prompt data structures
-✅ Basic pages (Home, Journal, Goals, Progress, Settings)
-✅ Research documentation complete
+✅ All pages (Home, Journal, Journal/New, Goals, Progress, Settings)
+✅ Research and setup documentation complete
+✅ Jest tests passing
 
 ## 🎯 Next Steps
 
-1. Implement journal entry creation and editing
-2. Add framework-specific structured data collection
-3. Implement mood tracking
-4. Create goal setting and tracking
-5. Add progress visualization
-6. Integrate Firebase for production
+1. Add data export (JSON/CSV)
+2. Publish Firestore security rules in Firebase console
+3. Conduct accessibility audit
+4. Add E2E tests
+5. Add push notifications for reminders
 
 ## 🙏 Acknowledgments
 

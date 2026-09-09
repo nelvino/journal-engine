@@ -37,67 +37,81 @@
 - Beautiful but functional UI with solid contrast
 
 #### ✅ Pages
-- Home with hero and feature cards
-- Journal with recent entries list
-- `/journal/new` entry creation form
-- Goals placeholder
-- Progress with stats cards
-- Settings with theme, language, reminders
+- Home with hero, daily prompt, and feature cards
+- Journal with Quick Start journeys, daily prompt, and recent entries
+- `/journal/new` three-step entry creation wizard
+- Goals page with SMART goal creation, tracking, and milestones
+- Progress with stats, mood charts, framework usage, and achievements
+- Settings with theme, language, reminders, profile, and data management
 
 #### ✅ Core Journaling
-- Journal entry creation with 12 entry types
-- Framework selection
-- Text area with word count
+- Journal entry creation with 12+ entry types
+- Framework selection with info modals
+- Text area with real-time word count
 - Mood selector (overall, energy, stress, focus, 1-10)
 - Session duration tracking
-- Local storage persistence
+- localStorage and Firestore persistence
 - Entry deletion
+- Quick Start journey cards
+- Entry type search and descriptions
 
 #### ✅ Framework-Specific Forms
 - CBT Thought Record (situation, automatic thoughts, emotions, evidence for/against, balanced perspective, final rating)
 - Gratitude Entry (items with type and detail, optional recipient)
 - Stoic Practice (morning preparation / evening review toggle)
+- Confucian Self-Examination
+- Self-Compassion writing
+- Expressive Writing with emotional depth tracking
+- Future Self Vision (3, 6, 12 month planning)
 
 #### ✅ Progress Tracking
 - `ProgressContext` calculates current streak, longest streak, total entries, total words, total minutes
 - Progress page displays current streak and total entries
 - Weekly statistics
-- Mood trend data collection
+- Mood trend charts
+- Framework usage breakdown
+- Achievement system (gentle, non-shaming)
 
 #### ✅ Documentation
 - This implementation plan
 - `docs/FEATURE_STATUS.md`
 - `docs/README.md`
+- `docs/FIREBASE_SETUP.md`
+- `docs/DEPLOYMENT.md`
 - Source code organized with clear separation (components, data, lib, context, types)
 
 ---
 
 ## What's Missing / Next Steps
 
-### 🎯 Immediate Priority (Next 3 Features)
+### ✅ Recently Completed
 
-1. **Goal System**
-   - Goal creation form with SMART elements
-   - Goal categories and timeframes
-   - Progress tracking (current/target, percentage)
-   - Milestone creation and completion
-   - Habit tracking for recurring goals
-   - Goal status management (active, paused, completed, cancelled)
+1. **Goal System** (complete)
+2. **Framework Forms** (CBT, gratitude, stoic, confucian, self-compassion, expressive, future self vision)
+3. **Enhanced Progress** (mood charts, framework usage, achievements)
+4. **Firebase Auth + Firestore** (code complete, needs console setup)
+5. **Adaptive Guidance** (daily prompts, recommendation engine)
+6. **Onboarding + UX Polish** (wizard, quick start, framework info modals, user profile)
 
-2. **More Framework Forms**
-   - Confucian self-examination (three daily questions)
-   - Self-compassion writing ( Kristin Neff's three components )
-   - Expressive writing with emotional depth tracking (Pennebaker-style)
+### 🎯 Next Priorities
 
-3. **Enhanced Progress**
-   - Mood charts / trends over time
-   - Framework usage breakdown
-   - Achievement system (with careful design to avoid harmful pressure)
-   - Better statistics display
+1. **Data Export**
+   - JSON/CSV export of journal entries, goals, and progress
+   - Import from backup
+
+2. **Accessibility & Quality**
+   - Screen reader and keyboard navigation audit
+   - E2E tests
+   - Error boundaries and recovery
+
+3. **Reminders & Engagement**
+   - Push notifications for daily reminders
+   - Follow-up prompts after entries
+   - Email or browser notifications
 
 ### 🔥 Critical for Real Use
 
-4. **Data Persistence & Sync** (Foundation Complete)
+4. **Data Persistence & Sync**
    - ✅ Firebase project config abstraction
    - ✅ Google authentication integration
    - ✅ Firestore storage adapter
@@ -106,19 +120,12 @@
    - ⏳ Data export/import UI
    - ⏳ Robust offline support and conflict resolution
 
-5. **Adaptive Guidance System** (Basic Version Complete)
-   - ✅ Prompt selection engine based on mood, time, and history
-   - ✅ Daily recommendation engine
-   - ✅ Goal-aware framework recommendations
-   - ✅ Dismissible recommendations
+5. **Adaptive Guidance System (Advanced)**
    - ⏳ Progressive difficulty tiers
    - ⏳ Follow-up reminders and gentle nudges
    - ⏳ Advanced framework recommendations
 
 6. **User Experience Polish**
-   - ✅ Onboarding flow
-   - ✅ Empty states and guidance
-   - ✅ Framework info modals
    - ⏳ Better mobile navigation
    - ⏳ PWA support
    - ⏳ Accessibility improvements
@@ -126,16 +133,16 @@
 ### 🚀 Production Readiness
 
 7. **Testing & Quality**
-   - More component tests
-   - E2E tests
-   - Performance optimization
-   - Error boundaries and recovery
+   - ✅ Component tests for core contexts and UI
+   - ⏳ E2E tests
+   - ⏳ Performance optimization
+   - ⏳ Error boundaries and recovery
 
 8. **Deployment**
-   - Vercel deployment configuration
-   - Environment variable setup for production
-   - Firebase project configuration
-   - Domain and SSL
+   - ✅ Netlify deployment configuration
+   - ✅ Environment variable documentation
+   - ✅ Firebase setup guide
+   - ⏳ Custom domain and SSL
 
 ---
 
@@ -159,7 +166,7 @@
 - **Basic guidance system in place**: Daily prompts adapt to time of day, mood, and active goals.
 - **No incremental difficulty tiers yet**: The app does not yet unlock advanced frameworks based on streak or experience level.
 - **Evidence surfaced in forms**: Research references are now shown inside framework-specific forms and framework info modals.
-- **Local only**: All data is in localStorage. It will be lost if the user clears the browser or switches devices.
+- **Firestore needs manual setup**: Firebase code is ready, but security rules must be published in the Firebase console and environment variables must be set on the host.
 
 ### Progressive Evolution (Planned)
 
@@ -181,25 +188,25 @@ This system is documented in the original `PROGRESSIVE_EVOLUTION_SYSTEM.md` (cur
 
 **Yes, with caveats.**
 
-The app is functional enough for a personal local test deployment:
+The app is functional for local and Netlify test deployment:
 - ✅ You can create journal entries
 - ✅ You can track mood
 - ✅ You can view progress statistics
 - ✅ You can switch themes and languages
+- ✅ You can sign in with Google and sync to Firestore
 - ✅ It builds and runs successfully
 
-**But it is not ready for production use because:**
-- ⚠️ Data is only in localStorage — it can be lost
-- ⚠️ No user authentication
-- ⚠️ No cloud backup
-- ⚠️ No data export yet
-- ✅ Goals, progress charts, achievements implemented
-- ✅ Basic adaptive guidance system implemented
-- ⏳ No strict follow-up reminders or push notifications yet
+**For full production use, still recommended:**
+- ⚠️ Data export feature is not implemented
+- ⚠️ Firestore security rules must be published manually
+- ⚠️ No accessibility audit yet
+- ⚠️ No E2E tests yet
+- ⏳ No push notifications yet
 
 **For a safe test deployment:**
-- Deploy to Vercel
-- Use localStorage
+- Deploy to Netlify using the included `netlify.toml`
+- Set Firebase environment variables in Netlify
+- Add your Netlify domain to Firebase authorized domains
 - Add a clear "beta / test version" notice
 - Add data export feature before real use
 
