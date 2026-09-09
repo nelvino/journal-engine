@@ -17,6 +17,23 @@ function sortJournalEntries<T>(key: string, value: T): T {
   }) as T;
 }
 
+function cleanUndefined<T>(value: T): T {
+  if (value instanceof Date) return value;
+  if (Array.isArray(value)) {
+    return value.map(cleanUndefined) as T;
+  }
+  if (value && typeof value === 'object') {
+    const result: Record<string, unknown> = {};
+    for (const [key, val] of Object.entries(value)) {
+      if (val !== undefined) {
+        result[key] = cleanUndefined(val);
+      }
+    }
+    return result as T;
+  }
+  return value;
+}
+
 export class SessionStorageAdapter implements StorageAdapter {
   async get<T>(key: string): Promise<T | null> {
     if (typeof window === 'undefined') return null;
@@ -113,7 +130,7 @@ export class FirestoreStorageAdapter implements StorageAdapter {
   async set<T>(key: string, value: T): Promise<void> {
     if (typeof window === 'undefined') return;
     const { db, doc, setDoc } = await this.getFirestore();
-    await setDoc(doc(db, this.docRef(key)), { value, updatedAt: new Date() });
+    await setDoc(doc(db, this.docRef(key)), { value: cleanUndefined(value), updatedAt: new Date() });
   }
 
   async addToArray<T>(key: string, value: T): Promise<void> {
@@ -121,7 +138,7 @@ export class FirestoreStorageAdapter implements StorageAdapter {
     const { db, doc, setDoc, arrayUnion } = await this.getFirestore();
     await setDoc(
       doc(db, this.docRef(key)),
-      { value: arrayUnion(value), updatedAt: new Date() },
+      { value: arrayUnion(cleanUndefined(value)), updatedAt: new Date() },
       { merge: true }
     );
   }
