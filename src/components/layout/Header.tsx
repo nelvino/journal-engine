@@ -112,7 +112,16 @@ export const Header: React.FC = () => {
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-secondary-700 hover:bg-secondary-100 transition-colors"
               title={user.email || 'Sign out'}
             >
-              <User className="h-4 w-4" />
+              {user.photoURL ? (
+                <img
+                  src={user.photoURL}
+                  alt=""
+                  className="h-6 w-6 rounded-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <User className="h-4 w-4" />
+              )}
               <span className="hidden sm:inline max-w-[120px] truncate">{user.displayName || user.email}</span>
               <LogOut className="h-4 w-4" />
             </button>

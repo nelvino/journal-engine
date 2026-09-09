@@ -1,21 +1,49 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Toggle } from '@/components/ui/Toggle';
+import { Modal } from '@/components/ui/Modal';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useOnboarding } from '@/context/OnboardingContext';
-import { Palette, Clock, Bell, Download, Trash2, Globe, HelpCircle } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { useStorage } from '@/lib/useStorage';
+import { Palette, Clock, Bell, Download, Trash2, Globe, HelpCircle, User, Mail, Shield } from 'lucide-react';
+
+const USER_DATA_KEYS = [
+  'journal_entries',
+  'goals',
+  'user_progress',
+  'onboarding_completed',
+  'recommendation_dismissed_date',
+];
 
 export default function SettingsPage() {
   const { t, language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
   const { restartOnboarding } = useOnboarding();
+  const { user } = useAuth();
+  const storage = useStorage();
+  const [showClearModal, setShowClearModal] = useState(false);
+  const [clearing, setClearing] = useState(false);
+  const [cleared, setCleared] = useState(false);
+
+  const handleClearData = async () => {
+    setClearing(true);
+    try {
+      await Promise.all(USER_DATA_KEYS.map((key) => storage.delete(key)));
+      setCleared(true);
+    } catch (error) {
+      console.error('Error clearing data:', error);
+    } finally {
+      setClearing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary-50 to-accent-50">
@@ -31,6 +59,50 @@ export default function SettingsPage() {
               Customize your journaling experience
             </p>
           </div>
+
+          {/* Profile Card */}
+          {user && (
+            <Card variant="elevated">
+              <CardHeader>
+                <CardTitle>Profile</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-4">
+                  {user.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt=""
+                      className="h-16 w-16 rounded-full object-cover border-2 border-primary"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="h-16 w-16 rounded-full bg-primary-100 flex items-center justify-center">
+                      <User className="h-8 w-8 text-primary-700" />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-foreground truncate">{user.displayName || 'Anonymous'}</p>
+                    <p className="text-sm text-muted-foreground truncate">{user.email}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <Mail className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{user.email}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <Shield className="h-4 w-4 shrink-0" />
+                    <span>Provider: Google</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <User className="h-4 w-4 shrink-0" />
+                    <span className="font-mono text-xs break-all">UID: {user.uid}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Preferences Card */}
           <Card variant="elevated">
@@ -154,17 +226,62 @@ export default function SettingsPage() {
               >
                 Replay Onboarding
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full text-error-700 border-error-500 hover:bg-error-50"
                 icon={<Trash2 className="h-4 w-4" />}
+                onClick={() => setShowClearModal(true)}
               >
                 {t.settings.clearAllData}
               </Button>
+              <p className="text-xs text-muted-foreground">
+                Clears journal entries, goals, and progress from this device and your cloud account if you are signed in. This cannot be undone.
+              </p>
             </CardContent>
           </Card>
         </div>
       </main>
+
+      <Modal isOpen={showClearModal} onClose={() => setShowClearModal(false)} title="Clear all data?">
+        <div className="space-y-4">
+          <p className="text-muted-foreground leading-relaxed">
+            This will permanently delete all your journal entries, goals, and progress data.
+          </p>
+          {user && (
+            <p className="text-sm text-warning-700 bg-warning-50 p-3 rounded-xl">
+              You are signed in as {user.email}. This will also delete your cloud data from Firebase.
+            </p>
+          )}
+          {!user && (
+            <p className="text-sm text-muted-foreground bg-muted p-3 rounded-xl">
+              You are not signed in. This will only clear data stored on this device.
+            </p>
+          )}
+          {cleared ? (
+            <p className="text-success-700 font-medium">Your data has been cleared.</p>
+          ) : (
+            <div className="flex gap-3 pt-2">
+              <Button
+                variant="ghost"
+                className="flex-1"
+                onClick={() => setShowClearModal(false)}
+                disabled={clearing}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                className="flex-1 bg-error-600 hover:bg-error-700 text-white"
+                onClick={handleClearData}
+                loading={clearing}
+                icon={<Trash2 className="h-4 w-4" />}
+              >
+                Clear Data
+              </Button>
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }
