@@ -1,0 +1,266 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
+import type { Goal, GoalCategory, GoalTimeframe } from '@/types';
+import { Plus } from 'lucide-react';
+
+interface GoalFormProps {
+  onSubmit: (goal: Omit<Goal, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onCancel: () => void;
+}
+
+const categories: { value: GoalCategory; label: string }[] = [
+  { value: 'personal_growth', label: 'Personal Growth' },
+  { value: 'health', label: 'Health' },
+  { value: 'relationships', label: 'Relationships' },
+  { value: 'career', label: 'Career' },
+  { value: 'financial', label: 'Financial' },
+  { value: 'spiritual', label: 'Spiritual' },
+  { value: 'creative', label: 'Creative' },
+  { value: 'educational', label: 'Educational' },
+  { value: 'contribution', label: 'Contribution' },
+];
+
+const timeframes: { value: GoalTimeframe; label: string }[] = [
+  { value: 'daily', label: 'Daily' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'quarterly', label: 'Quarterly' },
+  { value: 'yearly', label: 'Yearly' },
+  { value: 'long_term', label: 'Long Term' },
+];
+
+export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, onCancel }) => {
+  const today = new Date().toISOString().split('T')[0];
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState<GoalCategory>('personal_growth');
+  const [timeframe, setTimeframe] = useState<GoalTimeframe>('monthly');
+  const [startDate, setStartDate] = useState(today);
+  const [targetDate, setTargetDate] = useState('');
+  const [target, setTarget] = useState(1);
+  const [unit, setUnit] = useState('');
+  const [specific, setSpecific] = useState('');
+  const [measurable, setMeasurable] = useState('');
+  const [achievable, setAchievable] = useState('');
+  const [relevant, setRelevant] = useState('');
+  const [timeBound, setTimeBound] = useState('');
+  const [milestones, setMilestones] = useState<Array<{ id: string; title: string; targetDate: string; completed: boolean }>>([]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim() || !targetDate) return;
+
+    onSubmit({
+      userId: 'user-1',
+      title: title.trim(),
+      description: description.trim(),
+      category,
+      timeframe,
+      startDate,
+      targetDate,
+      progress: {
+        current: 0,
+        target,
+        unit: unit.trim() || 'units',
+        percentage: 0,
+      },
+      milestones: milestones.map(m => ({ ...m, completed: false })),
+      smartElements: {
+        specific: specific.trim(),
+        measurable: measurable.trim(),
+        achievable: achievable.trim(),
+        relevant: relevant.trim(),
+        timeBound: timeBound.trim(),
+      },
+      status: 'active',
+      valueIds: [],
+      habit: undefined,
+    });
+  };
+
+  const addMilestone = () => {
+    setMilestones([...milestones, { id: Date.now().toString(), title: '', targetDate: '', completed: false }]);
+  };
+
+  const updateMilestone = (index: number, field: 'title' | 'targetDate', value: string) => {
+    const updated = [...milestones];
+    updated[index] = { ...updated[index], [field]: value };
+    setMilestones(updated);
+  };
+
+  const removeMilestone = (index: number) => {
+    setMilestones(milestones.filter((_, i) => i !== index));
+  };
+
+  return (
+    <Card variant="elevated">
+      <CardHeader>
+        <CardTitle>Create New Goal</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            label="Goal Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g., Walk 10,000 steps daily"
+            required
+          />
+
+          <div>
+            <label className="block text-sm font-medium text-card-foreground mb-2">
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Why is this goal important to you?"
+              className="w-full min-h-[80px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Select
+              label="Category"
+              value={category}
+              onChange={(value) => setCategory(value as GoalCategory)}
+              options={categories}
+            />
+            <Select
+              label="Timeframe"
+              value={timeframe}
+              onChange={(value) => setTimeframe(value as GoalTimeframe)}
+              options={timeframes}
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input
+              label="Start Date"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              required
+            />
+            <Input
+              label="Target Date"
+              type="date"
+              value={targetDate}
+              onChange={(e) => setTargetDate(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Input
+              label="Target Value"
+              type="number"
+              min={1}
+              value={target}
+              onChange={(e) => setTarget(parseInt(e.target.value) || 1)}
+              required
+            />
+            <Input
+              label="Unit (e.g., steps, pages, minutes)"
+              value={unit}
+              onChange={(e) => setUnit(e.target.value)}
+              placeholder="steps"
+            />
+          </div>
+
+          <Card variant="bordered" className="bg-muted">
+            <CardHeader>
+              <CardTitle className="text-base">SMART Elements</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Based on Doran's SMART criteria (1981) and Locke & Latham's goal-setting theory. Making goals Specific, Measurable, Achievable, Relevant, and Time-bound improves clarity and commitment.
+              </p>
+              <Input
+                label="Specific: What exactly will you do?"
+                value={specific}
+                onChange={(e) => setSpecific(e.target.value)}
+                placeholder="e.g., Walk outside for 30 minutes"
+              />
+              <Input
+                label="Measurable: How will you track progress?"
+                value={measurable}
+                onChange={(e) => setMeasurable(e.target.value)}
+                placeholder="e.g., Track steps with my phone"
+              />
+              <Input
+                label="Achievable: Why is this realistic?"
+                value={achievable}
+                onChange={(e) => setAchievable(e.target.value)}
+                placeholder="e.g., I already walk 5,000 steps"
+              />
+              <Input
+                label="Relevant: Why does this matter?"
+                value={relevant}
+                onChange={(e) => setRelevant(e.target.value)}
+                placeholder="e.g., Improves my energy and mood"
+              />
+              <Input
+                label="Time-bound: When will you do it?"
+                value={timeBound}
+                onChange={(e) => setTimeBound(e.target.value)}
+                placeholder="e.g., Every morning before work"
+              />
+            </CardContent>
+          </Card>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-card-foreground">Milestones</label>
+              <button
+                type="button"
+                onClick={addMilestone}
+                className="text-sm text-primary-700 hover:text-primary-800 font-medium transition-colors flex items-center gap-1"
+              >
+                <Plus className="h-4 w-4" /> Add milestone
+              </button>
+            </div>
+            {milestones.map((milestone, index) => (
+              <div key={milestone.id} className="flex gap-2">
+                <input
+                  type="text"
+                  value={milestone.title}
+                  onChange={(e) => updateMilestone(index, 'title', e.target.value)}
+                  placeholder="Milestone description"
+                  className="flex-1 px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                />
+                <input
+                  type="date"
+                  value={milestone.targetDate}
+                  onChange={(e) => updateMilestone(index, 'targetDate', e.target.value)}
+                  className="px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeMilestone(index)}
+                  className="px-3 py-2 text-error-600 hover:bg-error-100 rounded-lg transition-colors"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-end gap-4">
+            <Button variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit" icon={<Plus className="h-4 w-4" />}>
+              Create Goal
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
