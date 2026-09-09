@@ -8,6 +8,7 @@ import { GoalProvider } from "@/context/GoalContext";
 import { OnboardingProvider } from "@/context/OnboardingContext";
 import { GuidanceProvider } from "@/context/GuidanceContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { ToastProvider } from "@/context/ToastContext";
 import { OnboardingModal } from "@/components/onboarding/OnboardingModal";
 
 const inter = Inter({
@@ -25,8 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <ThemeProvider>
-          <LanguageProvider>
+        <ToastProvider>
+          <ThemeProvider>
+            <LanguageProvider>
             <AuthProvider>
               <ProgressProvider>
                 <GoalProvider>
@@ -41,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
+        </ToastProvider>
       </body>
     </html>
   );

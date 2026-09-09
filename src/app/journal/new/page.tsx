@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { InputHint } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { useLanguage } from '@/context/LanguageContext';
+import { useToast } from '@/context/ToastContext';
 import { frameworks } from '@/data/frameworks';
 import { useStorage } from '@/lib/useStorage';
 import { CBTThoughtRecord } from '@/components/journal/CBTThoughtRecord';
@@ -108,6 +109,7 @@ function getContentPlaceholder(entryType: EntryType): string {
 function NewEntryPageContent() {
   const { t } = useLanguage();
   const storage = useStorage();
+  const { addToast } = useToast();
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type') as EntryType | null;
   
@@ -203,11 +205,15 @@ function NewEntryPageContent() {
 
       await storage.addToArray<JournalEntry>('journal_entries', entry);
 
+      addToast('Entry saved successfully!', 'success');
       resetForm();
-      window.location.href = '/journal';
+      setTimeout(() => {
+        window.location.href = '/journal';
+      }, 1500);
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Something went wrong while saving.';
+      addToast(`Error saving entry: ${message}`, 'error');
       console.error('Error saving entry:', error);
-    } finally {
       setIsSaving(false);
     }
   };
@@ -459,7 +465,7 @@ function NewEntryPageContent() {
           loading={isSaving}
           icon={<Save className="h-4 w-4" />}
         >
-          Save Entry
+          {isSaving ? 'Saving...' : 'Save Entry'}
         </Button>
       </div>
     </div>
