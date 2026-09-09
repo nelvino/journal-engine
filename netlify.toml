@@ -4,6 +4,12 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # NEXT_PUBLIC_FIREBASE_API_KEY is a public client-side key.
+  # It is embedded in the browser bundle by design.
+  # Tell Netlify's secret scanner to skip the build output directories
+  # and to ignore this specific public key.
+  SECRETS_SCAN_OMIT_PATHS = ".next/**,.netlify/**,node_modules/**"
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_FIREBASE_API_KEY,NEXT_PUBLIC_FIREBASE_APP_ID,NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
