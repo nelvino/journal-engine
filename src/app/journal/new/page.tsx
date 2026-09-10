@@ -14,6 +14,7 @@ import { SelectRow } from '@/components/design/SelectRow';
 import { RuledField } from '@/components/design/RuledField';
 import { EvidenceBlock } from '@/components/design/EvidenceBlock';
 import { ConfirmDialog } from '@/components/design/ConfirmDialog';
+import { InfoModal } from '@/components/design/InfoModal';
 import type { JournalEntry, EntryType, Intention } from '@/types';
 import { getStylePrompts, getWhyThisWorks } from '@/lib/prompts';
 import { unlockedEntryTypes, unlockLevelFor } from '@/lib/evolution';
@@ -70,6 +71,7 @@ function NewEntryContent() {
   const [wordCount, setWordCount] = useState(0);
   const [search, setSearch] = useState('');
   const [showAll, setShowAll] = useState(false);
+  const [infoType, setInfoType] = useState<EntryType | null>(null);
   const [sessionStart] = useState(new Date());
 
   const allTypes = useMemo(() => Object.keys(t.entryTypes) as EntryType[], [t.entryTypes]);
@@ -245,6 +247,8 @@ function NewEntryContent() {
                     selected={entryType === type}
                     disabled={locked}
                     onClick={() => setEntryType(type)}
+                    onInfo={() => setInfoType(type)}
+                    infoLabel={t.newEntry.moreInfo.replace('{style}', t.entryTypes[type].label)}
                   />
                 );
               })}
@@ -401,6 +405,24 @@ function NewEntryContent() {
         onCancel={() => setShowLeave(false)}
         onConfirm={confirmLeave}
       />
+
+      {infoType && (
+        <InfoModal
+          isOpen
+          title={t.entryTypes[infoType].label}
+          onClose={() => setInfoType(null)}
+        >
+          <p>{t.entryTypes[infoType].description}</p>
+          <p className="font-sans text-[9.5px] font-semibold uppercase tracking-[0.13em] text-sage leading-3 mt-4">
+            {t.newEntry.bestUsedFor} {t.entryTypes[infoType].useFor}
+          </p>
+          <p className="font-sans text-[13.5px] leading-[21px] text-ink-secondary mt-4">
+            {!unlocked.has(infoType)
+              ? t.newEntry.unlocksAt.replace('{level}', String(unlockLevelFor(infoType)))
+              : t.newEntry.availableNow}
+          </p>
+        </InfoModal>
+      )}
     </div>
   );
 }

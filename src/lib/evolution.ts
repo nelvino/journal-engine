@@ -3,8 +3,6 @@ import { localDateFromISO, toLocalISODate } from '@/lib/utils';
 
 export interface EvolutionLevel {
   level: number;
-  title: string;
-  description: string;
   requirements: {
     entries: number;
     distinctStyles: number;
@@ -17,43 +15,31 @@ export interface EvolutionLevel {
 export const EVOLUTION_LEVELS: EvolutionLevel[] = [
   {
     level: 1,
-    title: 'Beginner',
-    description: 'Start with free writing and gratitude.',
     requirements: { entries: 0, distinctStyles: 0, intentionsKept: 0, currentStreak: 0 },
     unlocks: ['expressive', 'gratitude', 'morning_pages', 'custom'],
   },
   {
     level: 2,
-    title: 'Building',
-    description: 'Add structure with CBT and self-compassion.',
     requirements: { entries: 2, distinctStyles: 2, intentionsKept: 0, currentStreak: 1 },
     unlocks: ['cbt', 'self_compassion'],
   },
   {
     level: 3,
-    title: 'Intermediate',
-    description: 'Try Stoic and Confucian reflection.',
     requirements: { entries: 5, distinctStyles: 3, intentionsKept: 1, currentStreak: 2 },
     unlocks: ['stoic_morning', 'stoic_evening', 'confucian'],
   },
   {
     level: 4,
-    title: 'Advanced',
-    description: 'Work on future self and deep reflection.',
     requirements: { entries: 10, distinctStyles: 4, intentionsKept: 2, currentStreak: 3 },
     unlocks: ['future_self', 'zen'],
   },
   {
     level: 5,
-    title: 'Mastery',
-    description: 'Explore deeper traditions and values.',
     requirements: { entries: 20, distinctStyles: 5, intentionsKept: 3, currentStreak: 4 },
     unlocks: ['islamic', 'vedanta', 'bullet_journal'],
   },
   {
     level: 6,
-    title: 'Sage',
-    description: 'You have a mature, consistent practice.',
     requirements: { entries: 50, distinctStyles: 6, intentionsKept: 5, currentStreak: 7 },
     unlocks: [],
   },

@@ -292,6 +292,7 @@ export interface Translations {
     intentions: string;
     streak: string;
     unlocked: string;
+    levels: { title: string; description: string }[];
   };
   onboarding: {
     step1Title: string;
@@ -328,6 +329,9 @@ export interface Translations {
     whatDoYouNeed: string;
     whatDoYouNeedDescription: string;
     searchPlaceholder: string;
+    moreInfo: string;
+    unlocksAt: string;
+    availableNow: string;
     showCommon: string;
     showAll: string;
     applyFramework: string;
@@ -798,16 +802,24 @@ export const translations: Record<Language, Translations> = {
       intentions: 'intentions kept',
       streak: 'day streak',
       unlocked: 'Unlocked',
+      levels: [
+        { title: 'Beginner', description: 'Start with free writing and gratitude.' },
+        { title: 'Building', description: 'Add structure with CBT and self-compassion.' },
+        { title: 'Intermediate', description: 'Try Stoic and Confucian reflection.' },
+        { title: 'Advanced', description: 'Work on future self and deep reflection.' },
+        { title: 'Mastery', description: 'Explore deeper traditions and values.' },
+        { title: 'Sage', description: 'You have a mature, consistent practice.' },
+      ],
     },
     onboarding: {
       step1Title: 'Welcome to Journal',
-      step1Description: 'A private, evidence-based journaling space. Nothing is made up. Each framework is backed by research or clearly marked as a tradition.',
+      step1Description: 'A private, evidence-based journaling space. Every framework is backed by research or clearly marked as a tradition.',
       step2Title: 'One page a day',
-      step2Description: 'Start from Today. The app suggests a style based on the time, your mood, and any open intentions. Just write for a few minutes.',
+      step2Description: 'Start from Today. The app suggests a style based on the time of day and your open intentions. Just write for a few minutes.',
       step3Title: 'Your practice',
       step3Description: 'Track your streak, set intentions, and watch your path. The more you write, the more styles and deeper frameworks you unlock.',
       step4Title: 'Honest and private',
-      step4Description: 'Your pages live on this device unless you choose to sign in. Export them anytime, and delete everything whenever you want.',
+      step4Description: 'Your pages stay on this device by default. If you sign in, they sync to your private account — only you can read them. Export or delete anytime.',
       step: 'Step {current} of {total}',
       next: 'Next',
       back: 'Back',
@@ -834,6 +846,9 @@ export const translations: Record<Language, Translations> = {
       whatDoYouNeed: 'What do you need today?',
       whatDoYouNeedDescription: 'Pick a journaling style. Each has guided prompts backed by research or tradition.',
       searchPlaceholder: 'Search entry types...',
+      moreInfo: 'More about {style}',
+      unlocksAt: 'Unlocks at level {level}',
+      availableNow: 'Available now',
       showCommon: 'Show only common options',
       showAll: 'Show all {count} entry types',
       applyFramework: 'Apply a Research Framework (optional)',
@@ -1634,16 +1649,24 @@ export const translations: Record<Language, Translations> = {
       intentions: 'intenciones cumplidas',
       streak: 'racha de días',
       unlocked: 'Desbloqueado',
+      levels: [
+        { title: 'Principiante', description: 'Empieza con escritura libre y gratitud.' },
+        { title: 'Construyendo', description: 'Añade estructura con TCC y autocompasión.' },
+        { title: 'Intermedio', description: 'Prueba la reflexión estoica y confuciana.' },
+        { title: 'Avanzado', description: 'Trabaja en tu futuro yo y la reflexión profunda.' },
+        { title: 'Maestría', description: 'Explora tradiciones y valores más profundos.' },
+        { title: 'Sabio', description: 'Tienes una práctica madura y consistente.' },
+      ],
     },
     onboarding: {
       step1Title: 'Bienvenido a Journal',
-      step1Description: 'Un espacio privado de journaling basado en evidencia. Nada está inventado. Cada método está respaldado por investigación o claramente marcado como tradición.',
+      step1Description: 'Un espacio privado de journaling basado en evidencia. Cada método está respaldado por investigación o claramente marcado como tradición.',
       step2Title: 'Una página al día',
-      step2Description: 'Empieza desde Hoy. La app sugiere un estilo según la hora, tu estado de ánimo y tus intenciones abiertas. Solo escribe unos minutos.',
+      step2Description: 'Empieza desde Hoy. La app sugiere un estilo según la hora del día y tus intenciones abiertas. Solo escribe unos minutos.',
       step3Title: 'Tu práctica',
       step3Description: 'Sigue tu racha, establece intenciones y mira tu camino. Cuanto más escribes, más estilos y marcos profundos desbloqueas.',
       step4Title: 'Honesto y privado',
-      step4Description: 'Tus páginas viven en este dispositivo a menos que elijas iniciar sesión. Expórtalas cuando quieras y borra todo cuando desees.',
+      step4Description: 'Tus páginas se quedan en este dispositivo por defecto. Si inicias sesión, se sincronizan con tu cuenta privada — solo tú puedes leerlas. Exporta o borra cuando quieras.',
       step: 'Paso {current} de {total}',
       next: 'Siguiente',
       back: 'Atrás',
@@ -1670,6 +1693,9 @@ export const translations: Record<Language, Translations> = {
       whatDoYouNeed: '¿Qué necesitas hoy?',
       whatDoYouNeedDescription: 'Elige un estilo de diario. Cada uno tiene guías respaldadas por investigación o tradición.',
       searchPlaceholder: 'Buscar tipos de entrada...',
+      moreInfo: 'Más sobre {style}',
+      unlocksAt: 'Se desbloquea en el nivel {level}',
+      availableNow: 'Disponible ahora',
       showCommon: 'Mostrar solo opciones comunes',
       showAll: 'Mostrar todas las {count} opciones',
       applyFramework: 'Aplicar un Marco de Investigación (opcional)',

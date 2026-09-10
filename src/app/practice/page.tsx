@@ -204,17 +204,17 @@ function RecordView() {
           </span>
         </div>
         <h2 className="font-serif text-[28px] leading-[34px] text-ink mb-1">
-          {evolution.current.title}
+          {t.evolution.levels[evolution.level - 1]?.title}
         </h2>
         <p className="font-serif text-[15px] leading-[23px] text-ink-secondary mb-3">
-          {evolution.current.description}
+          {t.evolution.levels[evolution.level - 1]?.description}
         </p>
         <div className="h-1 bg-rule mb-2">
           <div className="h-full bg-accent" style={{ width: `${evolution.progress}%` }} />
         </div>
         {evolution.next && evolution.next.level !== evolution.level && (
           <p className="font-sans text-[11px] leading-[16px] text-ink-caption">
-            {t.evolution.next} {evolution.next.level}: {evolution.next.description} · {evolution.progress}%
+            {t.evolution.next} {evolution.next.level}: {t.evolution.levels[evolution.next.level - 1]?.description} · {evolution.progress}%
           </p>
         )}
       </div>
