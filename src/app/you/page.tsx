@@ -31,7 +31,6 @@ interface UserSettings {
   eveningReminder: boolean;
   morningPages: boolean;
   monthlyReread: boolean;
-  appLock: boolean;
   hidePreviews: boolean;
   session: string;
 }
@@ -84,7 +83,6 @@ export default function YouPage() {
   const [eveningReminder, setEveningReminder] = useState(true);
   const [morningPages, setMorningPages] = useState(false);
   const [monthlyReread, setMonthlyReread] = useState(true);
-  const [appLock, setAppLock] = useState(false);
   const [hidePreviews, setHidePreviews] = useState(false);
   const [session, setSession] = useState('10');
 
@@ -98,7 +96,6 @@ export default function YouPage() {
         setEveningReminder(loadedSettings.eveningReminder ?? true);
         setMorningPages(loadedSettings.morningPages ?? false);
         setMonthlyReread(loadedSettings.monthlyReread ?? true);
-        setAppLock(loadedSettings.appLock ?? false);
         setHidePreviews(loadedSettings.hidePreviews ?? false);
         setSession(loadedSettings.session ?? '10');
       }
@@ -112,19 +109,11 @@ export default function YouPage() {
       eveningReminder,
       morningPages,
       monthlyReread,
-      appLock,
       hidePreviews,
       session,
     };
     storage.set('user_settings', settings);
-  }, [eveningReminder, morningPages, monthlyReread, appLock, hidePreviews, session, loaded, storage]);
-
-  useEffect(() => {
-    if (!loaded) return;
-    if (!appLock) {
-      storage.delete('app_lock_pin');
-    }
-  }, [appLock, loaded, storage]);
+  }, [eveningReminder, morningPages, monthlyReread, hidePreviews, session, loaded, storage]);
 
   const writingSince = useMemo(() => {
     const oldest = entries[entries.length - 1];
@@ -277,7 +266,7 @@ export default function YouPage() {
           />
           <ToggleRow
             label={t.settings.morningPages}
-            caption="7:00 am"
+            caption={t.settings.morningPagesDescription}
             checked={morningPages}
             onChange={setMorningPages}
           />
@@ -291,12 +280,6 @@ export default function YouPage() {
 
         <section>
           <SectionHeading>{t.settings.privacy}</SectionHeading>
-          <ToggleRow
-            label={t.settings.appLock}
-            caption={t.settings.faceIdOnOpen}
-            checked={appLock}
-            onChange={setAppLock}
-          />
           <ToggleRow
             label={t.settings.hideEntryTextInPreviews}
             caption={t.settings.titlesOnlyOnPagesList}

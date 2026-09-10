@@ -9,7 +9,6 @@ import { GuidanceProvider } from "@/context/GuidanceContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { OnboardingModal } from "@/components/onboarding/OnboardingModal";
-import { AppLockGate } from "@/components/design/AppLockGate";
 import { UpdatePrompt } from "@/components/design/UpdatePrompt";
 
 export const metadata: Metadata = {
@@ -40,7 +39,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <OnboardingProvider>
                       {children}
                       <OnboardingModal />
-                      <AppLockGate />
                       <UpdatePrompt />
                     </OnboardingProvider>
                   </GuidanceProvider>

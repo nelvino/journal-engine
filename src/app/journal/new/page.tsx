@@ -17,7 +17,6 @@ import { ConfirmDialog } from '@/components/design/ConfirmDialog';
 import { InfoModal } from '@/components/design/InfoModal';
 import type { JournalEntry, EntryType, Intention } from '@/types';
 import { getStylePrompts, getWhyThisWorks } from '@/lib/prompts';
-import { unlockedEntryTypes, unlockLevelFor } from '@/lib/evolution';
 
 const validEntryTypes: EntryType[] = [
   'expressive',
@@ -75,7 +74,18 @@ function NewEntryContent() {
   const [sessionStart] = useState(new Date());
 
   const allTypes = useMemo(() => Object.keys(t.entryTypes) as EntryType[], [t.entryTypes]);
-  const unlocked = useMemo(() => unlockedEntryTypes(entries, intentions), [entries, intentions]);
+  const today = useMemo(() => toLocalISODate(new Date()), []);
+  const todayTypes = useMemo(
+    () => new Set(entries.filter((e) => e.date === today).map((e) => e.entryType)),
+    [entries, today]
+  );
+
+  useEffect(() => {
+    if (todayTypes.has(entryType)) {
+      const next = allTypes.find((type) => !todayTypes.has(type));
+      if (next) setEntryType(next);
+    }
+  }, [todayTypes, entryType, allTypes]);
 
   const filteredTypes = useMemo(() => {
     let list = showAll ? allTypes : allTypes.slice(0, 4);
@@ -181,7 +191,7 @@ function NewEntryContent() {
 
   return (
     <div className="min-h-screen bg-paper">
-      <div className="w-full px-[26px] sm:px-[34px] md:px-0 pt-6 pb-32 md:pb-12 max-w-[430px] md:max-w-[620px] lg:max-w-[680px] mx-auto">
+      <div className="w-full px-[26px] sm:px-[34px] md:px-0 pt-6 pb-[calc(8rem+env(safe-area-inset-bottom))] md:pb-12 max-w-[430px] md:max-w-[620px] lg:max-w-[680px] mx-auto">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex-1">
@@ -236,14 +246,14 @@ function NewEntryContent() {
 
             <div className="divide-y divide-rule border-b border-rule">
               {filteredTypes.map((type, i) => {
-                const locked = !unlocked.has(type);
+                const locked = todayTypes.has(type);
                 return (
                   <TypeRow
                     key={type}
                     num={String(i + 1).padStart(2, '0')}
                     title={t.entryTypes[type].label}
                     description={t.entryTypes[type].description}
-                    tags={locked ? `${t.evolution.level} ${unlockLevelFor(type)}` : t.entryTypes[type].useFor}
+                    tags={locked ? t.newEntry.alreadyToday : t.entryTypes[type].useFor}
                     selected={entryType === type}
                     disabled={locked}
                     onClick={() => setEntryType(type)}
@@ -263,13 +273,15 @@ function NewEntryContent() {
               </button>
             )}
 
-            <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40">
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40"
+              style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
               <div className="w-full max-w-[430px] sm:max-w-[430px] md:max-w-[680px] mx-auto">
                 <Button
                   variant="primary"
                   size="lg"
                   className="w-full"
                   onClick={() => setStep(2)}
+                  disabled={todayTypes.has(entryType)}
                 >
                   {t.newEntry.continue}
                 </Button>
@@ -310,7 +322,8 @@ function NewEntryContent() {
               </p>
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40">
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40"
+              style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
               <div className="flex gap-3 w-full max-w-[430px] sm:max-w-[430px] md:max-w-[680px] mx-auto">
                 <Button
                   variant="outline"
@@ -371,7 +384,8 @@ function NewEntryContent() {
               </span>
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40">
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40"
+              style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
               <div className="flex gap-3 w-full max-w-[430px] sm:max-w-[430px] md:max-w-[680px] mx-auto">
                 <Button
                   variant="outline"
@@ -417,9 +431,7 @@ function NewEntryContent() {
             {t.newEntry.bestUsedFor} {t.entryTypes[infoType].useFor}
           </p>
           <p className="font-sans text-[13.5px] leading-[21px] text-ink-secondary mt-4">
-            {!unlocked.has(infoType)
-              ? t.newEntry.unlocksAt.replace('{level}', String(unlockLevelFor(infoType)))
-              : t.newEntry.availableNow}
+            {todayTypes.has(infoType) ? t.newEntry.alreadyTodayDescription : t.newEntry.availableNow}
           </p>
         </InfoModal>
       )}

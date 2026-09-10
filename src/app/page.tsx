@@ -21,11 +21,16 @@ export default function TodayPage() {
   const router = useRouter();
   const [now, setNow] = useState<Date | null>(null);
   const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [hidePreviews, setHidePreviews] = useState(false);
 
   useEffect(() => {
     setNow(new Date());
-    storage.get<JournalEntry[]>('journal_entries').then((data) => {
+    Promise.all([
+      storage.get<JournalEntry[]>('journal_entries'),
+      storage.get<any>('user_settings'),
+    ]).then(([data, settings]) => {
       setEntries(data || []);
+      setHidePreviews(settings?.hidePreviews ?? false);
     });
   }, [storage]);
 
@@ -89,11 +94,13 @@ export default function TodayPage() {
             const d = localDateFromISO(entry.date);
             const day = String(d.getDate()).padStart(2, '0');
             const month = d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
-            const title =
-              entry.content?.text?.split('\n')[0].trim().slice(0, 120) ||
-              t.entryTypes[entry.entryType].label;
-            const excerpt =
-              entry.content?.text?.split('\n')[1]?.trim().slice(0, 140) || '';
+            const title = hidePreviews
+              ? t.entryTypes[entry.entryType].label
+              : (entry.content?.text?.split('\n')[0].trim().slice(0, 120) ||
+                t.entryTypes[entry.entryType].label);
+            const excerpt = hidePreviews
+              ? ''
+              : (entry.content?.text?.split('\n')[1]?.trim().slice(0, 140) || '');
             const words = entry.sessionData?.wordCount ?? 0;
             const meta = `${t.entryTypes[entry.entryType].label} · ${words} ${t.common.words}`;
             return (

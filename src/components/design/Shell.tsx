@@ -114,7 +114,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     {/* Main content */}
     <main className="flex-1 w-full md:pl-20">
-      <div className="min-h-screen w-full px-[26px] sm:px-[34px] md:px-8 lg:px-0 pt-6 pb-28 md:pb-6">
+      <div className="min-h-screen w-full px-[26px] sm:px-[34px] md:px-8 lg:px-0 pt-6 pb-[calc(7rem+env(safe-area-inset-bottom))] md:pb-6">
         <div className="w-full md:max-w-[620px] lg:max-w-[680px] md:mx-auto">
           {children}
         </div>
@@ -123,7 +123,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     {/* Bottom tab bar for mobile */}
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 bg-paper border-t border-rule flex z-50"
+      className="md:hidden fixed bottom-0 left-0 right-0 bg-paper border-t border-rule flex z-50 pb-[env(safe-area-inset-bottom)]"
       aria-label="Primary"
     >
       {nav.map((item) => (

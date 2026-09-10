@@ -5,6 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { ChevronLeft, Trash2 } from 'lucide-react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
+import { Shell } from '@/components/design/Shell';
+import { Button } from '@/components/design/Button';
 import { ConfirmDialog } from '@/components/design/ConfirmDialog';
 import { localDateFromISO } from '@/lib/utils';
 import { getStylePrompts } from '@/lib/prompts';
@@ -25,11 +27,11 @@ export default function ReaderPage() {
   }, [storage]);
 
   const entry = useMemo(() => {
-    return (entries || []).find((e) => e.id === id);
+    return (entries || []).find((e) => String(e.id) === id);
   }, [entries, id]);
 
   const handleDelete = async () => {
-    const updated = (entries || []).filter((e) => e.id !== id);
+    const updated = (entries || []).filter((e) => String(e.id) !== id);
     await storage.set('journal_entries', updated);
     setShowDelete(false);
     router.push('/pages');
@@ -51,11 +53,16 @@ export default function ReaderPage() {
 
   if (!entry) {
     return (
-      <div className="min-h-screen bg-paper px-[26px] sm:px-[34px] md:px-8 pt-6">
-        <p className="font-serif text-[17px] leading-[27px] text-ink-secondary">
-          {t.common.search} not found.
-        </p>
-      </div>
+      <Shell>
+        <div className="px-[26px] sm:px-[34px] md:px-8 pt-6">
+          <p className="font-serif text-[17px] leading-[27px] text-ink-secondary mb-6">
+            {t.common.search} not found.
+          </p>
+          <Button variant="outline" onClick={() => router.push('/pages')}>
+            {t.common.back}
+          </Button>
+        </div>
+      </Shell>
     );
   }
 
@@ -69,8 +76,9 @@ export default function ReaderPage() {
   const month = date.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
 
   return (
-    <div className="min-h-screen bg-paper">
-      <ConfirmDialog
+    <Shell>
+      <div className="min-h-screen bg-paper">
+        <ConfirmDialog
         isOpen={showDelete}
         title={t.journal.list.deleteEntry}
         message={t.journal.list.deleteConfirm}
@@ -133,5 +141,6 @@ export default function ReaderPage() {
         </div>
       </div>
     </div>
+    </Shell>
   );
 }

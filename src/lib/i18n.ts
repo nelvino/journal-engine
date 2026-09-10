@@ -234,6 +234,7 @@ export interface Translations {
     defaultSessionDuration: string;
     minutes: string;
     morningPages: string;
+    morningPagesDescription: string;
     eveningReview: string;
     monthlyReread: string;
     lastDayOfMonth: string;
@@ -341,6 +342,8 @@ export interface Translations {
     whatDoYouNeedDescription: string;
     searchPlaceholder: string;
     moreInfo: string;
+    alreadyToday: string;
+    alreadyTodayDescription: string;
     unlocksAt: string;
     availableNow: string;
     showCommon: string;
@@ -750,11 +753,12 @@ export const translations: Record<Language, Translations> = {
       defaultSessionDuration: 'Default Session Duration (minutes)',
       minutes: 'minutes',
       morningPages: 'Morning Pages',
+      morningPagesDescription: 'Show an in-app nudge at 7:00 am',
       eveningReview: 'Evening Review',
       monthlyReread: 'Monthly re-read',
-      lastDayOfMonth: 'On the last day of the month',
+      lastDayOfMonth: 'Show an in-app nudge on the last day of the month',
       eveningReminder: 'Evening reminder',
-      everyDayAt: 'Every day at 9:30 pm',
+      everyDayAt: 'Show an in-app nudge every day at 9:30 pm',
       appLock: 'App lock',
       faceIdOnOpen: 'Face ID on open',
       appLockGate: {
@@ -869,6 +873,8 @@ export const translations: Record<Language, Translations> = {
       whatDoYouNeedDescription: 'Pick a journaling style. Each has guided prompts drawn from research or tradition.',
       searchPlaceholder: 'Search entry types...',
       moreInfo: 'More about {style}',
+      alreadyToday: 'Already today',
+      alreadyTodayDescription: 'You already wrote this style today. Each style is meant to be used once a day. Choose a different one or come back tomorrow.',
       unlocksAt: 'Unlocks at level {level}',
       availableNow: 'Available now',
       showCommon: 'Show only common options',
@@ -1608,11 +1614,12 @@ export const translations: Record<Language, Translations> = {
       defaultSessionDuration: 'Duración Predeterminada de Sesión (minutos)',
       minutes: 'minutos',
       morningPages: 'Páginas de la Mañana',
+      morningPagesDescription: 'Mostrar una sugerencia en la app a las 7:00 am',
       eveningReview: 'Revisión Vespertina',
       monthlyReread: 'Relectura mensual',
-      lastDayOfMonth: 'El último día del mes',
+      lastDayOfMonth: 'Mostrar una sugerencia en la app el último día del mes',
       eveningReminder: 'Recordatorio de la tarde',
-      everyDayAt: 'Todos los días a las 9:30 pm',
+      everyDayAt: 'Mostrar una sugerencia en la app todos los días a las 9:30 pm',
       appLock: 'Bloqueo de la app',
       faceIdOnOpen: 'Face ID al abrir',
       appLockGate: {
@@ -1727,6 +1734,8 @@ export const translations: Record<Language, Translations> = {
       whatDoYouNeedDescription: 'Elige un estilo de diario. Cada uno tiene guías inspiradas en investigación o tradición.',
       searchPlaceholder: 'Buscar tipos de entrada...',
       moreInfo: 'Más sobre {style}',
+      alreadyToday: 'Ya hoy',
+      alreadyTodayDescription: 'Ya escribiste este estilo hoy. Cada estilo está pensado para usarse una vez al día. Elige otro o vuelve mañana.',
       unlocksAt: 'Se desbloquea en el nivel {level}',
       availableNow: 'Disponible ahora',
       showCommon: 'Mostrar solo opciones comunes',
