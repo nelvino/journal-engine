@@ -282,6 +282,17 @@ export interface Translations {
       clearData: string;
     };
   };
+  evolution: {
+    title: string;
+    level: string;
+    next: string;
+    requirement: string;
+    entries: string;
+    styles: string;
+    intentions: string;
+    streak: string;
+    unlocked: string;
+  };
   common: {
     cancel: string;
     back: string;
@@ -761,6 +772,17 @@ export const translations: Record<Language, Translations> = {
       title: 'Update available',
       message: 'A new version of the app is ready. Refresh to use it.',
       now: 'Refresh now',
+    },
+    evolution: {
+      title: 'Your path',
+      level: 'Level',
+      next: 'Next',
+      requirement: 'to unlock',
+      entries: 'pages',
+      styles: 'styles tried',
+      intentions: 'intentions kept',
+      streak: 'day streak',
+      unlocked: 'Unlocked',
     },
     common: {
       cancel: 'Cancel',
@@ -1571,6 +1593,17 @@ export const translations: Record<Language, Translations> = {
       title: 'Actualización disponible',
       message: 'Hay una nueva versión de la app. Actualiza para usarla.',
       now: 'Actualizar ahora',
+    },
+    evolution: {
+      title: 'Tu camino',
+      level: 'Nivel',
+      next: 'Siguiente',
+      requirement: 'para desbloquear',
+      entries: 'páginas',
+      styles: 'estilos probados',
+      intentions: 'intenciones cumplidas',
+      streak: 'racha de días',
+      unlocked: 'Desbloqueado',
     },
     common: {
       cancel: 'Cancelar',

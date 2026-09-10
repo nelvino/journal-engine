@@ -10,18 +10,10 @@ import { ConfirmDialog } from '@/components/design/ConfirmDialog';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { localDateFromISO, toLocalISODate } from '@/lib/utils';
-import type { JournalEntry } from '@/types';
+import { calculateEvolution } from '@/lib/evolution';
+import type { JournalEntry, Intention } from '@/types';
 
 const MS_PER_DAY = 86400000;
-
-interface Intention {
-  id: string;
-  text: string;
-  target: number;
-  current: number;
-  createdAt: string;
-  keptAt?: string;
-}
 
 function toISODate(d: Date) {
   return toLocalISODate(d);
@@ -107,10 +99,14 @@ function RecordView() {
   const { t } = useLanguage();
   const storage = useStorage();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [intentions, setIntentions] = useState<Intention[]>([]);
 
   useEffect(() => {
     storage.get<JournalEntry[]>('journal_entries').then((loaded) => {
       setEntries(loaded || []);
+    });
+    storage.get<Intention[]>('intentions').then((loaded) => {
+      setIntentions(loaded || []);
     });
   }, [storage]);
 
@@ -169,6 +165,8 @@ function RecordView() {
 
   const hasData = entries.length > 0;
 
+  const evolution = useMemo(() => calculateEvolution(entries, intentions), [entries, intentions]);
+
   const Figure = ({ value, label }: { value: string; label: string }) => (
     <div className="py-2">
       <div className="font-serif text-[40px] leading-[46px] text-ink">{value}</div>
@@ -180,6 +178,31 @@ function RecordView() {
 
   return (
     <div className="space-y-8">
+      <div className="border-t-2 border-ink pt-4">
+        <div className="flex items-baseline justify-between mb-1">
+          <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption">
+            {t.evolution.title}
+          </span>
+          <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption">
+            {t.evolution.level} {evolution.level}
+          </span>
+        </div>
+        <h2 className="font-serif text-[28px] leading-[34px] text-ink mb-1">
+          {evolution.current.title}
+        </h2>
+        <p className="font-serif text-[15px] leading-[23px] text-ink-secondary mb-3">
+          {evolution.current.description}
+        </p>
+        <div className="h-1 bg-rule mb-2">
+          <div className="h-full bg-accent" style={{ width: `${evolution.progress}%` }} />
+        </div>
+        {evolution.next && evolution.next.level !== evolution.level && (
+          <p className="font-sans text-[11px] leading-[16px] text-ink-caption">
+            {t.evolution.next} {evolution.next.level}: {evolution.next.description} · {evolution.progress}%
+          </p>
+        )}
+      </div>
+
       <div className="bg-ink text-paper-raised p-6">
         <div className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-night-accent mb-4">
           {t.practice.currentRun}

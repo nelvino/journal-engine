@@ -4,7 +4,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { localDateFromISO } from '@/lib/utils';
-import type { JournalEntry, UserProgress, Goal, EntryType } from '@/types';
+import { calculateEvolution } from '@/lib/evolution';
+import type { JournalEntry, UserProgress, Intention, EntryType } from '@/types';
 
 interface ProgressContextType {
   progress: UserProgress | null;
@@ -23,9 +24,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const calculateProgress = async () => {
     try {
       const entriesData = await storage.get<JournalEntry[]>('journal_entries');
-      const goalsData = await storage.get<Goal[]>('goals');
+      const intentionsData = await storage.get<Intention[]>('intentions');
       const entries = entriesData || [];
-      const goals = goalsData || [];
+      const intentions = intentionsData || [];
       
       if (entries.length === 0) {
         setProgress(createEmptyProgress());
@@ -113,13 +114,16 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         mood: entry.content.mood || { overall: 5, energy: 5, stress: 5, focus: 5 },
       }));
       
-      // Goal progress
-      const activeGoals = goals.filter(g => g.status === 'active').length;
-      const completedGoals = goals.filter(g => g.status === 'completed').length;
-      const goalCompletionRate = goals.length > 0 ? (completedGoals / goals.length) * 100 : 0;
+      // Intention progress
+      const activeGoals = intentions.filter(i => !i.keptAt).length;
+      const completedGoals = intentions.filter(i => i.keptAt).length;
+      const goalCompletionRate = intentions.length > 0 ? (completedGoals / intentions.length) * 100 : 0;
       
       // Achievements
-      const achievements = calculateAchievements(entries, currentStreak, goals, totalWords, t);
+      const achievements = calculateAchievements(entries, currentStreak, intentions, totalWords, t);
+
+      // Evolution
+      const { level, progress } = calculateEvolution(entries, intentions);
       
       const userProgress: UserProgress = {
         id: 'user-1',
@@ -140,6 +144,11 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           completedGoals,
           completionRate: goalCompletionRate,
           averageCompletionTime: 0,
+        },
+        evolution: {
+          current: level,
+          progress,
+          next: level + 1,
         },
         periodicStats: {
           weekly: {
@@ -205,6 +214,11 @@ function createEmptyProgress(): UserProgress {
       completionRate: 0,
       averageCompletionTime: 0,
     },
+    evolution: {
+      current: 1,
+      progress: 0,
+      next: 2,
+    },
     periodicStats: {
       weekly: {
         entriesThisWeek: 0,
@@ -242,7 +256,7 @@ function getFrameworkName(id: string): string {
   return names[id] || id;
 }
 
-function calculateAchievements(entries: JournalEntry[], currentStreak: number, goals: Goal[], totalWords: number, t: { progress: { achievementList: Record<string, { title: string; description: string }> } }) {
+function calculateAchievements(entries: JournalEntry[], currentStreak: number, intentions: Intention[], totalWords: number, t: { progress: { achievementList: Record<string, { title: string; description: string }> } }) {
   const list = t.progress.achievementList;
   const achievements = [
     {
@@ -278,14 +292,14 @@ function calculateAchievements(entries: JournalEntry[], currentStreak: number, g
       title: list.goal_setter.title,
       description: list.goal_setter.description,
       icon: 'target' as const,
-      unlockedAt: goals.length >= 1 ? new Date() : undefined,
+      unlockedAt: intentions.length >= 1 ? new Date() : undefined,
     },
     {
       id: 'goal_achiever',
       title: list.goal_achiever.title,
       description: list.goal_achiever.description,
       icon: 'target' as const,
-      unlockedAt: goals.some(g => g.status === 'completed') ? new Date() : undefined,
+      unlockedAt: intentions.some(i => i.keptAt) ? new Date() : undefined,
     },
     {
       id: 'explorer',

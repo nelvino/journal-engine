@@ -176,6 +176,15 @@ export interface Goal {
   updatedAt: Date;
 }
 
+export interface Intention {
+  id: string;
+  text: string;
+  target: number;
+  current: number;
+  createdAt: string;
+  keptAt?: string;
+}
+
 export type GoalCategory =
   | 'personal_growth'
   | 'health'
@@ -371,6 +380,11 @@ export interface UserProgress {
     completedGoals: number;
     completionRate: number;
     averageCompletionTime: number;
+  };
+  evolution: {
+    current: number;
+    progress: number;
+    next: number;
   };
   periodicStats: {
     weekly: {

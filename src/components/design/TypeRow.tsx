@@ -7,6 +7,7 @@ interface TypeRowProps {
   description: string;
   tags: string;
   selected: boolean;
+  disabled?: boolean;
   onClick: () => void;
   className?: string;
 }
@@ -17,6 +18,7 @@ export const TypeRow: React.FC<TypeRowProps> = ({
   description,
   tags,
   selected,
+  disabled,
   onClick,
   className,
 }) => {
@@ -27,11 +29,14 @@ export const TypeRow: React.FC<TypeRowProps> = ({
 
   return (
     <button
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      aria-disabled={disabled}
       className={cn(
         'w-full grid grid-cols-[44px_1fr] items-start py-4 text-left min-h-[44px]',
         'transition-[background-color,border-color,color] duration-[var(--dur)]',
         'border-b border-rule',
+        disabled && 'opacity-50 cursor-not-allowed',
         selected
           ? 'border-l-2 border-l-accent bg-[#C2482C0F]'
           : 'border-l-2 border-l-transparent',

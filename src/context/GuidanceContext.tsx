@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { toLocalISODate } from '@/lib/utils';
-import type { JournalEntry, EntryType, Goal } from '@/types';
+import type { JournalEntry, EntryType, Intention } from '@/types';
 
 interface DailyRecommendation {
   entryType: EntryType;
@@ -32,12 +32,12 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
 
   const generateRecommendation = async () => {
     try {
-      const [entriesData, goalsData] = await Promise.all([
+      const [entriesData, intentionsData] = await Promise.all([
         storage.get<JournalEntry[]>('journal_entries'),
-        storage.get<Goal[]>('goals'),
+        storage.get<Intention[]>('intentions'),
       ]);
       const entries = entriesData || [];
-      const goals = goalsData || [];
+      const intentions = intentionsData || [];
 
       const dismissed = await storage.get<string>('recommendation_dismissed_date');
       const today = toLocalISODate(new Date());
@@ -46,7 +46,7 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const recommendation = buildRecommendation(entries, goals, t);
+      const recommendation = buildRecommendation(entries, intentions, t);
       setRecommendation(recommendation);
     } catch (error) {
       console.error('Error generating guidance:', error);
@@ -78,7 +78,7 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function buildRecommendation(entries: JournalEntry[], goals: Goal[], t: { guidance: { recommendations: Record<string, { title: string; subtitle: string; prompt: string; reason: string }> } }): DailyRecommendation {
+function buildRecommendation(entries: JournalEntry[], intentions: Intention[], t: { guidance: { recommendations: Record<string, { title: string; subtitle: string; prompt: string; reason: string }> } }): DailyRecommendation {
   const now = new Date();
   const hour = now.getHours();
   const isMorning = hour >= 5 && hour < 12;
@@ -103,7 +103,7 @@ function buildRecommendation(entries: JournalEntry[], goals: Goal[], t: { guidan
   } else if (lastMood >= 8) {
     entryType = 'gratitude';
     priority = 'medium';
-  } else if (goals.some(g => g.status === 'active')) {
+  } else if (intentions.some(i => !i.keptAt)) {
     entryType = 'future_self';
     priority = 'medium';
   } else {

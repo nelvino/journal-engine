@@ -14,8 +14,9 @@ import { SelectRow } from '@/components/design/SelectRow';
 import { RuledField } from '@/components/design/RuledField';
 import { EvidenceBlock } from '@/components/design/EvidenceBlock';
 import { ConfirmDialog } from '@/components/design/ConfirmDialog';
-import type { JournalEntry, EntryType } from '@/types';
+import type { JournalEntry, EntryType, Intention } from '@/types';
 import { getStylePrompts, getWhyThisWorks } from '@/lib/prompts';
+import { unlockedEntryTypes, unlockLevelFor } from '@/lib/evolution';
 
 const validEntryTypes: EntryType[] = [
   'expressive',
@@ -44,6 +45,8 @@ function NewEntryContent() {
   const [step, setStep] = useState(1);
   const [session, setSession] = useState('10');
   const [showLeave, setShowLeave] = useState(false);
+  const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [intentions, setIntentions] = useState<Intention[]>([]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -53,6 +56,12 @@ function NewEntryContent() {
     }
     storage.get<any>('user_settings').then((s) => {
       if (s?.session) setSession(String(s.session));
+    });
+    storage.get<JournalEntry[]>('journal_entries').then((loaded) => {
+      setEntries(loaded || []);
+    });
+    storage.get<Intention[]>('intentions').then((loaded) => {
+      setIntentions(loaded || []);
     });
   }, [storage]);
 
@@ -64,6 +73,7 @@ function NewEntryContent() {
   const [sessionStart] = useState(new Date());
 
   const allTypes = useMemo(() => Object.keys(t.entryTypes) as EntryType[], [t.entryTypes]);
+  const unlocked = useMemo(() => unlockedEntryTypes(entries, intentions), [entries, intentions]);
 
   const filteredTypes = useMemo(() => {
     let list = showAll ? allTypes : allTypes.slice(0, 4);
@@ -222,17 +232,21 @@ function NewEntryContent() {
             </div>
 
             <div className="divide-y divide-rule border-b border-rule">
-              {filteredTypes.map((type, i) => (
-                <TypeRow
-                  key={type}
-                  num={String(i + 1).padStart(2, '0')}
-                  title={t.entryTypes[type].label}
-                  description={t.entryTypes[type].description}
-                  tags={t.entryTypes[type].useFor}
-                  selected={entryType === type}
-                  onClick={() => setEntryType(type)}
-                />
-              ))}
+              {filteredTypes.map((type, i) => {
+                const locked = !unlocked.has(type);
+                return (
+                  <TypeRow
+                    key={type}
+                    num={String(i + 1).padStart(2, '0')}
+                    title={t.entryTypes[type].label}
+                    description={t.entryTypes[type].description}
+                    tags={locked ? `${t.evolution.level} ${unlockLevelFor(type)}` : t.entryTypes[type].useFor}
+                    selected={entryType === type}
+                    disabled={locked}
+                    onClick={() => setEntryType(type)}
+                  />
+                );
+              })}
             </div>
 
             {!showAll && !search.trim() && filteredTypes.length < allTypes.length && (
