@@ -1,4 +1,5 @@
 import { homeHero } from '@/lib/homeHero';
+import { toLocalISODate } from '@/lib/utils';
 import type { JournalEntry } from '@/types';
 
 const now = new Date('2026-09-10T19:00:00');
@@ -7,7 +8,7 @@ function makeEntry(overrides: Partial<JournalEntry> = {}): JournalEntry {
   return {
     id: '1',
     userId: '',
-    date: now.toISOString().split('T')[0],
+    date: toLocalISODate(now),
     entryType: 'expressive',
     content: { text: 'test' },
     sessionData: {

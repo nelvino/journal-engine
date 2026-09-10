@@ -9,6 +9,7 @@ import { SelectRow } from '@/components/design/SelectRow';
 import { ConfirmDialog } from '@/components/design/ConfirmDialog';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
+import { localDateFromISO, toLocalISODate } from '@/lib/utils';
 import type { JournalEntry } from '@/types';
 
 const MS_PER_DAY = 86400000;
@@ -23,7 +24,7 @@ interface Intention {
 }
 
 function toISODate(d: Date) {
-  return d.toISOString().split('T')[0];
+  return toLocalISODate(d);
 }
 
 function getLastNDays(n: number, end = new Date()) {
@@ -39,10 +40,10 @@ function getLastNDays(n: number, end = new Date()) {
 
 function getStreaks(dates: string[]) {
   const set = new Set(dates);
-  const today = toISODate(new Date());
+  const today = toLocalISODate(new Date());
   let current = 0;
-  let d = new Date(today);
-  while (set.has(toISODate(d))) {
+  let d = localDateFromISO(today);
+  while (set.has(toLocalISODate(d))) {
     current++;
     d.setDate(d.getDate() - 1);
   }
@@ -70,7 +71,7 @@ function getStreaks(dates: string[]) {
 }
 
 function formatMonth(iso: string) {
-  return new Date(iso).toLocaleDateString('en-GB', { month: 'long' });
+  return localDateFromISO(iso).toLocaleDateString('en-GB', { month: 'long' });
 }
 
 const targetOptions = [1, 2, 3, 4, 5, 6, 7].map((n) => ({

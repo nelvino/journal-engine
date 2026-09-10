@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
+import { toLocalISODate } from '@/lib/utils';
 import type { JournalEntry, EntryType, Goal } from '@/types';
 
 interface DailyRecommendation {
@@ -39,7 +40,7 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
       const goals = goalsData || [];
 
       const dismissed = await storage.get<string>('recommendation_dismissed_date');
-      const today = new Date().toISOString().split('T')[0];
+      const today = toLocalISODate(new Date());
       if (dismissed === today) {
         setRecommendation(null);
         return;
@@ -65,7 +66,7 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
   };
 
   const dismissRecommendation = async () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = toLocalISODate(new Date());
     await storage.set('recommendation_dismissed_date', today);
     setRecommendation(null);
   };
@@ -85,7 +86,7 @@ function buildRecommendation(entries: JournalEntry[], goals: Goal[], t: { guidan
 
   const lastEntry = entries.length > 0 ? entries[0] : null;
   const lastMood = lastEntry?.content.mood?.overall || 5;
-  const hasEntriesToday = entries.some(e => e.date === now.toISOString().split('T')[0]);
+  const hasEntriesToday = entries.some(e => e.date === toLocalISODate(now));
 
   let entryType: EntryType = 'gratitude';
   let priority: 'high' | 'medium' | 'low' = 'low';

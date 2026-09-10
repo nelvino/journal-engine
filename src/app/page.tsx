@@ -9,6 +9,7 @@ import { WeekStrip } from '@/components/design/WeekStrip';
 import { HomeHero } from '@/components/design/HomeHero';
 import { useLanguage } from '@/context/LanguageContext';
 import { useStorage } from '@/lib/useStorage';
+import { localDateFromISO, toLocalISODate } from '@/lib/utils';
 import { homeHero } from '@/lib/homeHero';
 import type { JournalEntry } from '@/types';
 
@@ -50,7 +51,7 @@ export default function TodayPage() {
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(weekStart);
       d.setDate(weekStart.getDate() + i);
-      const iso = d.toISOString().split('T')[0];
+      const iso = toLocalISODate(d);
       const hasEntry = entries.some((e) => e.date === iso);
       const isToday = i === dayIndex;
       const state: 'today' | 'written' | 'empty' = isToday
@@ -85,7 +86,7 @@ export default function TodayPage() {
           </p>
         ) : (
           recent.map((entry) => {
-            const d = new Date(entry.date);
+            const d = localDateFromISO(entry.date);
             const day = String(d.getDate()).padStart(2, '0');
             const month = d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
             const title =

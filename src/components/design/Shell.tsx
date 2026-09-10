@@ -4,7 +4,7 @@ import React, { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, BookOpen, Calendar, User } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, toLocalISODate } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { useStorage } from '@/lib/useStorage';
 import { useToast } from '@/context/ToastContext';
@@ -71,7 +71,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       storage.get<any>('user_settings'),
     ]).then(([entries, settings]) => {
       if (!mounted || !settings) return;
-      const today = new Date().toISOString().split('T')[0];
+      const today = toLocalISODate(new Date());
       const hasToday = (entries || []).some((e) => e.date === today);
       const now = new Date();
       const hour = now.getHours();

@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
+import { localDateFromISO } from '@/lib/utils';
 import type { JournalEntry, UserProgress, Goal, EntryType } from '@/types';
 
 interface ProgressContextType {
@@ -36,7 +37,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       today.setHours(0, 0, 0, 0);
       
       const uniqueDates = [...new Set(entries.map(entry => {
-        const d = new Date(entry.date);
+        const d = localDateFromISO(entry.date);
         d.setHours(0, 0, 0, 0);
         return d.getTime();
       }))].sort((a, b) => b - a);
@@ -83,7 +84,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       // Weekly stats
       const oneWeekAgo = new Date(today);
       oneWeekAgo.setDate(today.getDate() - 7);
-      const weekEntries = entries.filter(entry => new Date(entry.date) >= oneWeekAgo);
+      const weekEntries = entries.filter(entry => localDateFromISO(entry.date) >= oneWeekAgo);
       const entriesThisWeek = weekEntries.length;
       const wordsThisWeek = weekEntries.reduce((sum, entry) => sum + (entry.sessionData.wordCount || 0), 0);
       const minutesThisWeek = weekEntries.reduce((sum, entry) => sum + (entry.sessionData.duration || 0), 0);

@@ -13,6 +13,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useOnboarding } from '@/context/OnboardingContext';
 import { useStorage } from '@/lib/useStorage';
 import { useToast } from '@/context/ToastContext';
+import { localDateFromISO } from '@/lib/utils';
 import { Download, HelpCircle, Trash2 } from 'lucide-react';
 import type { JournalEntry } from '@/types';
 
@@ -124,11 +125,15 @@ export default function YouPage() {
   }, [appLock, loaded, storage]);
 
   const writingSince = useMemo(() => {
+    const oldest = entries[entries.length - 1];
     const since =
       user?.metadata?.creationTime ||
-      (entries.length ? entries[entries.length - 1].createdAt : undefined);
+      (oldest ? oldest.date || oldest.createdAt : undefined);
     if (!since) return '';
-    const d = new Date(since);
+    const d =
+      typeof since === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(since)
+        ? localDateFromISO(since)
+        : new Date(since);
     return d.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-GB', {
       day: 'numeric',
       month: 'long',

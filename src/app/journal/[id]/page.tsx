@@ -6,6 +6,7 @@ import { ChevronLeft, Trash2 } from 'lucide-react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { ConfirmDialog } from '@/components/design/ConfirmDialog';
+import { localDateFromISO } from '@/lib/utils';
 import { getStylePrompts } from '@/lib/prompts';
 import type { JournalEntry } from '@/types';
 
@@ -63,7 +64,7 @@ export default function ReaderPage() {
     entry.content?.text?.trim().split(/\s+/).filter(Boolean).length ??
     0;
 
-  const date = new Date(entry.date);
+  const date = localDateFromISO(entry.date);
   const day = date.getDate().toString().padStart(2, '0');
   const month = date.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
 

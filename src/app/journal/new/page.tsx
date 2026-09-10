@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, toLocalISODate } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { useStorage } from '@/lib/useStorage';
 import { useToast } from '@/context/ToastContext';
@@ -145,7 +145,7 @@ function NewEntryContent() {
     const entry: JournalEntry = {
       id: crypto.randomUUID?.() ?? String(Date.now()),
       userId: '',
-      date: now.toISOString().split('T')[0],
+      date: toLocalISODate(now),
       entryType,
       frameworkId: frameworkId || undefined,
       content: { text, questions },

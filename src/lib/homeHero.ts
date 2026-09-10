@@ -1,3 +1,4 @@
+import { toLocalISODate } from '@/lib/utils';
 import type { JournalEntry } from '@/types';
 
 export type HomeHeroState =
@@ -41,7 +42,7 @@ export function homeHero(
   entries: JournalEntry[],
   draft?: HomeHeroDraft
 ): { state: HomeHeroState; stats: HomeHeroStats } {
-  const todayISO = now.toISOString().split('T')[0];
+  const todayISO = toLocalISODate(now);
 
   const sorted = [...entries].sort((a, b) => {
     const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;

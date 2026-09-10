@@ -9,20 +9,21 @@ import { LedgerRow } from '@/components/design/LedgerRow';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { cn } from '@/lib/utils';
+import { localDateFromISO } from '@/lib/utils';
 import type { JournalEntry, EntryType } from '@/types';
 
 const ALL_STYLES = '';
 
 function formatDay(date: string) {
-  return new Date(date).getDate().toString().padStart(2, '0');
+  return localDateFromISO(date).getDate().toString().padStart(2, '0');
 }
 
 function formatMonth(date: string) {
-  return new Date(date).toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  return localDateFromISO(date).toLocaleString('en-US', { month: 'short' }).toUpperCase();
 }
 
 function formatMonthGroup(date: string) {
-  return new Date(date).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  return localDateFromISO(date).toLocaleString('en-US', { month: 'long', year: 'numeric' });
 }
 
 function wordCount(text: string) {
@@ -56,13 +57,13 @@ export default function PagesPage() {
 
   const year = new Date().getFullYear();
   const yearTotal = useMemo(
-    () => entries.filter((e) => new Date(e.date).getFullYear() === year).length,
+    () => entries.filter((e) => localDateFromISO(e.date).getFullYear() === year).length,
     [entries, year]
   );
   const yearWords = useMemo(
     () =>
       entries
-        .filter((e) => new Date(e.date).getFullYear() === year)
+        .filter((e) => localDateFromISO(e.date).getFullYear() === year)
         .reduce((sum, e) => sum + (e.sessionData?.wordCount ?? wordCount(e.content?.text || '')), 0),
     [entries, year]
   );
@@ -77,7 +78,7 @@ export default function PagesPage() {
         const excerpt = (entry.content?.text || '').toLowerCase();
         return title.includes(term) || excerpt.includes(term);
       })
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort((a, b) => localDateFromISO(b.date).getTime() - localDateFromISO(a.date).getTime());
   }, [entries, search, styleFilter, t.entryTypes]);
 
   const groups = useMemo(() => {
