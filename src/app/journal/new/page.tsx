@@ -13,6 +13,7 @@ import { TypeRow } from '@/components/design/TypeRow';
 import { SelectRow } from '@/components/design/SelectRow';
 import { RuledField } from '@/components/design/RuledField';
 import { EvidenceBlock } from '@/components/design/EvidenceBlock';
+import { ConfirmDialog } from '@/components/design/ConfirmDialog';
 import type { JournalEntry, EntryType } from '@/types';
 import { getStylePrompts, getWhyThisWorks } from '@/lib/prompts';
 
@@ -42,6 +43,7 @@ function NewEntryContent() {
   const [entryType, setEntryType] = useState<EntryType>('expressive');
   const [step, setStep] = useState(1);
   const [session, setSession] = useState('10');
+  const [showLeave, setShowLeave] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -114,9 +116,16 @@ function NewEntryContent() {
   const handleCancel = () => {
     const hasDraft =
       Object.values(answers).some((v) => v.trim().length > 0) || step > 1;
-    if (!hasDraft || window.confirm(t.newEntry.leaveDraft)) {
+    if (!hasDraft) {
       router.push('/');
+      return;
     }
+    setShowLeave(true);
+  };
+
+  const confirmLeave = () => {
+    setShowLeave(false);
+    router.push('/');
   };
 
   const handleSave = async () => {
@@ -368,6 +377,15 @@ function NewEntryContent() {
           </div>
         )}
       </div>
+      <ConfirmDialog
+        isOpen={showLeave}
+        title={t.newEntry.leaveTitle}
+        message={t.newEntry.leaveDraft}
+        cancelLabel={t.common.cancel}
+        confirmLabel={t.newEntry.leave}
+        onCancel={() => setShowLeave(false)}
+        onConfirm={confirmLeave}
+      />
     </div>
   );
 }

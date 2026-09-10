@@ -315,6 +315,8 @@ export interface Translations {
     whyThisWorks: string;
     evidence: string;
     leaveDraft: string;
+    leaveTitle: string;
+    leave: string;
     defaultSession: string;
     bestUsedFor: string;
     yourEntry: string;
@@ -782,7 +784,9 @@ export const translations: Record<Language, Translations> = {
       startAnywhere: 'Start anywhere...',
       whyThisWorks: 'Why this works',
       evidence: 'Evidence from research and tradition',
-      leaveDraft: 'Leave this entry? Your draft will not be saved.',
+      leaveDraft: 'Your draft will not be saved.',
+      leaveTitle: 'Leave this entry?',
+      leave: 'Leave',
       defaultSession: 'Default session',
       bestUsedFor: 'Best used for:',
       yourEntry: 'Your Entry',
@@ -1585,7 +1589,9 @@ export const translations: Record<Language, Translations> = {
       startAnywhere: 'Empieza donde quieras...',
       whyThisWorks: 'Por qué funciona',
       evidence: 'Evidencia de investigación y tradición',
-      leaveDraft: '¿Salir de esta entrada? Tu borrador no se guardará.',
+      leaveDraft: 'Tu borrador no se guardará.',
+      leaveTitle: '¿Salir de esta entrada?',
+      leave: 'Salir',
       defaultSession: 'Sesión predeterminada',
       bestUsedFor: 'Mejor para:',
       yourEntry: 'Tu Entrada',
