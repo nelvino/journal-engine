@@ -268,7 +268,6 @@ export interface Framework {
       url?: string;
       description: string;
     }>;
-    effectivenessRating?: number;
   };
   protocol: {
     frequency: string;

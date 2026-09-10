@@ -5,7 +5,7 @@ export const frameworks: Framework[] = [
     id: 'expressive-writing',
     name: 'Expressive Writing',
     slug: 'expressive-writing',
-    description: 'Write about emotional experiences for 15-20 minutes over 3-4 consecutive days. Proven to improve immune function and mental health.',
+    description: 'Write about emotional experiences for 15-20 minutes over 3-4 consecutive days. A style studied for emotional processing; effects on health are not guaranteed and vary by person.',
     category: 'expressive_writing',
     origin: 'scientific',
     evidenceBase: {
@@ -15,10 +15,9 @@ export const frameworks: Framework[] = [
           title: 'Writing About Emotional Experiences as a Therapeutic Process',
           author: 'James W. Pennebaker',
           year: 1997,
-          description: 'Seminal paper establishing expressive writing as a therapeutic intervention with proven health benefits.'
+          description: 'Seminal paper that introduced expressive writing and studied its effects on emotion and health. Effects are not guaranteed and vary by person.'
         }
-      ],
-      effectivenessRating: 8
+      ]
     },
     protocol: {
       frequency: '3-4 consecutive days, repeat monthly',
@@ -42,7 +41,7 @@ export const frameworks: Framework[] = [
     id: 'cbt-journaling',
     name: 'CBT Journaling',
     slug: 'cbt-journaling',
-    description: 'Structured writing practice from cognitive behavioral therapy to identify negative thoughts, examine evidence, and develop balanced perspectives.',
+    description: 'Structured writing practice from cognitive behavioral therapy to identify thoughts, examine evidence, and develop balanced perspectives. For reflection, not a substitute for therapy.',
     category: 'cbt',
     origin: 'scientific',
     evidenceBase: {
@@ -52,10 +51,9 @@ export const frameworks: Framework[] = [
           title: 'Cognitive Therapy of Depression',
           author: 'Aaron T. Beck',
           year: 1979,
-          description: 'Foundational text establishing CBT as an evidence-based treatment for depression and anxiety.'
+          description: 'Foundational text on CBT, an approach studied for depression and anxiety. This app is not a substitute for therapy.'
         }
-      ],
-      effectivenessRating: 9
+      ]
     },
     protocol: {
       frequency: 'Daily or as needed',
@@ -80,19 +78,17 @@ export const frameworks: Framework[] = [
     id: 'gratitude-journaling',
     name: 'Gratitude Journaling',
     slug: 'gratitude-journaling',
-    description: 'Regular practice of writing about things you are grateful for, proven to increase well-being and positive emotions.',
+    description: 'Regular practice of writing about things you are grateful for. Research has explored links to well-being, but results vary by person and context.',
     category: 'gratitude',
     origin: 'scientific',
     evidenceBase: {
       type: 'scientific',
       sources: [
         {
-          title: 'A meta-analysis of the effectiveness of gratitude interventions on well-being across cultures',
-          year: 2026,
-          description: 'Meta-analysis of 145 papers, 163 samples, 24,804 participants across 28 countries showing small but significant well-being increases.'
+          title: 'Gratitude journaling and well-being research',
+          description: 'Research has explored whether writing about gratitude is linked to well-being, with mixed results that depend on context and individual differences.'
         }
-      ],
-      effectivenessRating: 7
+      ]
     },
     protocol: {
       frequency: 'Daily',
@@ -101,7 +97,7 @@ export const frameworks: Framework[] = [
         'Write 3-5 things you are grateful for',
         'Be specific and detailed',
         'Focus on people, experiences, opportunities',
-        'Long-form letters more effective than lists'
+        'Some people find detailed letters more reflective than short lists; use what fits your time'
       ]
     },
     promptIds: ['gratitude-1', 'gratitude-2', 'gratitude-3'],
@@ -127,8 +123,7 @@ export const frameworks: Framework[] = [
           year: 180,
           description: 'Personal journal of Roman Emperor Marcus Aurelius, never intended for publication, containing Stoic reflections.'
         }
-      ],
-      effectivenessRating: 8
+      ]
     },
     protocol: {
       frequency: 'Daily (morning and evening)',
@@ -164,8 +159,7 @@ export const frameworks: Framework[] = [
           year: -500,
           description: 'Foundational Confucian text containing the three daily examinations practice.'
         }
-      ],
-      effectivenessRating: 7
+      ]
     },
     protocol: {
       frequency: 'Daily',
@@ -189,20 +183,17 @@ export const frameworks: Framework[] = [
     id: 'self-compassion',
     name: 'Self-Compassion Writing',
     slug: 'self-compassion',
-    description: 'Write about stressful events with self-compassion to increase self-compassion and proactive coping.',
+    description: 'Write about stressful events with self-compassion. A style studied for coping and self-compassion; results vary and it is not a substitute for therapy.',
     category: 'self_compassion',
     origin: 'scientific',
     evidenceBase: {
       type: 'scientific',
       sources: [
         {
-          title: 'A Randomized Controlled Trial of a Self-Compassion Writing Intervention',
-          author: 'Debra Urken, Craig Winston LeCroy',
-          year: 2021,
-          description: 'RCT showing self-compassion writing increases self-compassion and proactive coping in adults with mental illness.'
+          title: 'Self-compassion writing research',
+          description: 'Studies have examined whether writing about difficulties with self-compassion can support coping, but results vary and it is not a substitute for therapy.'
         }
-      ],
-      effectivenessRating: 8
+      ]
     },
     protocol: {
       frequency: '3 consecutive days',

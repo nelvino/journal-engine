@@ -75,7 +75,6 @@ export interface Translations {
   frameworkInfo: {
     evidenceBase: string;
     type: string;
-    effectivenessRating: string;
     howToPractice: string;
     frequency: string;
     duration: string;
@@ -416,12 +415,12 @@ export const translations: Record<Language, Translations> = {
     },
     home: {
       welcome: 'Lets start Journaling',
-      subtitle: 'Evidence-based personal development through journaling. Combining modern scientific research with ancient wisdom traditions to create an adaptive system that evolves with you.',
+      subtitle: 'Research-informed personal development through journaling. Combining modern scientific research with ancient wisdom traditions to create an adaptive system that evolves with you.',
       startJournaling: 'Start Journaling',
       learnMore: 'Learn More',
       scienceBased: {
-        title: 'Science-Based',
-        description: 'Backed by peer-reviewed research from expressive writing, CBT, gratitude interventions, and more.',
+        title: 'Research-Informed',
+        description: 'Draws on peer-reviewed research from expressive writing, CBT, gratitude, and more.',
       },
       ancientWisdom: {
         title: 'Ancient Wisdom',
@@ -436,7 +435,7 @@ export const translations: Record<Language, Translations> = {
       title: 'Journal',
       subtitle: 'Your personal journaling sanctuary',
       todaysEntry: "Today's Journal Entry",
-      todaysEntryDescription: 'Start your journaling practice with evidence-based prompts and frameworks.',
+      todaysEntryDescription: 'Start your journaling practice with prompts and frameworks drawn from research and tradition.',
       startNewEntry: 'Start New Entry',
       recentEntries: 'Recent Entries',
       recentEntriesDescription: 'Your recent journal entries will appear here.',
@@ -504,7 +503,7 @@ export const translations: Record<Language, Translations> = {
           title: 'Be kind to yourself',
           subtitle: 'A gentle self-compassion check-in',
           prompt: 'What is difficult right now? Imagine a friend going through this. What warm, supportive words would you offer them?',
-          reason: 'Your recent mood has been low. Self-compassion can help reduce self-criticism and shame.',
+          reason: 'Your recent mood has been low. Self-compassion is a gentle way to explore self-criticism and shame without judgment.',
         },
         gratitude: {
           title: 'Capture the good',
@@ -535,7 +534,6 @@ export const translations: Record<Language, Translations> = {
     frameworkInfo: {
       evidenceBase: 'Evidence Base',
       type: 'Type',
-      effectivenessRating: 'Effectiveness rating',
       howToPractice: 'How to practice',
       frequency: 'Frequency',
       duration: 'Duration',
@@ -818,7 +816,7 @@ export const translations: Record<Language, Translations> = {
     },
     onboarding: {
       step1Title: 'Welcome to Journal',
-      step1Description: 'A private, evidence-based journaling space. Every framework is backed by research or clearly marked as a tradition.',
+      step1Description: 'A private, research-informed journaling space. Every framework is drawn from research or clearly marked as a tradition.',
       step2Title: 'One page a day',
       step2Description: 'Start from Today. The app suggests a style based on the time of day and your open intentions. Just write for a few minutes.',
       step3Title: 'Your practice',
@@ -854,22 +852,22 @@ export const translations: Record<Language, Translations> = {
       title: 'New Journal Entry',
       stepOf: 'Step {step} of 3',
       whatDoYouNeed: 'What do you need today?',
-      whatDoYouNeedDescription: 'Pick a journaling style. Each has guided prompts backed by research or tradition.',
+      whatDoYouNeedDescription: 'Pick a journaling style. Each has guided prompts drawn from research or tradition.',
       searchPlaceholder: 'Search entry types...',
       moreInfo: 'More about {style}',
       unlocksAt: 'Unlocks at level {level}',
       availableNow: 'Available now',
       showCommon: 'Show only common options',
       showAll: 'Show all {count} entry types',
-      applyFramework: 'Apply a Research Framework (optional)',
+      applyFramework: 'Apply a Framework (optional)',
       noFramework: 'No specific framework, just use the entry type',
-      frameworkHelp: 'Frameworks add curated prompts from specific research or traditions. Most of the time, the entry type itself is enough. Tap the info icon once you select one to learn more.',
+      frameworkHelp: 'Frameworks add curated prompts from research or traditions. Most of the time, the entry type itself is enough. Tap the info icon once you select one to learn more.',
       startWriting: 'Start Writing',
       continue: 'Continue',
       chosenStyle: 'Chosen style',
       autosaving: 'Autosaving',
       startAnywhere: 'Start anywhere...',
-      whyThisWorks: 'Why this works',
+      whyThisWorks: 'What this draws from',
       evidence: 'Evidence from research and tradition',
       leaveDraft: 'Your draft will not be saved.',
       leaveTitle: 'Leave this entry?',
@@ -994,8 +992,8 @@ export const translations: Record<Language, Translations> = {
       },
       cbt: {
         label: 'CBT Thought Record',
-        description: 'Challenge anxious or negative thoughts with evidence.',
-        useFor: 'Anxiety, intrusive thoughts, cognitive reframing',
+        description: 'Explore anxious or negative thoughts by looking at evidence.',
+        useFor: 'Anxious thoughts, intrusive thoughts, cognitive reframing',
       },
       gratitude: {
         label: 'Gratitude',
@@ -1268,12 +1266,12 @@ export const translations: Record<Language, Translations> = {
     },
     home: {
       welcome: 'Empecemos a escribir!',
-      subtitle: 'Desarrollo personal basado en evidencia a través del diario. Combinando investigación científica moderna con tradiciones de sabiduría antigua para crear un sistema adaptativo que evoluciona contigo.',
+      subtitle: 'Desarrollo personal informado por la investigación a través del diario. Combinando investigación científica moderna con tradiciones de sabiduría antigua para crear un sistema adaptativo que evoluciona contigo.',
       startJournaling: 'Comenzar a Escribir',
       learnMore: 'Más Información',
       scienceBased: {
-        title: 'Basado en Ciencia',
-        description: 'Respaldado por investigación revisada por pares en escritura expresiva, TCC, intervenciones de gratitud y más.',
+        title: 'Informado por la Ciencia',
+        description: 'Se inspira en investigación revisada por pares sobre escritura expresiva, TCC, gratitud y más.',
       },
       ancientWisdom: {
         title: 'Sabiduría Antigua',
@@ -1288,7 +1286,7 @@ export const translations: Record<Language, Translations> = {
       title: 'Diario',
       subtitle: 'Tu santuario personal de diario',
       todaysEntry: 'Entrada de Hoy',
-      todaysEntryDescription: 'Comienza tu práctica de diario con preguntas basadas en evidencia y marcos de trabajo.',
+      todaysEntryDescription: 'Comienza tu práctica de diario con preguntas y marcos inspirados en investigaciones y tradiciones.',
       startNewEntry: 'Nueva Entrada',
       recentEntries: 'Entradas Recientes',
       recentEntriesDescription: 'Tus entradas recientes aparecerán aquí.',
@@ -1356,7 +1354,7 @@ export const translations: Record<Language, Translations> = {
           title: 'Sé amable contigo mismo',
           subtitle: 'Una revisión suave de autocompasión',
           prompt: '¿Qué es difícil ahora? Imagina a un amigo pasando por esto. ¿Qué palabras cálidas y de apoyo le ofrecerías?',
-          reason: 'Tu estado de ánimo reciente ha sido bajo. La autocompasión puede reducir la autocrítica y la vergüenza.',
+          reason: 'Tu estado de ánimo reciente ha sido bajo. La autocompasión es una forma gentil de explorar la autocrítica y la vergüenza sin juicio.',
         },
         gratitude: {
           title: 'Captura lo bueno',
@@ -1387,7 +1385,6 @@ export const translations: Record<Language, Translations> = {
     frameworkInfo: {
       evidenceBase: 'Base de Evidencia',
       type: 'Tipo',
-      effectivenessRating: 'Calificación de Eficacia',
       howToPractice: 'Cómo practicar',
       frequency: 'Frecuencia',
       duration: 'Duración',
@@ -1670,7 +1667,7 @@ export const translations: Record<Language, Translations> = {
     },
     onboarding: {
       step1Title: 'Bienvenido a Journal',
-      step1Description: 'Un espacio privado de journaling basado en evidencia. Cada método está respaldado por investigación o claramente marcado como tradición.',
+      step1Description: 'Un espacio privado de journaling informado por la investigación. Cada método se inspira en investigación o está claramente marcado como tradición.',
       step2Title: 'Una página al día',
       step2Description: 'Empieza desde Hoy. La app sugiere un estilo según la hora del día y tus intenciones abiertas. Solo escribe unos minutos.',
       step3Title: 'Tu práctica',
@@ -1706,22 +1703,22 @@ export const translations: Record<Language, Translations> = {
       title: 'Nueva Entrada de Diario',
       stepOf: 'Paso {step} de 3',
       whatDoYouNeed: '¿Qué necesitas hoy?',
-      whatDoYouNeedDescription: 'Elige un estilo de diario. Cada uno tiene guías respaldadas por investigación o tradición.',
+      whatDoYouNeedDescription: 'Elige un estilo de diario. Cada uno tiene guías inspiradas en investigación o tradición.',
       searchPlaceholder: 'Buscar tipos de entrada...',
       moreInfo: 'Más sobre {style}',
       unlocksAt: 'Se desbloquea en el nivel {level}',
       availableNow: 'Disponible ahora',
       showCommon: 'Mostrar solo opciones comunes',
       showAll: 'Mostrar todas las {count} opciones',
-      applyFramework: 'Aplicar un Marco de Investigación (opcional)',
+      applyFramework: 'Aplicar un Marco (opcional)',
       noFramework: 'Sin marco específico, solo usar el tipo de entrada',
-      frameworkHelp: 'Los marcos añaden guías de investigaciones o tradiciones específicas. La mayoría de las veces, el tipo de entrada es suficiente. Toca el ícono de información una vez que selecciones uno para saber más.',
+      frameworkHelp: 'Los marcos añaden guías de investigaciones o tradiciones. La mayoría de las veces, el tipo de entrada es suficiente. Toca el ícono de información una vez que selecciones uno para saber más.',
       startWriting: 'Empezar a Escribir',
       continue: 'Continuar',
       chosenStyle: 'Estilo elegido',
       autosaving: 'Guardando automáticamente',
       startAnywhere: 'Empieza donde quieras...',
-      whyThisWorks: 'Por qué funciona',
+      whyThisWorks: 'En qué se basa',
       evidence: 'Evidencia de investigación y tradición',
       leaveDraft: 'Tu borrador no se guardará.',
       leaveTitle: '¿Salir de esta entrada?',
@@ -1846,8 +1843,8 @@ export const translations: Record<Language, Translations> = {
       },
       cbt: {
         label: 'Registro de Pensamientos TCC',
-        description: 'Desafía pensamientos ansiosos o negativos con evidencia.',
-        useFor: 'Ansiedad, pensamientos intrusivos, reformulación cognitiva',
+        description: 'Explora pensamientos ansiosos o negativos examinando la evidencia.',
+        useFor: 'Pensamientos ansiosos, pensamientos intrusivos, reformulación cognitiva',
       },
       gratitude: {
         label: 'Gratitud',

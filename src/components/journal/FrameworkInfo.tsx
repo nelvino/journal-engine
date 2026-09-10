@@ -36,11 +36,6 @@ export const FrameworkInfo: React.FC<FrameworkInfoProps> = ({ framework }) => {
             <div className="p-4 bg-primary-50 rounded-xl">
               <p className="text-sm font-medium text-primary-800 mb-2">{t.frameworkInfo.evidenceBase}</p>
               <p className="text-sm text-primary-700 capitalize">{t.frameworkInfo.type}: {framework.evidenceBase.type}</p>
-              {framework.evidenceBase.effectivenessRating && (
-                <p className="text-sm text-primary-700">
-                  {t.frameworkInfo.effectivenessRating}: {framework.evidenceBase.effectivenessRating}/10
-                </p>
-              )}
               <ul className="mt-2 space-y-2">
                 {framework.evidenceBase.sources.map((source, index) => (
                   <li key={index} className="text-sm text-primary-700">
