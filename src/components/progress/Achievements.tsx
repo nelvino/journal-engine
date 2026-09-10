@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Award, Flame, BookOpen, Calendar, Target } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export interface Achievement {
   id: string;
@@ -25,10 +26,11 @@ const iconMap = {
 };
 
 export const Achievements: React.FC<AchievementsProps> = ({ achievements, className = '' }) => {
+  const { t } = useLanguage();
   return (
     <div className={`space-y-3 ${className}`}>
       <p className="text-sm text-muted-foreground">
-        Small celebrations of your consistency. These are optional nudges, not requirements. Missing a day is part of being human.
+        {t.progress.achievementsComponent.intro}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {achievements.map((achievement) => {
@@ -57,7 +59,7 @@ export const Achievements: React.FC<AchievementsProps> = ({ achievements, classN
                   </p>
                   {achievement.unlockedAt && (
                     <p className="text-xs text-success-700 mt-1">
-                      Unlocked {new Date(achievement.unlockedAt).toLocaleDateString()}
+                      {t.progress.achievementsComponent.unlocked} {new Date(achievement.unlockedAt).toLocaleDateString()}
                     </p>
                   )}
                 </div>

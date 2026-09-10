@@ -43,7 +43,7 @@ export default function ProgressPage() {
               {t.progress.title}
             </h1>
             <p className="text-muted-foreground">
-              Track your growth and celebrate your achievements
+              {t.progress.subtitle}
             </p>
           </div>
 
@@ -81,7 +81,7 @@ export default function ProgressPage() {
                 <p className="text-3xl font-bold text-accent-700">
                   {loading ? '...' : formatMinutes(stats?.totalMinutes || 0)}
                 </p>
-                <p className="text-sm text-muted-foreground">Total Time</p>
+                <p className="text-sm text-muted-foreground">{t.progress.stats.totalTime}</p>
               </CardContent>
             </Card>
 
@@ -93,7 +93,7 @@ export default function ProgressPage() {
                 <p className="text-3xl font-bold text-success-700">
                   {loading ? '...' : goalStats?.completedGoals || 0}
                 </p>
-                <p className="text-sm text-muted-foreground">Goals Done</p>
+                <p className="text-sm text-muted-foreground">{t.progress.stats.goalsDone}</p>
               </CardContent>
             </Card>
           </div>
@@ -103,22 +103,22 @@ export default function ProgressPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary-700" />
-                This Week
+                {t.progress.weekly.title}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p className="text-2xl font-bold text-foreground">{progress?.periodicStats.weekly.entriesThisWeek || 0}</p>
-                  <p className="text-sm text-muted-foreground">Entries</p>
+                  <p className="text-sm text-muted-foreground">{t.progress.weekly.entries}</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">{progress?.periodicStats.weekly.wordsThisWeek || 0}</p>
-                  <p className="text-sm text-muted-foreground">Words</p>
+                  <p className="text-sm text-muted-foreground">{t.progress.weekly.words}</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">{formatMinutes(progress?.periodicStats.weekly.minutesThisWeek || 0)}</p>
-                  <p className="text-sm text-muted-foreground">Time</p>
+                  <p className="text-sm text-muted-foreground">{t.progress.weekly.time}</p>
                 </div>
               </div>
             </CardContent>
@@ -129,7 +129,7 @@ export default function ProgressPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-primary-700" />
-                Mood Trends
+                {t.progress.moodTrends}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -142,7 +142,7 @@ export default function ProgressPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-primary-700" />
-                Framework Usage
+                {t.progress.frameworkUsage}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -158,7 +158,7 @@ export default function ProgressPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Award className="h-5 w-5 text-primary-700" />
-                Achievements
+                {t.progress.achievements}
               </CardTitle>
             </CardHeader>
             <CardContent>

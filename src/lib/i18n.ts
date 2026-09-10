@@ -125,12 +125,45 @@ export interface Translations {
   };
   progress: {
     title: string;
+    subtitle: string;
     currentStreak: string;
     currentStreakDescription: string;
     totalEntries: string;
     totalEntriesDescription: string;
     yourProgress: string;
     yourProgressDescription: string;
+    stats: {
+      totalTime: string;
+      goalsDone: string;
+    };
+    weekly: {
+      title: string;
+      entries: string;
+      words: string;
+      time: string;
+    };
+    moodTrends: string;
+    frameworkUsage: string;
+    achievements: string;
+    moodChart: {
+      empty: string;
+      labels: {
+        overall: string;
+        energy: string;
+        stress: string;
+        focus: string;
+      };
+    };
+    frameworkUsageComponent: {
+      empty: string;
+      entry: string;
+      entries: string;
+    };
+    achievementsComponent: {
+      intro: string;
+      unlocked: string;
+    };
+    achievementList: Record<string, { title: string; description: string }>;
   };
   settings: {
     title: string;
@@ -413,12 +446,78 @@ export const translations: Record<Language, Translations> = {
     },
     progress: {
       title: 'Progress',
+      subtitle: 'Track your growth and celebrate your achievements',
       currentStreak: 'Current Streak',
       currentStreakDescription: 'Keep going to build your streak!',
       totalEntries: 'Total Entries',
       totalEntriesDescription: 'Start journaling to track your progress',
       yourProgress: 'Your Progress',
       yourProgressDescription: 'Your detailed progress analytics will appear here as you journal.',
+      stats: {
+        totalTime: 'Total Time',
+        goalsDone: 'Goals Done',
+      },
+      weekly: {
+        title: 'This Week',
+        entries: 'Entries',
+        words: 'Words',
+        time: 'Time',
+      },
+      moodTrends: 'Mood Trends',
+      frameworkUsage: 'Framework Usage',
+      achievements: 'Achievements',
+      moodChart: {
+        empty: 'No mood data yet. Start journaling to see your mood trends.',
+        labels: {
+          overall: 'Overall',
+          energy: 'Energy',
+          stress: 'Stress',
+          focus: 'Focus',
+        },
+      },
+      frameworkUsageComponent: {
+        empty: 'No framework usage yet. Try a framework-specific entry to see your practice patterns.',
+        entry: 'entry',
+        entries: 'entries',
+      },
+      achievementsComponent: {
+        intro: 'Small celebrations of your consistency. These are optional nudges, not requirements. Missing a day is part of being human.',
+        unlocked: 'Unlocked',
+      },
+      achievementList: {
+        first_entry: {
+          title: 'First Entry',
+          description: 'Write your first journal entry.',
+        },
+        three_day_streak: {
+          title: 'Three-Day Streak',
+          description: 'Journal for three days in a row.',
+        },
+        seven_day_streak: {
+          title: 'Seven-Day Streak',
+          description: 'Journal for a week in a row.',
+        },
+        writer_1000: {
+          title: 'Thousand Words',
+          description: 'Write 1,000 words across all entries.',
+        },
+        goal_setter: {
+          title: 'Goal Setter',
+          description: 'Create your first goal.',
+        },
+        goal_achiever: {
+          title: 'Goal Achiever',
+          description: 'Complete your first goal.',
+        },
+        explorer: {
+          title: 'Framework Explorer',
+          description: 'Try three different frameworks.',
+        },
+        monthly_dedication: {
+          title: 'Monthly Dedication',
+          description: 'Journal for 30 total days.',
+        },
+      },
     },
     settings: {
       title: 'Settings',
@@ -984,12 +1083,78 @@ export const translations: Record<Language, Translations> = {
     },
     progress: {
       title: 'Progreso',
+      subtitle: 'Rastrea tu crecimiento y celebra tus logros',
       currentStreak: 'Racha Actual',
       currentStreakDescription: '¡Continúa para construir tu racha!',
       totalEntries: 'Total de Entradas',
       totalEntriesDescription: 'Comienza a escribir para rastrear tu progreso',
       yourProgress: 'Tu Progreso',
       yourProgressDescription: 'Tus análisis detallados de progreso aparecerán aquí mientras escribes.',
+      stats: {
+        totalTime: 'Tiempo Total',
+        goalsDone: 'Metas Hechas',
+      },
+      weekly: {
+        title: 'Esta Semana',
+        entries: 'Entradas',
+        words: 'Palabras',
+        time: 'Tiempo',
+      },
+      moodTrends: 'Tendencias de Estado de Ánimo',
+      frameworkUsage: 'Uso de Marcos',
+      achievements: 'Logros',
+      moodChart: {
+        empty: 'Aún no hay datos de estado de ánimo. Comienza a escribir para ver tus tendencias.',
+        labels: {
+          overall: 'General',
+          energy: 'Energía',
+          stress: 'Estrés',
+          focus: 'Enfoque',
+        },
+      },
+      frameworkUsageComponent: {
+        empty: 'Aún no hay uso de marcos. Prueba una entrada específica de un marco para ver tus patrones de práctica.',
+        entry: 'entrada',
+        entries: 'entradas',
+      },
+      achievementsComponent: {
+        intro: 'Pequeñas celebraciones de tu constancia. Son recordatorios opcionales, no requisitos. Perder un día es parte de ser humano.',
+        unlocked: 'Desbloqueado',
+      },
+      achievementList: {
+        first_entry: {
+          title: 'Primera Entrada',
+          description: 'Escribe tu primera entrada de diario.',
+        },
+        three_day_streak: {
+          title: 'Racha de Tres Días',
+          description: 'Escribe en el diario tres días seguidos.',
+        },
+        seven_day_streak: {
+          title: 'Racha de Siete Días',
+          description: 'Escribe en el diario una semana seguida.',
+        },
+        writer_1000: {
+          title: 'Mil Palabras',
+          description: 'Escribe 1,000 palabras en todas tus entradas.',
+        },
+        goal_setter: {
+          title: 'Fijador de Metas',
+          description: 'Crea tu primera meta.',
+        },
+        goal_achiever: {
+          title: 'Cumplidor de Metas',
+          description: 'Completa tu primera meta.',
+        },
+        explorer: {
+          title: 'Explorador de Marcos',
+          description: 'Prueba tres marcos diferentes.',
+        },
+        monthly_dedication: {
+          title: 'Dedicación Mensual',
+          description: 'Escribe 30 días en total.',
+        },
+      },
     },
     settings: {
       title: 'Configuración',

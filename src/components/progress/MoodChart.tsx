@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MoodChartProps {
   data: Array<{
@@ -14,23 +15,29 @@ interface MoodChartProps {
 }
 
 export const MoodChart: React.FC<MoodChartProps> = ({ data, className = '' }) => {
+  const { t, language } = useLanguage();
   if (data.length === 0) {
     return (
       <div className={`text-center py-8 text-muted-foreground ${className}`}>
-        No mood data yet. Start journaling to see your mood trends.
+        {t.progress.moodChart.empty}
       </div>
     );
   }
 
   // Show last 7 entries max
   const recentData = data.slice(-7);
-  const labels = ['Overall', 'Energy', 'Stress', 'Focus'];
+  const labels = [
+    t.progress.moodChart.labels.overall,
+    t.progress.moodChart.labels.energy,
+    t.progress.moodChart.labels.stress,
+    t.progress.moodChart.labels.focus,
+  ];
   const colors = ['bg-primary', 'bg-success', 'bg-warning', 'bg-accent'];
 
   const getBarHeight = (value: number) => `${(value / 10) * 100}%`;
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
+    return date.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
   };
 
   return (

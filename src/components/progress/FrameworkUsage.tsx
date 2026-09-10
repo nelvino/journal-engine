@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface FrameworkUsageItem {
   frameworkId: string;
@@ -17,10 +18,11 @@ interface FrameworkUsageProps {
 }
 
 export const FrameworkUsage: React.FC<FrameworkUsageProps> = ({ usage, totalEntries, className = '' }) => {
+  const { t } = useLanguage();
   if (usage.length === 0) {
     return (
       <div className={`text-center py-8 text-muted-foreground ${className}`}>
-        No framework usage yet. Try a framework-specific entry to see your practice patterns.
+        {t.progress.frameworkUsageComponent.empty}
       </div>
     );
   }
@@ -32,7 +34,7 @@ export const FrameworkUsage: React.FC<FrameworkUsageProps> = ({ usage, totalEntr
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium text-card-foreground">{item.frameworkName}</span>
             <span className="text-muted-foreground">
-              {item.count} {item.count === 1 ? 'entry' : 'entries'} ({Math.round(item.percentage)}%)
+              {item.count} {item.count === 1 ? t.progress.frameworkUsageComponent.entry : t.progress.frameworkUsageComponent.entries} ({Math.round(item.percentage)}%)
             </span>
           </div>
           <ProgressBar value={item.percentage} />

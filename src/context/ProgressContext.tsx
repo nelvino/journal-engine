@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useStorage } from '@/lib/useStorage';
-import type { JournalEntry, UserProgress, Goal } from '@/types';
+import { useLanguage } from '@/context/LanguageContext';
+import type { JournalEntry, UserProgress, Goal, EntryType } from '@/types';
 
 interface ProgressContextType {
   progress: UserProgress | null;
@@ -16,6 +17,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const storage = useStorage();
+  const { t } = useLanguage();
 
   const calculateProgress = async () => {
     try {
@@ -99,7 +101,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       
       const frameworkUsage = Object.entries(frameworkCounts).map(([id, count]) => ({
         frameworkId: id,
-        frameworkName: getFrameworkName(id),
+        frameworkName: t.entryTypes[id as EntryType]?.label || id,
         count,
         percentage: (count / entries.length) * 100,
       })).sort((a, b) => b.count - a.count);
@@ -116,7 +118,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       const goalCompletionRate = goals.length > 0 ? (completedGoals / goals.length) * 100 : 0;
       
       // Achievements
-      const achievements = calculateAchievements(entries, currentStreak, goals, totalWords);
+      const achievements = calculateAchievements(entries, currentStreak, goals, totalWords, t);
       
       const userProgress: UserProgress = {
         id: 'user-1',
@@ -239,61 +241,62 @@ function getFrameworkName(id: string): string {
   return names[id] || id;
 }
 
-function calculateAchievements(entries: JournalEntry[], currentStreak: number, goals: Goal[], totalWords: number) {
+function calculateAchievements(entries: JournalEntry[], currentStreak: number, goals: Goal[], totalWords: number, t: { progress: { achievementList: Record<string, { title: string; description: string }> } }) {
+  const list = t.progress.achievementList;
   const achievements = [
     {
       id: 'first_entry',
-      title: 'First Entry',
-      description: 'Write your first journal entry.',
+      title: list.first_entry.title,
+      description: list.first_entry.description,
       icon: 'book' as const,
       unlockedAt: entries.length >= 1 ? new Date(entries[entries.length - 1].createdAt) : undefined,
     },
     {
       id: 'three_day_streak',
-      title: 'Three-Day Streak',
-      description: 'Journal for three days in a row.',
+      title: list.three_day_streak.title,
+      description: list.three_day_streak.description,
       icon: 'flame' as const,
       unlockedAt: currentStreak >= 3 ? new Date() : undefined,
     },
     {
       id: 'seven_day_streak',
-      title: 'Seven-Day Streak',
-      description: 'Journal for a week in a row.',
+      title: list.seven_day_streak.title,
+      description: list.seven_day_streak.description,
       icon: 'flame' as const,
       unlockedAt: currentStreak >= 7 ? new Date() : undefined,
     },
     {
       id: 'writer_1000',
-      title: 'Thousand Words',
-      description: 'Write 1,000 words across all entries.',
+      title: list.writer_1000.title,
+      description: list.writer_1000.description,
       icon: 'book' as const,
       unlockedAt: totalWords >= 1000 ? new Date() : undefined,
     },
     {
       id: 'goal_setter',
-      title: 'Goal Setter',
-      description: 'Create your first goal.',
+      title: list.goal_setter.title,
+      description: list.goal_setter.description,
       icon: 'target' as const,
       unlockedAt: goals.length >= 1 ? new Date() : undefined,
     },
     {
       id: 'goal_achiever',
-      title: 'Goal Achiever',
-      description: 'Complete your first goal.',
+      title: list.goal_achiever.title,
+      description: list.goal_achiever.description,
       icon: 'target' as const,
       unlockedAt: goals.some(g => g.status === 'completed') ? new Date() : undefined,
     },
     {
       id: 'explorer',
-      title: 'Framework Explorer',
-      description: 'Try three different frameworks.',
+      title: list.explorer.title,
+      description: list.explorer.description,
       icon: 'award' as const,
       unlockedAt: new Set(entries.map(e => e.entryType)).size >= 3 ? new Date() : undefined,
     },
     {
       id: 'monthly_dedication',
-      title: 'Monthly Dedication',
-      description: 'Journal for 30 total days.',
+      title: list.monthly_dedication.title,
+      description: list.monthly_dedication.description,
       icon: 'calendar' as const,
       unlockedAt: entries.length >= 30 ? new Date() : undefined,
     },
