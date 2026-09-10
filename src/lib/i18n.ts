@@ -58,6 +58,16 @@ export interface Translations {
     why: string;
     recommendations: Record<string, { title: string; subtitle: string; prompt: string; reason: string }>;
   };
+  frameworkInfo: {
+    evidenceBase: string;
+    type: string;
+    effectivenessRating: string;
+    howToPractice: string;
+    frequency: string;
+    duration: string;
+    gotIt: string;
+    learnMore: string;
+  };
   goals: {
     title: string;
     subtitle: string;
@@ -361,6 +371,16 @@ export const translations: Record<Language, Translations> = {
           reason: 'Gratitude practice is a simple, low-pressure way to maintain consistency.',
         },
       },
+    },
+    frameworkInfo: {
+      evidenceBase: 'Evidence Base',
+      type: 'Type',
+      effectivenessRating: 'Effectiveness rating',
+      howToPractice: 'How to practice',
+      frequency: 'Frequency',
+      duration: 'Duration',
+      gotIt: 'Got it',
+      learnMore: 'Learn more about',
     },
     goals: {
       title: 'Goals',
@@ -998,6 +1018,16 @@ export const translations: Record<Language, Translations> = {
           reason: 'La práctica de gratitud es una forma sencilla y sin presión de mantener la constancia.',
         },
       },
+    },
+    frameworkInfo: {
+      evidenceBase: 'Base de Evidencia',
+      type: 'Tipo',
+      effectivenessRating: 'Calificación de Eficacia',
+      howToPractice: 'Cómo practicar',
+      frequency: 'Frecuencia',
+      duration: 'Duración',
+      gotIt: 'Entendido',
+      learnMore: 'Más información sobre',
     },
     goals: {
       title: 'Metas',

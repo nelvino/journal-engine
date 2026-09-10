@@ -3,6 +3,7 @@
 import React from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Info } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 import type { Framework } from '@/types';
 
 interface FrameworkInfoProps {
@@ -10,6 +11,7 @@ interface FrameworkInfoProps {
 }
 
 export const FrameworkInfo: React.FC<FrameworkInfoProps> = ({ framework }) => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = React.useState(false);
 
   if (!framework) return null;
@@ -20,8 +22,8 @@ export const FrameworkInfo: React.FC<FrameworkInfoProps> = ({ framework }) => {
         type="button"
         onClick={() => setIsOpen(true)}
         className="ml-2 p-1 rounded-full hover:bg-primary-100 text-primary-700 transition-colors"
-        aria-label={`Learn more about ${framework.name}`}
-        title={`Learn more about ${framework.name}`}
+        aria-label={`${t.frameworkInfo.learnMore} ${framework.name}`}
+        title={`${t.frameworkInfo.learnMore} ${framework.name}`}
       >
         <Info className="h-4 w-4" />
       </button>
@@ -32,11 +34,11 @@ export const FrameworkInfo: React.FC<FrameworkInfoProps> = ({ framework }) => {
 
           {framework.evidenceBase && (
             <div className="p-4 bg-primary-50 rounded-xl">
-              <p className="text-sm font-medium text-primary-800 mb-2">Evidence Base</p>
-              <p className="text-sm text-primary-700 capitalize">Type: {framework.evidenceBase.type}</p>
+              <p className="text-sm font-medium text-primary-800 mb-2">{t.frameworkInfo.evidenceBase}</p>
+              <p className="text-sm text-primary-700 capitalize">{t.frameworkInfo.type}: {framework.evidenceBase.type}</p>
               {framework.evidenceBase.effectivenessRating && (
                 <p className="text-sm text-primary-700">
-                  Effectiveness rating: {framework.evidenceBase.effectivenessRating}/10
+                  {t.frameworkInfo.effectivenessRating}: {framework.evidenceBase.effectivenessRating}/10
                 </p>
               )}
               <ul className="mt-2 space-y-2">
@@ -56,10 +58,10 @@ export const FrameworkInfo: React.FC<FrameworkInfoProps> = ({ framework }) => {
 
           {framework.protocol && (
             <div>
-              <p className="text-sm font-medium text-card-foreground mb-2">How to practice</p>
+              <p className="text-sm font-medium text-card-foreground mb-2">{t.frameworkInfo.howToPractice}</p>
               <div className="text-sm text-muted-foreground space-y-1">
-                <p><span className="font-medium">Frequency:</span> {framework.protocol.frequency}</p>
-                <p><span className="font-medium">Duration:</span> {framework.protocol.duration}</p>
+                <p><span className="font-medium">{t.frameworkInfo.frequency}:</span> {framework.protocol.frequency}</p>
+                <p><span className="font-medium">{t.frameworkInfo.duration}:</span> {framework.protocol.duration}</p>
                 <ol className="list-decimal list-inside space-y-1 mt-2">
                   {framework.protocol.structure.map((step, index) => (
                     <li key={index}>{step}</li>
@@ -74,7 +76,7 @@ export const FrameworkInfo: React.FC<FrameworkInfoProps> = ({ framework }) => {
               onClick={() => setIsOpen(false)}
               className="w-full py-2 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary-700 transition-colors"
             >
-              Got it
+              {t.frameworkInfo.gotIt}
             </button>
           </div>
         </div>
