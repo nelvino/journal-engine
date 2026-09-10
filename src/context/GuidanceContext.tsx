@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useStorage } from '@/lib/useStorage';
+import { useLanguage } from '@/context/LanguageContext';
 import type { JournalEntry, EntryType, Goal } from '@/types';
 
 interface DailyRecommendation {
@@ -26,6 +27,7 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
   const [recommendation, setRecommendation] = useState<DailyRecommendation | null>(null);
   const [loading, setLoading] = useState(true);
   const storage = useStorage();
+  const { t } = useLanguage();
 
   const generateRecommendation = async () => {
     try {
@@ -43,7 +45,7 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const recommendation = buildRecommendation(entries, goals);
+      const recommendation = buildRecommendation(entries, goals, t);
       setRecommendation(recommendation);
     } catch (error) {
       console.error('Error generating guidance:', error);
@@ -75,7 +77,7 @@ export function GuidanceProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function buildRecommendation(entries: JournalEntry[], goals: Goal[]): DailyRecommendation {
+function buildRecommendation(entries: JournalEntry[], goals: Goal[], t: { guidance: { recommendations: Record<string, { title: string; subtitle: string; prompt: string; reason: string }> } }): DailyRecommendation {
   const now = new Date();
   const hour = now.getHours();
   const isMorning = hour >= 5 && hour < 12;
@@ -85,87 +87,53 @@ function buildRecommendation(entries: JournalEntry[], goals: Goal[]): DailyRecom
   const lastMood = lastEntry?.content.mood?.overall || 5;
   const hasEntriesToday = entries.some(e => e.date === now.toISOString().split('T')[0]);
 
-  // Default by time of day
+  let entryType: EntryType = 'gratitude';
+  let priority: 'high' | 'medium' | 'low' = 'low';
+
   if (isMorning && !hasEntriesToday) {
-    return {
-      entryType: 'stoic_morning',
-      title: 'Start your day with intention',
-      subtitle: 'A 5-minute Stoic morning practice',
-      prompt: 'What challenges might you face today? How would your best self respond with wisdom, courage, justice, and temperance?',
-      reason: 'Morning preparation helps you anticipate the day and plan virtuous responses.',
-      priority: 'high',
-    };
+    entryType = 'stoic_morning';
+    priority = 'high';
+  } else if (isEvening && !hasEntriesToday) {
+    entryType = 'stoic_evening';
+    priority = 'high';
+  } else if (lastMood <= 3) {
+    entryType = 'self_compassion';
+    priority = 'high';
+  } else if (lastMood >= 8) {
+    entryType = 'gratitude';
+    priority = 'medium';
+  } else if (goals.some(g => g.status === 'active')) {
+    entryType = 'future_self';
+    priority = 'medium';
+  } else {
+    const recentTypes = entries.slice(0, 5).map(e => e.entryType);
+    if (!recentTypes.includes('cbt')) {
+      entryType = 'expressive';
+      priority = 'low';
+    } else {
+      entryType = 'gratitude';
+      priority = 'low';
+    }
   }
 
-  if (isEvening && !hasEntriesToday) {
-    return {
-      entryType: 'stoic_evening',
-      title: 'Review your day',
-      subtitle: 'Honest evening reflection',
-      prompt: 'What did you do well today? Where did you fall short? What will you do differently tomorrow?',
-      reason: 'Evening review supports learning from the day without self-judgment.',
-      priority: 'high',
-    };
-  }
+  const varietyGratitude = entryType === 'gratitude' && priority === 'low';
+  const rec = t.guidance.recommendations[varietyGratitude ? 'gratitude_fallback' : entryType];
 
-  // Mood-based guidance
-  if (lastMood <= 3) {
+  if (!rec) {
     return {
-      entryType: 'self_compassion',
-      title: 'Be kind to yourself',
-      subtitle: 'A gentle self-compassion check-in',
-      prompt: 'What is difficult right now? Imagine a friend going through this. What warm, supportive words would you offer them?',
-      reason: 'Your recent mood has been low. Self-compassion can help reduce self-criticism and shame.',
-      priority: 'high',
-    };
-  }
-
-  if (lastMood >= 8) {
-    return {
-      entryType: 'gratitude',
-      title: 'Capture the good',
-      subtitle: 'Build on positive momentum',
-      prompt: 'What are you grateful for today? Name one person, one experience, and one small thing.',
-      reason: 'Your recent mood has been strong. Gratitude can help savor and reinforce positive moments.',
-      priority: 'medium',
-    };
-  }
-
-  // Goal-based guidance
-  if (goals.some(g => g.status === 'active')) {
-    return {
-      entryType: 'future_self',
-      title: 'Connect with your goals',
-      subtitle: 'Future self visualization',
-      prompt: 'Imagine yourself 3 months from now having made meaningful progress. What is one small step you can take this week?',
-      reason: 'You have active goals. Future-self writing can strengthen motivation and planning.',
-      priority: 'medium',
-    };
-  }
-
-  // Variety-based guidance
-  const recentTypes = entries.slice(0, 5).map(e => e.entryType);
-  const typeCounts: Record<string, number> = {};
-  recentTypes.forEach(t => { typeCounts[t] = (typeCounts[t] || 0) + 1; });
-
-  if (!recentTypes.includes('cbt')) {
-    return {
-      entryType: 'expressive',
-      title: 'Free-write today',
-      subtitle: 'Clear your mind',
-      prompt: 'Set a timer for 5 minutes and write continuously about whatever is on your mind. Do not worry about grammar or structure.',
-      reason: 'Expressive writing can help process thoughts and feelings that are hard to name.',
-      priority: 'low',
+      entryType,
+      title: '',
+      subtitle: '',
+      prompt: '',
+      reason: '',
+      priority,
     };
   }
 
   return {
-    entryType: 'gratitude',
-    title: 'Gratitude moment',
-    subtitle: 'A quick positive reflection',
-    prompt: 'List three things you are grateful for right now, and briefly say why each matters to you.',
-    reason: 'Gratitude practice is a simple, low-pressure way to maintain consistency.',
-    priority: 'low',
+    entryType,
+    ...rec,
+    priority,
   };
 }
 

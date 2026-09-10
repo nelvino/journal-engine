@@ -42,38 +42,38 @@ export default function JournalPage() {
 
   const quickStartJourneys: QuickStartJourney[] = [
     {
-      id: 'morning-checkin',
-      title: 'Morning Check-In',
-      description: 'Set your mood and intentions for the day in under 5 minutes.',
+      id: 'morning_checkin',
+      title: t.journal.quickStart.morning_checkin.title,
+      description: t.journal.quickStart.morning_checkin.description,
       entryType: 'expressive',
-      duration: '5 min',
+      duration: t.journal.quickStart.morning_checkin.duration,
       icon: <Sun className="h-5 w-5" />,
       color: 'bg-warning-100 text-warning-700',
     },
     {
-      id: 'process-difficult',
-      title: 'Process Something Difficult',
-      description: 'Use the CBT thought record to untangle anxious or negative thinking.',
+      id: 'process_difficult',
+      title: t.journal.quickStart.process_difficult.title,
+      description: t.journal.quickStart.process_difficult.description,
       entryType: 'cbt',
-      duration: '10 min',
+      duration: t.journal.quickStart.process_difficult.duration,
       icon: <Brain className="h-5 w-5" />,
       color: 'bg-secondary-100 text-secondary-700',
     },
     {
-      id: 'future-vision',
-      title: 'Build Your Future Self',
-      description: 'Manifest where you want to be in 3, 6, and 12 months.',
+      id: 'future_vision',
+      title: t.journal.quickStart.future_vision.title,
+      description: t.journal.quickStart.future_vision.description,
       entryType: 'future_self',
-      duration: '15 min',
+      duration: t.journal.quickStart.future_vision.duration,
       icon: <Sparkles className="h-5 w-5" />,
       color: 'bg-accent-100 text-accent-700',
     },
     {
-      id: 'evening-review',
-      title: 'Evening Review',
-      description: 'Reflect on gratitude and review your day with Stoic honesty.',
+      id: 'evening_review',
+      title: t.journal.quickStart.evening_review.title,
+      description: t.journal.quickStart.evening_review.description,
       entryType: 'stoic_evening',
-      duration: '10 min',
+      duration: t.journal.quickStart.evening_review.duration,
       icon: <Moon className="h-5 w-5" />,
       color: 'bg-primary-100 text-primary-700',
     },
@@ -90,7 +90,7 @@ export default function JournalPage() {
               {t.journal.title}
             </h1>
             <p className="text-muted-foreground">
-              Your personal journaling sanctuary
+              {t.journal.subtitle}
             </p>
           </div>
 
@@ -120,12 +120,12 @@ export default function JournalPage() {
           {/* Quick Start Journeys */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold text-foreground">Quick Start</h2>
+              <h2 className="text-2xl font-semibold text-foreground">{t.journal.quickStartTitle}</h2>
               <Link
                 href="/journal/new"
                 className="text-sm font-medium text-primary-700 hover:text-primary-900 flex items-center gap-1"
               >
-                Explore all <ChevronRight className="h-4 w-4" />
+                {t.journal.exploreAll} <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -169,7 +169,7 @@ export default function JournalPage() {
               <div className="flex items-center justify-between">
                 <CardTitle>{t.journal.recentEntries}</CardTitle>
                 {entries.length > 0 && (
-                  <span className="text-sm text-muted-foreground">{entries.length} total</span>
+                  <span className="text-sm text-muted-foreground">{t.journal.list.total.replace('{count}', String(entries.length))}</span>
                 )}
               </div>
             </CardHeader>
@@ -180,7 +180,7 @@ export default function JournalPage() {
                     <Pen className="h-8 w-8 text-muted-foreground" />
                   </div>
                   <p className="text-muted-foreground">
-                    {t.journal.recentEntriesDescription}
+                    {t.journal.list.emptyTitle}
                   </p>
                   <Link href="/journal/new" className="inline-block mt-4">
                     <Button variant="primary" size="sm" icon={<Pen className="h-4 w-4" />}>
@@ -199,21 +199,21 @@ export default function JournalPage() {
                             <span className="text-sm text-muted-foreground">{new Date(entry.date).toLocaleDateString()}</span>
                             {entry.structuredData && (
                               <span className="text-xs px-2 py-1 bg-primary-100 text-primary-700 rounded-full">
-                                structured
+                                {t.journal.list.structured}
                               </span>
                             )}
                           </div>
                           <p className="text-foreground line-clamp-3">{entry.content.text}</p>
                           <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                            <span>{entry.sessionData.wordCount} words</span>
+                            <span>{entry.sessionData.wordCount} {t.journal.list.words}</span>
                             <span>{Math.floor(entry.sessionData.duration / 60)}m {entry.sessionData.duration % 60}s</span>
-                            {entry.content.mood && <span>Mood: {entry.content.mood.overall}/10</span>}
+                            {entry.content.mood && <span>{t.journal.list.mood}: {entry.content.mood.overall}/10</span>}
                           </div>
                         </div>
                         <button
                           onClick={() => deleteEntry(entry.id)}
                           className="p-2 text-error-600 hover:bg-error-100 rounded-lg transition-colors"
-                          aria-label="Delete entry"
+                          aria-label={t.journal.list.deleteEntry}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>

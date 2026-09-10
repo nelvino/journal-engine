@@ -33,11 +33,30 @@ export interface Translations {
   };
   journal: {
     title: string;
+    subtitle: string;
     todaysEntry: string;
     todaysEntryDescription: string;
     startNewEntry: string;
     recentEntries: string;
     recentEntriesDescription: string;
+    quickStartTitle: string;
+    exploreAll: string;
+    quickStart: Record<string, { title: string; description: string; duration: string }>;
+    list: {
+      total: string;
+      emptyTitle: string;
+      structured: string;
+      words: string;
+      mood: string;
+      deleteEntry: string;
+    };
+  };
+  guidance: {
+    todaySuggestion: string;
+    startThisPrompt: string;
+    notNow: string;
+    why: string;
+    recommendations: Record<string, { title: string; subtitle: string; prompt: string; reason: string }>;
   };
   goals: {
     title: string;
@@ -221,11 +240,94 @@ export const translations: Record<Language, Translations> = {
     },
     journal: {
       title: 'Journal',
+      subtitle: 'Your personal journaling sanctuary',
       todaysEntry: "Today's Journal Entry",
       todaysEntryDescription: 'Start your journaling practice with evidence-based prompts and frameworks.',
       startNewEntry: 'Start New Entry',
       recentEntries: 'Recent Entries',
       recentEntriesDescription: 'Your recent journal entries will appear here.',
+      quickStartTitle: 'Quick Start',
+      exploreAll: 'Explore all',
+      quickStart: {
+        morning_checkin: {
+          title: 'Morning Check-In',
+          description: 'Set your mood and intentions for the day in under 5 minutes.',
+          duration: '5 min',
+        },
+        process_difficult: {
+          title: 'Process Something Difficult',
+          description: 'Use the CBT thought record to untangle anxious or negative thinking.',
+          duration: '10 min',
+        },
+        future_vision: {
+          title: 'Build Your Future Self',
+          description: 'Manifest where you want to be in 3, 6, and 12 months.',
+          duration: '15 min',
+        },
+        evening_review: {
+          title: 'Evening Review',
+          description: 'Reflect on gratitude and review your day with Stoic honesty.',
+          duration: '10 min',
+        },
+      },
+      list: {
+        total: '{count} total',
+        emptyTitle: 'No entries yet',
+        structured: 'structured',
+        words: 'words',
+        mood: 'Mood',
+        deleteEntry: 'Delete entry',
+      },
+    },
+    guidance: {
+      todaySuggestion: "Today's Suggestion",
+      startThisPrompt: 'Start This Prompt',
+      notNow: 'Not now',
+      why: 'Why this suggestion?',
+      recommendations: {
+        stoic_morning: {
+          title: 'Start your day with intention',
+          subtitle: 'A 5-minute Stoic morning practice',
+          prompt: 'What challenges might you face today? How would your best self respond with wisdom, courage, justice, and temperance?',
+          reason: 'Morning preparation helps you anticipate the day and plan virtuous responses.',
+        },
+        stoic_evening: {
+          title: 'Review your day',
+          subtitle: 'Honest evening reflection',
+          prompt: 'What did you do well today? Where did you fall short? What will you do differently tomorrow?',
+          reason: 'Evening review supports learning from the day without self-judgment.',
+        },
+        self_compassion: {
+          title: 'Be kind to yourself',
+          subtitle: 'A gentle self-compassion check-in',
+          prompt: 'What is difficult right now? Imagine a friend going through this. What warm, supportive words would you offer them?',
+          reason: 'Your recent mood has been low. Self-compassion can help reduce self-criticism and shame.',
+        },
+        gratitude: {
+          title: 'Capture the good',
+          subtitle: 'Build on positive momentum',
+          prompt: 'What are you grateful for today? Name one person, one experience, and one small thing.',
+          reason: 'Your recent mood has been strong. Gratitude can help savor and reinforce positive moments.',
+        },
+        future_self: {
+          title: 'Connect with your goals',
+          subtitle: 'Future self visualization',
+          prompt: 'Imagine yourself 3 months from now having made meaningful progress. What is one small step you can take this week?',
+          reason: 'You have active goals. Future-self writing can strengthen motivation and planning.',
+        },
+        expressive: {
+          title: 'Free-write today',
+          subtitle: 'Clear your mind',
+          prompt: 'Set a timer for 5 minutes and write continuously about whatever is on your mind. Do not worry about grammar or structure.',
+          reason: 'Expressive writing can help process thoughts and feelings that are hard to name.',
+        },
+        gratitude_fallback: {
+          title: 'Gratitude moment',
+          subtitle: 'A quick positive reflection',
+          prompt: 'List three things you are grateful for right now, and briefly say why each matters to you.',
+          reason: 'Gratitude practice is a simple, low-pressure way to maintain consistency.',
+        },
+      },
     },
     goals: {
       title: 'Goals',
@@ -709,11 +811,94 @@ export const translations: Record<Language, Translations> = {
     },
     journal: {
       title: 'Diario',
+      subtitle: 'Tu santuario personal de diario',
       todaysEntry: 'Entrada de Hoy',
       todaysEntryDescription: 'Comienza tu práctica de diario con preguntas basadas en evidencia y marcos de trabajo.',
       startNewEntry: 'Nueva Entrada',
       recentEntries: 'Entradas Recientes',
       recentEntriesDescription: 'Tus entradas recientes aparecerán aquí.',
+      quickStartTitle: 'Inicio Rápido',
+      exploreAll: 'Explorar todo',
+      quickStart: {
+        morning_checkin: {
+          title: 'Check-In de la Mañana',
+          description: 'Establece tu estado de ánimo e intenciones para el día en menos de 5 minutos.',
+          duration: '5 min',
+        },
+        process_difficult: {
+          title: 'Procesar Algo Difícil',
+          description: 'Usa el registro de pensamientos TCC para desenredar pensamientos ansiosos o negativos.',
+          duration: '10 min',
+        },
+        future_vision: {
+          title: 'Construir tu Yo Futuro',
+          description: 'Manifiesta dónde quieres estar en 3, 6 y 12 meses.',
+          duration: '15 min',
+        },
+        evening_review: {
+          title: 'Revisión de la Noche',
+          description: 'Reflexiona sobre la gratitud y revisa tu día con honestidad estoica.',
+          duration: '10 min',
+        },
+      },
+      list: {
+        total: '{count} total',
+        emptyTitle: 'Aún no hay entradas',
+        structured: 'estructurado',
+        words: 'palabras',
+        mood: 'Estado de ánimo',
+        deleteEntry: 'Eliminar entrada',
+      },
+    },
+    guidance: {
+      todaySuggestion: 'Sugerencia de Hoy',
+      startThisPrompt: 'Comenzar esta Sugerencia',
+      notNow: 'Ahora no',
+      why: '¿Por qué esta sugerencia?',
+      recommendations: {
+        stoic_morning: {
+          title: 'Comienza tu día con intención',
+          subtitle: 'Una práctica estoica de la mañana de 5 minutos',
+          prompt: '¿Qué desafíos podrías enfrentar hoy? ¿Cómo respondería tu mejor yo con sabiduría, coraje, justicia y templanza?',
+          reason: 'La preparación matutina te ayuda a anticipar el día y planificar respuestas virtuosas.',
+        },
+        stoic_evening: {
+          title: 'Revisa tu día',
+          subtitle: 'Reflexión honesta de la noche',
+          prompt: '¿Qué hiciste bien hoy? ¿Dónde te quedaste corto? ¿Qué harás diferente mañana?',
+          reason: 'La revisión nocturna apoya el aprendizaje del día sin autojuicio.',
+        },
+        self_compassion: {
+          title: 'Sé amable contigo mismo',
+          subtitle: 'Una revisión suave de autocompasión',
+          prompt: '¿Qué es difícil ahora? Imagina a un amigo pasando por esto. ¿Qué palabras cálidas y de apoyo le ofrecerías?',
+          reason: 'Tu estado de ánimo reciente ha sido bajo. La autocompasión puede reducir la autocrítica y la vergüenza.',
+        },
+        gratitude: {
+          title: 'Captura lo bueno',
+          subtitle: 'Aprovecha el impulso positivo',
+          prompt: '¿Por qué estás agradecido hoy? Nombra una persona, una experiencia y una cosa pequeña.',
+          reason: 'Tu estado de ánimo reciente ha sido fuerte. La gratitud puede ayudar a saborear y reforzar momentos positivos.',
+        },
+        future_self: {
+          title: 'Conecta con tus metas',
+          subtitle: 'Visualización del yo futuro',
+          prompt: 'Imagínate dentro de 3 meses habiendo hecho un progreso significativo. ¿Cuál es un pequeño paso que puedes dar esta semana?',
+          reason: 'Tienes metas activas. Escribir sobre el yo futuro puede fortalecer la motivación y la planificación.',
+        },
+        expressive: {
+          title: 'Escribe libremente hoy',
+          subtitle: 'Despeja tu mente',
+          prompt: 'Pon un temporizador de 5 minutos y escribe continuamente sobre lo que sea que esté en tu mente. No te preocupes por la gramática o estructura.',
+          reason: 'La escritura expresiva puede ayudar a procesar pensamientos y sentimientos difíciles de nombrar.',
+        },
+        gratitude_fallback: {
+          title: 'Momento de gratitud',
+          subtitle: 'Una reflexión positiva rápida',
+          prompt: 'Enumera tres cosas por las que estás agradecido ahora, y di brevemente por qué cada una importa.',
+          reason: 'La práctica de gratitud es una forma sencilla y sin presión de mantener la constancia.',
+        },
+      },
     },
     goals: {
       title: 'Metas',

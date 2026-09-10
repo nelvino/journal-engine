@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useGuidance } from '@/context/GuidanceContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { Sparkles, X, Clock } from 'lucide-react';
 
 export const DailyPrompt: React.FC = () => {
+  const { t } = useLanguage();
   const { recommendation, loading, dismissRecommendation } = useGuidance();
 
   if (loading) return null;
@@ -22,7 +24,7 @@ export const DailyPrompt: React.FC = () => {
               <div className="p-1.5 bg-primary-100 rounded-lg">
                 <Sparkles className="h-4 w-4 text-primary-700" />
               </div>
-              <span className="text-xs font-medium text-primary-700 uppercase tracking-wide">Today&apos;s Suggestion</span>
+              <span className="text-xs font-medium text-primary-700 uppercase tracking-wide">{t.guidance.todaySuggestion}</span>
             </div>
             <h3 className="text-lg font-semibold text-foreground mb-1">{recommendation.title}</h3>
             <p className="text-sm text-muted-foreground mb-3">{recommendation.subtitle}</p>
@@ -30,20 +32,20 @@ export const DailyPrompt: React.FC = () => {
             <div className="flex items-center gap-3">
               <Link href={`/journal/new?type=${recommendation.entryType}`}>
                 <Button variant="primary" size="sm" icon={<Sparkles className="h-4 w-4" />}>
-                  Start This Prompt
+                  {t.guidance.startThisPrompt}
                 </Button>
               </Link>
               <button
                 onClick={dismissRecommendation}
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
               >
-                <X className="h-3 w-3" /> Not now
+                <X className="h-3 w-3" /> {t.guidance.notNow}
               </button>
             </div>
           </div>
         </div>
         <p className="text-xs text-muted-foreground mt-4 pt-3 border-t border-border/50">
-          <span className="font-medium">Why this suggestion?</span> {recommendation.reason}
+          <span className="font-medium">{t.guidance.why}</span> {recommendation.reason}
         </p>
       </CardContent>
     </Card>
