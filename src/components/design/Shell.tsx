@@ -3,9 +3,10 @@
 import React, { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen, Calendar, User } from 'lucide-react';
+import { Home, BookOpen, Calendar, LogIn, User } from 'lucide-react';
 import { cn, toLocalISODate } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 import { useStorage } from '@/lib/useStorage';
 import { useToast } from '@/context/ToastContext';
 import type { JournalEntry } from '@/types';
@@ -52,6 +53,7 @@ function NavLink({ item, layout }: { item: NavItem; layout: 'bottom' | 'rail' })
 
 export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const storage = useStorage();
   const { addToast } = useToast();
 
@@ -128,6 +130,26 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         <NavLink key={item.id} item={item} layout="bottom" />
       ))}
     </nav>
+
+    {/* Account indicator */}
+    <Link
+      href="/you"
+      className="fixed top-4 right-4 md:top-6 md:right-6 z-50 w-11 h-11 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      aria-label={user ? t.settings.account : t.settings.signIn}
+      title={user ? (user.email ?? t.settings.account) : t.settings.signIn}
+    >
+      {user?.photoURL ? (
+        <img
+          src={user.photoURL}
+          alt=""
+          className="w-8 h-8 rounded-full object-cover"
+        />
+      ) : user ? (
+        <User className="w-5 h-5 text-ink-caption" strokeWidth={1.5} />
+      ) : (
+        <LogIn className="w-5 h-5 text-ink-caption hover:text-ink transition-colors" strokeWidth={1.5} />
+      )}
+    </Link>
   </div>
   );
 };
