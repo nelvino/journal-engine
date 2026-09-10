@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { FieldLabel } from '@/components/ui/Input';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface SelfCompassionProps {
   data: {
@@ -46,6 +47,7 @@ const fields = [
 ] as const;
 
 export const SelfCompassion: React.FC<SelfCompassionProps> = ({ data, onChange }) => {
+  const { t } = useLanguage();
   const updateField = <K extends keyof SelfCompassionProps['data']>(
     field: K,
     value: SelfCompassionProps['data'][K]
@@ -56,7 +58,7 @@ export const SelfCompassion: React.FC<SelfCompassionProps> = ({ data, onChange }
   return (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>Self-Compassion Writing</CardTitle>
+        <CardTitle>{t.frameworks.self_compassion.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="p-4 bg-accent-50 rounded-xl text-sm text-accent-800">
@@ -72,21 +74,21 @@ export const SelfCompassion: React.FC<SelfCompassionProps> = ({ data, onChange }
         </div>
 
         <p className="text-muted-foreground text-sm leading-relaxed">
-          Work through a difficulty using the three components of self-compassion. This exercise is for reflection and emotional support, not a substitute for therapy.
+          {t.frameworks.self_compassion.intro}
         </p>
 
         {fields.map((field) => (
           <div key={field.key}>
             <FieldLabel
-              label={field.label}
-              hint={field.placeholder}
+              label={t.frameworks.self_compassion.fields[field.key].label}
+              hint={t.frameworks.self_compassion.fields[field.key].placeholder}
               hasValue={data[field.key].trim().length > 0}
             />
-            <p className="text-xs text-muted-foreground mb-2">{field.description}</p>
+            <p className="text-xs text-muted-foreground mb-2">{t.frameworks.self_compassion.fields[field.key].description}</p>
             <textarea
               value={data[field.key]}
               onChange={(e) => updateField(field.key, e.target.value)}
-              placeholder={field.placeholder}
+              placeholder={t.frameworks.self_compassion.fields[field.key].placeholder}
               className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
               style={{ minHeight: field.minHeight }}
             />

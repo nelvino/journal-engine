@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { FieldLabel } from '@/components/ui/Input';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface FutureSelfVisionProps {
   data: {
@@ -63,6 +64,7 @@ const fields = [
 ] as const;
 
 export const FutureSelfVision: React.FC<FutureSelfVisionProps> = ({ data, onChange }) => {
+  const { t } = useLanguage();
   const updateField = <K extends keyof FutureSelfVisionProps['data']>(
     field: K,
     value: FutureSelfVisionProps['data'][K]
@@ -73,7 +75,7 @@ export const FutureSelfVision: React.FC<FutureSelfVisionProps> = ({ data, onChan
   return (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>Future Self Vision</CardTitle>
+        <CardTitle>{t.frameworks.future_self.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="p-4 bg-accent-50 rounded-xl text-sm text-accent-800">
@@ -95,14 +97,14 @@ export const FutureSelfVision: React.FC<FutureSelfVisionProps> = ({ data, onChan
         {fields.map((field) => (
           <div key={field.key}>
             <FieldLabel
-              label={field.label}
-              hint={field.placeholder}
+              label={t.frameworks.future_self.fields[field.key].label}
+              hint={t.frameworks.future_self.fields[field.key].placeholder}
               hasValue={data[field.key].trim().length > 0}
             />
             <textarea
               value={data[field.key]}
               onChange={(e) => updateField(field.key, e.target.value)}
-              placeholder={field.placeholder}
+              placeholder={t.frameworks.future_self.fields[field.key].placeholder}
               className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
               style={{ minHeight: field.minHeight }}
             />

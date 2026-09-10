@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { FieldLabel } from '@/components/ui/Input';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface StoicPracticeProps {
   data: {
@@ -17,6 +18,7 @@ interface StoicPracticeProps {
 }
 
 export const StoicPractice: React.FC<StoicPracticeProps> = ({ data, onChange }) => {
+  const { t } = useLanguage();
   const updateField = <K extends keyof StoicPracticeProps['data']>(
     field: K,
     value: StoicPracticeProps['data'][K]
@@ -63,7 +65,7 @@ export const StoicPractice: React.FC<StoicPracticeProps> = ({ data, onChange }) 
         onClick={() => onItemsChange([...items, ''])}
         className="text-sm text-primary-700 hover:text-primary-800 font-medium transition-colors"
       >
-        + Add another
+        {t.frameworks.stoic.addAnother}
       </button>
     </div>
   );
@@ -73,7 +75,7 @@ export const StoicPractice: React.FC<StoicPracticeProps> = ({ data, onChange }) 
   return (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>Stoic {isMorning ? 'Morning Preparation' : 'Evening Review'}</CardTitle>
+        <CardTitle>{t.frameworks.stoic.title[isMorning ? 'morning' : 'evening']}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex gap-2 p-1 bg-muted rounded-xl">
@@ -86,7 +88,7 @@ export const StoicPractice: React.FC<StoicPracticeProps> = ({ data, onChange }) 
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            Morning
+            {t.frameworks.stoic.morning}
           </button>
           <button
             type="button"
@@ -97,60 +99,60 @@ export const StoicPractice: React.FC<StoicPracticeProps> = ({ data, onChange }) 
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            Evening
+            {t.frameworks.stoic.evening}
           </button>
         </div>
 
         {isMorning ? (
           <>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Based on Stoic morning practice (premeditatio malorum): anticipate challenges you may face today and plan how you will respond with virtue.
+              {t.frameworks.stoic.intro.morning}
             </p>
 
             {listField(
-              'Challenges You May Face Today',
+              t.frameworks.stoic.fields.challengesAnticipated.label,
               data.challengesAnticipated || [],
               (items) => updateField('challengesAnticipated', items),
-              'What difficulty might arise today?'
+              t.frameworks.stoic.fields.challengesAnticipated.placeholder
             )}
 
             {listField(
-              'Virtuous Responses',
+              t.frameworks.stoic.fields.virtuousResponses.label,
               data.virtuousResponses || [],
               (items) => updateField('virtuousResponses', items),
-              'How will you respond with wisdom, courage, justice, or temperance?'
+              t.frameworks.stoic.fields.virtuousResponses.placeholder
             )}
           </>
         ) : (
           <>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Based on Stoic evening review: reflect on your day with honesty, noting what went well, what did not, and what you can learn.
+              {t.frameworks.stoic.intro.evening}
             </p>
 
             {listField(
-              'Successes',
+              t.frameworks.stoic.fields.successes.label,
               data.successes || [],
               (items) => updateField('successes', items),
-              'What did you do well today?'
+              t.frameworks.stoic.fields.successes.placeholder
             )}
 
             {listField(
-              'Failures or Missed Opportunities',
+              t.frameworks.stoic.fields.failures.label,
               data.failures || [],
               (items) => updateField('failures', items),
-              'Where did you fall short of your values?'
+              t.frameworks.stoic.fields.failures.placeholder
             )}
 
             <div>
               <FieldLabel
-                label="Lessons for Tomorrow"
-                hint="What will you do differently tomorrow?"
+                label={t.frameworks.stoic.fields.lessons.label}
+                hint={t.frameworks.stoic.fields.lessons.placeholder}
                 hasValue={(data.lessons || '').trim().length > 0}
               />
               <textarea
                 value={data.lessons || ''}
                 onChange={(e) => updateField('lessons', e.target.value || undefined)}
-                placeholder="What will you do differently tomorrow?"
+                placeholder={t.frameworks.stoic.fields.lessons.placeholder}
                 className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
               />
             </div>

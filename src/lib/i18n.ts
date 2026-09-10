@@ -114,6 +114,7 @@ export interface Translations {
     saveError: string;
   };
   entryTypes: Record<EntryType, { label: string; description: string; useFor: string }>;
+  frameworks: Record<string, any>;
 }
 
 export const translations: Record<Language, Translations> = {
@@ -312,6 +313,206 @@ export const translations: Record<Language, Translations> = {
         useFor: 'Free writing, unstructured journaling',
       },
     },
+    frameworks: {
+      expressive: {
+        title: 'Expressive Writing',
+        fields: {
+          topic: {
+            label: 'Topic or Focus',
+            placeholder: 'e.g., A recent challenge, a memory, a fear...',
+          },
+          emotionalDepth: {
+            label: 'Emotional Depth (1-10)',
+            low: 'Surface-level',
+            high: 'Deeply emotional',
+          },
+          catharsis: {
+            label: 'Catharsis / Release (1-10)',
+            low: 'No release',
+            high: 'Strong release',
+          },
+        },
+      },
+      future_self: {
+        title: 'Future Self Vision',
+        fields: {
+          presentState: {
+            label: 'Where are you right now?',
+            placeholder: 'Describe your current situation honestly. What is working and what feels stuck?',
+          },
+          threeMonthVision: {
+            label: '3-Month Future Self',
+            placeholder: 'Imagine yourself 3 months from now. What has changed? How do you feel? What are you doing?',
+          },
+          sixMonthVision: {
+            label: '6-Month Future Self',
+            placeholder: 'Look further ahead. What milestones have you reached? What kind of person are you becoming?',
+          },
+          twelveMonthVision: {
+            label: '12-Month Future Self',
+            placeholder: 'One year from today. What does your life look like? Be specific but flexible. This is a direction, not a contract.',
+          },
+          obstacles: {
+            label: 'Likely Obstacles',
+            placeholder: 'What might get in the way? Naming obstacles in advance makes them easier to navigate.',
+          },
+          supportNeeded: {
+            label: 'Support You Will Need',
+            placeholder: 'People, habits, resources, or mindset shifts that will help you move toward this vision.',
+          },
+          weeklyAction: {
+            label: 'One Action This Week',
+            placeholder: 'What is one small, concrete step you can take this week? (Keep it tiny and doable.)',
+          },
+        },
+      },
+      cbt: {
+        title: 'CBT Thought Record',
+        fields: {
+          situation: {
+            label: 'Situation',
+            placeholder: 'Describe what happened, where you were, and who was involved...',
+          },
+          automaticThoughts: {
+            label: 'Automatic Thoughts',
+            placeholder: 'What thought went through your mind?',
+          },
+          emotions: {
+            label: 'Emotions & Intensity',
+            emotionPlaceholder: 'Emotion (e.g., anxiety, sadness)',
+            addEmotion: '+ Add emotion',
+          },
+          evidenceFor: {
+            label: 'Evidence For the Thought',
+            placeholder: 'What evidence supports this thought?',
+          },
+          evidenceAgainst: {
+            label: 'Evidence Against the Thought',
+            placeholder: 'What evidence contradicts this thought?',
+          },
+          balancedPerspective: {
+            label: 'Balanced Perspective',
+            placeholder: 'Given the evidence for and against, what is a more balanced way to view this situation?',
+          },
+          finalEmotionRating: {
+            label: 'Final Emotion Rating (1-10)',
+          },
+        },
+        addAnother: '+ Add another',
+      },
+      gratitude: {
+        title: 'Gratitude Practice',
+        intro: 'List things, people, experiences, or opportunities you feel grateful for today. Research suggests gratitude journaling can support well-being, though effects vary by person and context.',
+        item: {
+          title: 'Gratitude #',
+          placeholder: 'I am grateful for...',
+          detailPlaceholder: 'Why are you grateful for this? How does it affect your life? (optional)',
+        },
+        types: {
+          person: 'Person',
+          experience: 'Experience',
+          opportunity: 'Opportunity',
+          thing: 'Thing',
+        },
+        addItem: '+ Add gratitude item',
+        recipient: {
+          label: 'Gratitude Letter Recipient (optional)',
+          hint: 'Someone you want to express gratitude toward',
+          placeholder: 'Someone you want to express gratitude toward',
+        },
+      },
+      self_compassion: {
+        title: 'Self-Compassion Writing',
+        intro: 'Work through a difficulty using the three components of self-compassion. This exercise is for reflection and emotional support, not a substitute for therapy.',
+        fields: {
+          stressfulEvent: {
+            label: 'Stressful Event',
+            placeholder: 'Describe a difficulty, mistake, or painful experience you are facing...',
+            description: 'Identify the situation you want to work with, as you would in a self-compassion letter or journal exercise.',
+          },
+          mindfulnessObservation: {
+            label: 'Mindfulness: Observe Without Judgment',
+            placeholder: 'What thoughts and feelings are present? Can you notice them without suppressing or exaggerating them?',
+            description: 'Neff (2003b) identifies mindfulness as the first component of self-compassion: balanced awareness of painful experiences.',
+          },
+          commonHumanity: {
+            label: 'Common Humanity: You Are Not Alone',
+            placeholder: 'How is this struggle part of the shared human experience? Who else might feel this way?',
+            description: 'Self-compassion involves recognizing suffering as part of the human condition, not isolating. See Kristin Neff, Self-Compassion (2011).',
+          },
+          kindResponse: {
+            label: 'Self-Kindness: What Would You Say to a Friend?',
+            placeholder: 'What caring, supportive, and encouraging words would you offer yourself?',
+            description: 'Neff describes self-kindness as extending the same warmth and understanding to oneself as to a good friend.',
+          },
+        },
+      },
+      stoic: {
+        title: {
+          morning: 'Stoic Morning Preparation',
+          evening: 'Stoic Evening Review',
+        },
+        morning: 'Morning',
+        evening: 'Evening',
+        intro: {
+          morning: 'Based on Stoic morning practice (premeditatio malorum): anticipate challenges you may face today and plan how you will respond with virtue.',
+          evening: 'Based on Stoic evening review: reflect on your day with honesty, noting what went well, what did not, and what you can learn.',
+        },
+        fields: {
+          challengesAnticipated: {
+            label: 'Challenges You May Face Today',
+            placeholder: 'What difficulty might arise today?',
+          },
+          virtuousResponses: {
+            label: 'Virtuous Responses',
+            placeholder: 'How will you respond with wisdom, courage, justice, or temperance?',
+          },
+          successes: {
+            label: 'Successes',
+            placeholder: 'What did you do well today?',
+          },
+          failures: {
+            label: 'Failures or Missed Opportunities',
+            placeholder: 'Where did you fall short of your values?',
+          },
+          lessons: {
+            label: 'Lessons for Tomorrow',
+            placeholder: 'What will you do differently tomorrow?',
+          },
+        },
+        addAnother: '+ Add another',
+      },
+      confucian: {
+        title: 'Confucian Self-Examination',
+        source: 'Source: Analects 1.4',
+        quote: '"I examine myself on three things: in what I have undertaken on behalf of others, have I done my best? In my dealings with my friends, have I been trustworthy? And have I practiced what has been transmitted to me?"',
+        citation: 'Translation based on Roger T. Ames & Henry Rosemont, Jr., The Analects of Confucius: A Philosophical Translation (1998).',
+        intro: 'Rate yourself and reflect on each of the three Confucian dimensions. This is a traditional reflective practice, not a clinical assessment.',
+        dimensions: {
+          loyalty: {
+            label: 'Loyalty / Devotion (忠, zhōng)',
+            question: 'In what I have undertaken on behalf of others, have I done my best?',
+            description: 'Based on Analects 1.4: "I examine myself on three things." This is a traditional Confucian practice of self-scrutiny, not a clinical intervention.',
+          },
+          trustworthiness: {
+            label: 'Trustworthiness (信, xìn)',
+            question: 'In my dealings with friends and others, have I been trustworthy?',
+            description: 'Confucius emphasizes trustworthiness as a core virtue. Self-rating here is for reflection, not diagnosis.',
+          },
+          practice: {
+            label: 'Practice / Learning (習, xí)',
+            question: 'Did I practice what I have learned? Rate 1-10 and reflect on how to better apply knowledge.',
+            description: 'Confucian self-cultivation involves reviewing whether one applies what one learns.',
+          },
+        },
+        rating: 'Rating (1-10)',
+        reflection: {
+          label: 'Reflection',
+          hint: 'What did you do well? Where can you improve?',
+          placeholder: 'What did you do well? Where can you improve?',
+        },
+      },
+    },
   },
   es: {
     nav: {
@@ -506,6 +707,206 @@ export const translations: Record<Language, Translations> = {
         label: 'Personalizado',
         description: 'Una entrada en blanco sin marco específico.',
         useFor: 'Escritura libre, diario no estructurado',
+      },
+    },
+    frameworks: {
+      expressive: {
+        title: 'Escritura Expresiva',
+        fields: {
+          topic: {
+            label: 'Tema o Enfoque',
+            placeholder: 'p. ej., Un desafío reciente, un recuerdo, un miedo...',
+          },
+          emotionalDepth: {
+            label: 'Profundidad Emocional (1-10)',
+            low: 'Superficial',
+            high: 'Muy emocional',
+          },
+          catharsis: {
+            label: 'Cataris / Liberación (1-10)',
+            low: 'Sin liberación',
+            high: 'Fuerte liberación',
+          },
+        },
+      },
+      future_self: {
+        title: 'Visión del Yo Futuro',
+        fields: {
+          presentState: {
+            label: '¿Dónde estás ahora?',
+            placeholder: 'Describe tu situación actual con honestidad. ¿Qué funciona y qué se siente estancado?',
+          },
+          threeMonthVision: {
+            label: 'Yo Futuro a 3 Meses',
+            placeholder: 'Imagínate dentro de 3 meses. ¿Qué ha cambiado? ¿Cómo te sientes? ¿Qué estás haciendo?',
+          },
+          sixMonthVision: {
+            label: 'Yo Futuro a 6 Meses',
+            placeholder: 'Mira más allá. ¿Qué hitos has alcanzado? ¿En qué tipo de persona te estás convirtiendo?',
+          },
+          twelveMonthVision: {
+            label: 'Yo Futuro a 12 Meses',
+            placeholder: 'Dentro de un año. ¿Cómo luce tu vida? Sé específico pero flexible. Es una dirección, no un contrato.',
+          },
+          obstacles: {
+            label: 'Obstáculos Probables',
+            placeholder: '¿Qué podría interponerse? Nombrar los obstáculos de antemano los hace más manejables.',
+          },
+          supportNeeded: {
+            label: 'Apoyo que Necesitarás',
+            placeholder: 'Personas, hábitos, recursos o cambios de mentalidad que te ayudarán a avanzar hacia esta visión.',
+          },
+          weeklyAction: {
+            label: 'Una Acción Esta Semana',
+            placeholder: '¿Cuál es un pequeño paso concreto que puedes dar esta semana? (Que sea pequeño y factible).',
+          },
+        },
+      },
+      cbt: {
+        title: 'Registro de Pensamientos TCC',
+        fields: {
+          situation: {
+            label: 'Situación',
+            placeholder: 'Describe qué pasó, dónde estabas y quién estuvo involucrado...',
+          },
+          automaticThoughts: {
+            label: 'Pensamientos Automáticos',
+            placeholder: '¿Qué pensamiento pasó por tu mente?',
+          },
+          emotions: {
+            label: 'Emociones e Intensidad',
+            emotionPlaceholder: 'Emoción (p. ej., ansiedad, tristeza)',
+            addEmotion: '+ Agregar emoción',
+          },
+          evidenceFor: {
+            label: 'Evidencia a Favor del Pensamiento',
+            placeholder: '¿Qué evidencia apoya este pensamiento?',
+          },
+          evidenceAgainst: {
+            label: 'Evidencia en Contra del Pensamiento',
+            placeholder: '¿Qué evidencia contradice este pensamiento?',
+          },
+          balancedPerspective: {
+            label: 'Perspectiva Equilibrada',
+            placeholder: 'Dada la evidencia a favor y en contra, ¿cuál es una forma más equilibrada de ver esta situación?',
+          },
+          finalEmotionRating: {
+            label: 'Calificación Final de la Emoción (1-10)',
+          },
+        },
+        addAnother: '+ Agregar otro',
+      },
+      gratitude: {
+        title: 'Práctica de Gratitud',
+        intro: 'Enumera personas, experiencias, oportunidades o cosas por las que sientes gratitud hoy. La investigación sugiere que llevar un diario de gratitud puede apoyar el bienestar, aunque los efectos varían según la persona y el contexto.',
+        item: {
+          title: 'Gratitud #',
+          placeholder: 'Estoy agradecido por...',
+          detailPlaceholder: '¿Por qué estás agradecido por esto? ¿Cómo afecta tu vida? (opcional)',
+        },
+        types: {
+          person: 'Persona',
+          experience: 'Experiencia',
+          opportunity: 'Oportunidad',
+          thing: 'Cosa',
+        },
+        addItem: '+ Agregar item de gratitud',
+        recipient: {
+          label: 'Destinatario de la Carta de Gratitud (opcional)',
+          hint: 'Alguien a quien quieras expresar gratitud',
+          placeholder: 'Alguien a quien quieras expresar gratitud',
+        },
+      },
+      self_compassion: {
+        title: 'Escritura de Autocompasión',
+        intro: 'Trabaja una dificultad usando los tres componentes de la autocompasión. Este ejercicio es para reflexión y apoyo emocional, no sustituye la terapia.',
+        fields: {
+          stressfulEvent: {
+            label: 'Evento Estresante',
+            placeholder: 'Describe una dificultad, un error o una experiencia dolorosa que estés enfrentando...',
+            description: 'Identifica la situación con la que quieres trabajar, como lo harías en una carta o ejercicio de autocompasión.',
+          },
+          mindfulnessObservation: {
+            label: 'Atención Plena: Observa sin Juzgar',
+            placeholder: '¿Qué pensamientos y emociones están presentes? ¿Puedes notarlos sin reprimirlos o exagerarlos?',
+            description: 'Neff (2003b) identifica la atención plena como el primer componente de la autocompasión: conciencia equilibrada de experiencias dolorosas.',
+          },
+          commonHumanity: {
+            label: 'Humanidad Común: No Estás Solo',
+            placeholder: '¿Cómo forma parte de la experiencia humana compartida esta lucha? ¿Quién más podría sentirse así?',
+            description: 'La autocompasión implica reconocer el sufrimiento como parte de la condición humana, no aislarse. Ver Kristin Neff, Self-Compassion (2011).',
+          },
+          kindResponse: {
+            label: 'Amabilidad Hacia Uno Mismo: ¿Qué Le Dirías a un Amigo?',
+            placeholder: '¿Qué palabras cariñosas, de apoyo y aliento te ofrecerías a ti mismo?',
+            description: 'Neff describe la amabilidad hacia uno mismo como extenderse la misma calidez y comprensión que a un buen amigo.',
+          },
+        },
+      },
+      stoic: {
+        title: {
+          morning: 'Preparación Estoica de la Mañana',
+          evening: 'Revisión Estoica de la Noche',
+        },
+        morning: 'Mañana',
+        evening: 'Noche',
+        intro: {
+          morning: 'Basado en la práctica estoica de la mañana (premeditatio malorum): anticipa los desafíos que puedas enfrentar hoy y planea cómo responder con virtud.',
+          evening: 'Basado en la revisión estoica de la noche: reflexiona sobre tu día con honestidad, notando lo que salió bien, lo que no y qué puedes aprender.',
+        },
+        fields: {
+          challengesAnticipated: {
+            label: 'Desafíos que Podrías Enfrentar Hoy',
+            placeholder: '¿Qué dificultad podría surgir hoy?',
+          },
+          virtuousResponses: {
+            label: 'Respuestas Virtuosas',
+            placeholder: '¿Cómo responderás con sabiduría, coraje, justicia o templanza?',
+          },
+          successes: {
+            label: 'Aciertos',
+            placeholder: '¿Qué hiciste bien hoy?',
+          },
+          failures: {
+            label: 'Fallos u Oportunidades Perdidas',
+            placeholder: '¿Dónde no estuviste a la altura de tus valores?',
+          },
+          lessons: {
+            label: 'Lecciones para Mañana',
+            placeholder: '¿Qué harás diferente mañana?',
+          },
+        },
+        addAnother: '+ Agregar otro',
+      },
+      confucian: {
+        title: 'Autoexamen Confuciano',
+        source: 'Fuente: Analectas 1.4',
+        quote: '"Me examino a mí mismo en tres cosas: en lo que he emprendido en nombre de otros, ¿he hecho lo mejor que puedo? En mis tratos con mis amigos, ¿he sido confiable? ¿Y he practicado lo que se me ha transmitido?"',
+        citation: 'Traducción basada en Roger T. Ames y Henry Rosemont, Jr., The Analects of Confucius: A Philosophical Translation (1998).',
+        intro: 'Evalúate y reflexiona sobre cada una de las tres dimensiones confucianas. Esta es una práctica de reflexión tradicional, no una evaluación clínica.',
+        dimensions: {
+          loyalty: {
+            label: 'Lealtad / Devoción (忠, zhōng)',
+            question: 'En lo que he emprendido en nombre de otros, ¿he hecho lo mejor que puedo?',
+            description: 'Basado en Analectas 1.4: "Me examino a mí mismo en tres cosas." Esta es una práctica confuciana tradicional de autoexamen, no una intervención clínica.',
+          },
+          trustworthiness: {
+            label: 'Confiabilidad (信, xìn)',
+            question: 'En mis tratos con amigos y otros, ¿he sido confiable?',
+            description: 'Confucio enfatiza la confiabilidad como una virtud central. La autoevaluación aquí es para reflexión, no diagnóstico.',
+          },
+          practice: {
+            label: 'Práctica / Aprendizaje (習, xí)',
+            question: '¿Practiqué lo que he aprendido? Califícate de 1 a 10 y reflexiona sobre cómo aplicar mejor el conocimiento.',
+            description: 'La autocuscación confuciana implica revisar si se aplica lo que se aprende.',
+          },
+        },
+        rating: 'Calificación (1-10)',
+        reflection: {
+          label: 'Reflexión',
+          hint: '¿Qué hiciste bien? ¿Dónde puedes mejorar?',
+          placeholder: '¿Qué hiciste bien? ¿Dónde puedes mejorar?',
+        },
       },
     },
   },

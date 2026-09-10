@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Input, FieldLabel } from '@/components/ui/Input';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface CBTThoughtRecordProps {
   data: {
@@ -18,6 +19,7 @@ interface CBTThoughtRecordProps {
 }
 
 export const CBTThoughtRecord: React.FC<CBTThoughtRecordProps> = ({ data, onChange }) => {
+  const { t } = useLanguage();
   const updateField = <K extends keyof CBTThoughtRecordProps['data']>(
     field: K,
     value: CBTThoughtRecordProps['data'][K]
@@ -78,7 +80,7 @@ export const CBTThoughtRecord: React.FC<CBTThoughtRecordProps> = ({ data, onChan
         onClick={() => onItemsChange([...items, ''])}
         className="text-sm text-primary-700 hover:text-primary-800 font-medium transition-colors"
       >
-        + Add another
+        {t.frameworks.cbt.addAnother}
       </button>
     </div>
   );
@@ -86,39 +88,39 @@ export const CBTThoughtRecord: React.FC<CBTThoughtRecordProps> = ({ data, onChan
   return (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>CBT Thought Record</CardTitle>
+        <CardTitle>{t.frameworks.cbt.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
           <FieldLabel
-            label="Situation"
-            hint="Describe what happened, where you were, and who was involved..."
+            label={t.frameworks.cbt.fields.situation.label}
+            hint={t.frameworks.cbt.fields.situation.placeholder}
             hasValue={data.situation.trim().length > 0}
           />
           <textarea
             value={data.situation}
             onChange={(e) => updateField('situation', e.target.value)}
-            placeholder="Describe what happened, where you were, and who was involved..."
+            placeholder={t.frameworks.cbt.fields.situation.placeholder}
             className="w-full min-h-[100px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
           />
         </div>
 
         {listField(
-          'Automatic Thoughts',
+          t.frameworks.cbt.fields.automaticThoughts.label,
           data.automaticThoughts,
           (items) => updateField('automaticThoughts', items),
-          'What thought went through your mind?'
+          t.frameworks.cbt.fields.automaticThoughts.placeholder
         )}
 
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-card-foreground">Emotions & Intensity</label>
+          <label className="block text-sm font-medium text-card-foreground">{t.frameworks.cbt.fields.emotions.label}</label>
           {data.emotions.map((emotion, index) => (
             <div key={index} className="flex items-center gap-3 p-3 bg-muted rounded-xl">
               <input
                 type="text"
                 value={emotion.name}
                 onChange={(e) => updateEmotion(index, { name: e.target.value })}
-                placeholder="Emotion (e.g., anxiety, sadness)"
+                placeholder={t.frameworks.cbt.fields.emotions.emotionPlaceholder}
                 className="flex-1 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <div className="flex items-center gap-2">
@@ -146,41 +148,41 @@ export const CBTThoughtRecord: React.FC<CBTThoughtRecordProps> = ({ data, onChan
             onClick={addEmotion}
             className="text-sm text-primary-700 hover:text-primary-800 font-medium transition-colors"
           >
-            + Add emotion
+            {t.frameworks.cbt.fields.emotions.addEmotion}
           </button>
         </div>
 
         {listField(
-          'Evidence For the Thought',
+          t.frameworks.cbt.fields.evidenceFor.label,
           data.evidenceFor,
           (items) => updateField('evidenceFor', items),
-          'What evidence supports this thought?'
+          t.frameworks.cbt.fields.evidenceFor.placeholder
         )}
 
         {listField(
-          'Evidence Against the Thought',
+          t.frameworks.cbt.fields.evidenceAgainst.label,
           data.evidenceAgainst,
           (items) => updateField('evidenceAgainst', items),
-          'What evidence contradicts this thought?'
+          t.frameworks.cbt.fields.evidenceAgainst.placeholder
         )}
 
         <div>
           <FieldLabel
-            label="Balanced Perspective"
-            hint="Given the evidence for and against, what is a more balanced way to view this situation?"
+            label={t.frameworks.cbt.fields.balancedPerspective.label}
+            hint={t.frameworks.cbt.fields.balancedPerspective.placeholder}
             hasValue={data.balancedPerspective.trim().length > 0}
           />
           <textarea
             value={data.balancedPerspective}
             onChange={(e) => updateField('balancedPerspective', e.target.value)}
-            placeholder="Given the evidence for and against, what is a more balanced way to view this situation?"
+            placeholder={t.frameworks.cbt.fields.balancedPerspective.placeholder}
             className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-card-foreground mb-2">
-            Final Emotion Rating (1-10)
+            {t.frameworks.cbt.fields.finalEmotionRating.label}
           </label>
           <input
             type="range"

@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { FieldLabel } from '@/components/ui/Input';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ConfucianExaminationProps {
   data: {
@@ -38,6 +39,7 @@ const dimensions = [
 ] as const;
 
 export const ConfucianExamination: React.FC<ConfucianExaminationProps> = ({ data, onChange }) => {
+  const { t } = useLanguage();
   const updateField = <K extends keyof ConfucianExaminationProps['data']>(
     field: K,
     value: ConfucianExaminationProps['data'][K]
@@ -48,22 +50,19 @@ export const ConfucianExamination: React.FC<ConfucianExaminationProps> = ({ data
   return (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>Confucian Self-Examination</CardTitle>
+        <CardTitle>{t.frameworks.confucian.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="p-4 bg-primary-50 rounded-xl text-sm text-primary-800">
-          <p className="font-medium mb-1">Source: Analects 1.4</p>
-          <p>
-            "I examine myself on three things: in what I have undertaken on behalf of others, have I done my best? 
-            In my dealings with my friends, have I been trustworthy? And have I practiced what has been transmitted to me?"
-          </p>
+          <p className="font-medium mb-1">{t.frameworks.confucian.source}</p>
+          <p>{t.frameworks.confucian.quote}</p>
           <p className="mt-2 text-xs text-primary-700">
-            Translation based on Roger T. Ames & Henry Rosemont, Jr., <em>The Analects of Confucius: A Philosophical Translation</em> (1998).
+            {t.frameworks.confucian.citation}
           </p>
         </div>
 
         <p className="text-muted-foreground text-sm leading-relaxed">
-          Rate yourself and reflect on each of the three Confucian dimensions. This is a traditional reflective practice, not a clinical assessment.
+          {t.frameworks.confucian.intro}
         </p>
 
         {dimensions.map((dimension) => {
@@ -72,13 +71,13 @@ export const ConfucianExamination: React.FC<ConfucianExaminationProps> = ({ data
           
           return (
             <div key={dimension.key} className="space-y-3 p-4 bg-muted rounded-xl">
-              <h4 className="font-medium text-card-foreground">{dimension.label}</h4>
-              <p className="text-sm text-muted-foreground">{dimension.question}</p>
-              <p className="text-xs text-muted-foreground">{dimension.description}</p>
+              <h4 className="font-medium text-card-foreground">{t.frameworks.confucian.dimensions[dimension.key].label}</h4>
+              <p className="text-sm text-muted-foreground">{t.frameworks.confucian.dimensions[dimension.key].question}</p>
+              <p className="text-xs text-muted-foreground">{t.frameworks.confucian.dimensions[dimension.key].description}</p>
               
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-2">
-                  Rating (1-10)
+                  {t.frameworks.confucian.rating}
                 </label>
                 <input
                   type="range"
@@ -96,14 +95,14 @@ export const ConfucianExamination: React.FC<ConfucianExaminationProps> = ({ data
               </div>
 
               <FieldLabel
-                label="Reflection"
-                hint="What did you do well? Where can you improve?"
+                label={t.frameworks.confucian.reflection.label}
+                hint={t.frameworks.confucian.reflection.hint}
                 hasValue={((data[notesKey] as string) || '').trim().length > 0}
               />
               <textarea
                 value={(data[notesKey] as string) || ''}
                 onChange={(e) => updateField(notesKey, e.target.value || undefined)}
-                placeholder="What did you do well? Where can you improve?"
+                placeholder={t.frameworks.confucian.reflection.placeholder}
                 className="w-full min-h-[80px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
               />
             </div>

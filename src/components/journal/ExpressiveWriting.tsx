@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { FieldLabel } from '@/components/ui/Input';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ExpressiveWritingProps {
   data: {
@@ -14,6 +15,7 @@ interface ExpressiveWritingProps {
 }
 
 export const ExpressiveWriting: React.FC<ExpressiveWritingProps> = ({ data, onChange }) => {
+  const { t } = useLanguage();
   const updateField = <K extends keyof ExpressiveWritingProps['data']>(
     field: K,
     value: ExpressiveWritingProps['data'][K]
@@ -24,7 +26,7 @@ export const ExpressiveWriting: React.FC<ExpressiveWritingProps> = ({ data, onCh
   return (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>Expressive Writing</CardTitle>
+        <CardTitle>{t.frameworks.expressive.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="p-4 bg-primary-50 rounded-xl text-sm text-primary-800">
@@ -46,22 +48,22 @@ export const ExpressiveWriting: React.FC<ExpressiveWritingProps> = ({ data, onCh
 
         <div>
           <FieldLabel
-            label="Topic or Focus"
-            hint="e.g., A recent challenge, a memory, a fear..."
+            label={t.frameworks.expressive.fields.topic.label}
+            hint={t.frameworks.expressive.fields.topic.placeholder}
             hasValue={data.topic.trim().length > 0}
           />
           <input
             type="text"
             value={data.topic}
             onChange={(e) => updateField('topic', e.target.value)}
-            placeholder="e.g., A recent challenge, a memory, a fear..."
+            placeholder={t.frameworks.expressive.fields.topic.placeholder}
             className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-card-foreground mb-2">
-            Emotional Depth (1-10)
+            {t.frameworks.expressive.fields.emotionalDepth.label}
           </label>
           <input
             type="range"
@@ -72,15 +74,15 @@ export const ExpressiveWriting: React.FC<ExpressiveWritingProps> = ({ data, onCh
             className="w-full"
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>Surface-level</span>
+            <span>{t.frameworks.expressive.fields.emotionalDepth.low}</span>
             <span>{data.emotionalDepth}</span>
-            <span>Deeply emotional</span>
+            <span>{t.frameworks.expressive.fields.emotionalDepth.high}</span>
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-card-foreground mb-2">
-            Catharsis / Release (1-10)
+            {t.frameworks.expressive.fields.catharsis.label}
           </label>
           <input
             type="range"
@@ -91,9 +93,9 @@ export const ExpressiveWriting: React.FC<ExpressiveWritingProps> = ({ data, onCh
             className="w-full"
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>No release</span>
+            <span>{t.frameworks.expressive.fields.catharsis.low}</span>
             <span>{data.catharsisRating}</span>
-            <span>Strong release</span>
+            <span>{t.frameworks.expressive.fields.catharsis.high}</span>
           </div>
         </div>
       </CardContent>
