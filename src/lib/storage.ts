@@ -8,7 +8,7 @@ export interface StorageAdapter {
   clear(): Promise<void>;
 }
 
-function sortJournalEntries<T>(key: string, value: T): T {
+function sortJournalEntries<T>(key: string, value: T | null): T | null {
   if (key !== 'journal_entries' || !Array.isArray(value)) return value;
   return [...value].sort((a, b) => {
     const aId = typeof a?.id === 'string' ? parseInt(a.id, 10) : 0;
@@ -34,17 +34,26 @@ function cleanUndefined<T>(value: T): T {
   return value;
 }
 
+function safeParse<T>(item: string | null): T | null {
+  if (!item) return null;
+  try {
+    return JSON.parse(item) as T;
+  } catch {
+    return item as unknown as T;
+  }
+}
+
 export class SessionStorageAdapter implements StorageAdapter {
   async get<T>(key: string): Promise<T | null> {
     if (typeof window === 'undefined') return null;
     const item = sessionStorage.getItem(key);
-    const parsed = item ? JSON.parse(item) : null;
+    const parsed = safeParse<T>(item);
     return sortJournalEntries<T>(key, parsed);
   }
 
   async set<T>(key: string, value: T): Promise<void> {
     if (typeof window === 'undefined') return;
-    sessionStorage.setItem(key, JSON.stringify(value));
+    sessionStorage.setItem(key, JSON.stringify(cleanUndefined(value)));
   }
 
   async addToArray<T>(key: string, value: T): Promise<void> {
@@ -69,13 +78,13 @@ export class LocalStorageAdapter implements StorageAdapter {
   async get<T>(key: string): Promise<T | null> {
     if (typeof window === 'undefined') return null;
     const item = localStorage.getItem(key);
-    const parsed = item ? JSON.parse(item) : null;
+    const parsed = safeParse<T>(item);
     return sortJournalEntries<T>(key, parsed);
   }
 
   async set<T>(key: string, value: T): Promise<void> {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(cleanUndefined(value)));
   }
 
   async addToArray<T>(key: string, value: T): Promise<void> {

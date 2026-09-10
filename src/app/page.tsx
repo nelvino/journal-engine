@@ -1,94 +1,114 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { Header } from '@/components/layout/Header';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Shell } from '@/components/design/Shell';
+import { SectionRule } from '@/components/design/SectionRule';
+import { LedgerRow } from '@/components/design/LedgerRow';
+import { WeekStrip } from '@/components/design/WeekStrip';
+import { HomeHero } from '@/components/design/HomeHero';
 import { useLanguage } from '@/context/LanguageContext';
-import { DailyPrompt } from '@/components/guidance/DailyPrompt';
-import { Sparkles, BookOpen, Lightbulb, TrendingUp } from 'lucide-react';
+import { useStorage } from '@/lib/useStorage';
+import { homeHero } from '@/lib/homeHero';
+import type { JournalEntry } from '@/types';
 
-export default function Home() {
+const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+export default function TodayPage() {
   const { t } = useLanguage();
+  const storage = useStorage();
+  const router = useRouter();
+  const [now, setNow] = useState<Date | null>(null);
+  const [entries, setEntries] = useState<JournalEntry[]>([]);
+
+  useEffect(() => {
+    setNow(new Date());
+    storage.get<JournalEntry[]>('journal_entries').then((data) => {
+      setEntries(data || []);
+    });
+  }, [storage]);
+
+  const { state, stats } = useMemo(() => {
+    if (!now) {
+      return { state: 'coldStart' as const, stats: undefined };
+    }
+    return homeHero(now, entries);
+  }, [now, entries]);
+
+  const recent = useMemo(() => {
+    return entries.slice(0, 3);
+  }, [entries]);
+
+  const days = useMemo(() => {
+    if (!now) {
+      return [] as { label: string; day: string; state: 'today' | 'written' | 'empty' }[];
+    }
+    const dayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1;
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - dayIndex);
+
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + i);
+      const iso = d.toISOString().split('T')[0];
+      const hasEntry = entries.some((e) => e.date === iso);
+      const isToday = i === dayIndex;
+      const state: 'today' | 'written' | 'empty' = isToday
+        ? 'today'
+        : hasEntry
+        ? 'written'
+        : 'empty';
+      return {
+        label: labels[i],
+        day: String(d.getDate()).padStart(2, '0'),
+        state,
+      };
+    });
+  }, [now, entries]);
+
+  if (!now || !stats) {
+    return <div className="min-h-screen bg-paper" />;
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary-50 to-accent-50">
-      <Header />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-4xl mx-auto space-y-8">
-          {/* Hero Section */}
-          <div className="text-center space-y-6">
-            <div className="inline-flex items-center justify-center p-3 bg-primary-100 rounded-2xl mb-4">
-              <Sparkles className="h-8 w-8 text-primary-700" />
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground">
-              {t.home.welcome}
-            </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              {t.home.subtitle}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <Link href="/journal">
-                <Button size="lg" variant="primary" icon={<BookOpen className="h-5 w-5" />}>
-                  {t.home.startJournaling}
-                </Button>
-              </Link>
-              <Button size="lg" variant="outline">
-                {t.home.learnMore}
-              </Button>
-            </div>
-          </div>
+    <Shell>
+      <HomeHero state={state} stats={stats} />
 
-          {/* Daily Prompt */}
-          <DailyPrompt />
+      <div className="mb-8">
+        <WeekStrip days={days} />
+      </div>
 
-          {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-6 pt-8">
-            <Card variant="elevated" className="group hover:scale-105 transition-transform duration-300">
-              <CardHeader>
-                <div className="inline-flex items-center justify-center p-2 bg-primary-100 rounded-xl mb-3 group-hover:bg-primary-200 transition-colors">
-                  <Lightbulb className="h-6 w-6 text-primary-700" />
-                </div>
-                <CardTitle>{t.home.scienceBased.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base leading-relaxed">
-                  {t.home.scienceBased.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card variant="elevated" className="group hover:scale-105 transition-transform duration-300">
-              <CardHeader>
-                <div className="inline-flex items-center justify-center p-2 bg-accent-100 rounded-xl mb-3 group-hover:bg-accent-200 transition-colors">
-                  <BookOpen className="h-6 w-6 text-accent-700" />
-                </div>
-                <CardTitle>{t.home.ancientWisdom.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base leading-relaxed">
-                  {t.home.ancientWisdom.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-
-            <Card variant="elevated" className="group hover:scale-105 transition-transform duration-300">
-              <CardHeader>
-                <div className="inline-flex items-center justify-center p-2 bg-success-100 rounded-xl mb-3 group-hover:bg-success-200 transition-colors">
-                  <TrendingUp className="h-6 w-6 text-success-700" />
-                </div>
-                <CardTitle>{t.home.adaptiveSystem.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base leading-relaxed">
-                  {t.home.adaptiveSystem.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </main>
-    </div>
+      <SectionRule eyebrow="Recent pages">
+        {recent.length === 0 ? (
+          <p className="font-sans text-[13.5px] leading-[21px] text-ink-secondary py-4">
+            No pages yet. Start writing on Today.
+          </p>
+        ) : (
+          recent.map((entry) => {
+            const d = new Date(entry.date);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
+            const title =
+              entry.content?.text?.split('\n')[0].trim().slice(0, 120) ||
+              t.entryTypes[entry.entryType].label;
+            const excerpt =
+              entry.content?.text?.split('\n')[1]?.trim().slice(0, 140) || '';
+            const words = entry.sessionData?.wordCount ?? 0;
+            const meta = `${t.entryTypes[entry.entryType].label} · ${words} ${t.common.words}`;
+            return (
+              <LedgerRow
+                key={entry.id}
+                day={day}
+                month={month}
+                title={title}
+                excerpt={excerpt}
+                meta={meta}
+                href={`/journal/${entry.id}`}
+              />
+            );
+          })
+        )}
+      </SectionRule>
+    </Shell>
   );
 }

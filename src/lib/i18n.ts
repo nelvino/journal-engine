@@ -2,15 +2,20 @@
 // Supports English (default) and Spanish
 
 import type { EntryType } from '@/types';
+import type { HomeHeroState } from '@/lib/homeHero';
 
 export type Language = 'en' | 'es';
 
 export interface Translations {
   nav: {
     home: string;
+    today: string;
     journal: string;
+    pages: string;
     goals: string;
+    practice: string;
     progress: string;
+    you: string;
     settings: string;
   };
   home: {
@@ -41,14 +46,23 @@ export interface Translations {
     recentEntriesDescription: string;
     quickStartTitle: string;
     exploreAll: string;
+    yourPages: string;
+    writtenThisYear: string;
+    wordsThisYear: string;
+    newPage: string;
+    searchYourPages: string;
+    showMore: string;
+    showFewer: string;
     quickStart: Record<string, { title: string; description: string; duration: string }>;
     list: {
       total: string;
       emptyTitle: string;
+      noMatches: string;
       structured: string;
       words: string;
       mood: string;
       deleteEntry: string;
+      deleteConfirm: string;
     };
   };
   guidance: {
@@ -175,6 +189,38 @@ export interface Translations {
     };
     achievementList: Record<string, { title: string; description: string }>;
   };
+  practice: {
+    title: string;
+    record: string;
+    intentions: string;
+    subtitle: string;
+    switchDescription: string;
+    currentRun: string;
+    daysInARow: string;
+    lastFourWeeks: string;
+    longestRun: string;
+    thisWeek: string;
+    howTheDaysSat: string;
+    stylesYouReachFor: string;
+    noData: string;
+    noSuggestions: string;
+    nothingSet: string;
+    setFirst: string;
+    intentionDescription: string;
+    whyItWorks: string;
+    suggested: string;
+    open: string;
+    kept: string;
+    average: string;
+    newIntention: string;
+    newIntentionPlaceholder: string;
+    target: string;
+    saveIntention: string;
+    deleteConfirm: string;
+    keptIn: string;
+    notStarted: string;
+    setIn: string;
+  };
   settings: {
     title: string;
     subtitle: string;
@@ -190,14 +236,38 @@ export interface Translations {
     minutes: string;
     morningPages: string;
     eveningReview: string;
+    monthlyReread: string;
+    lastDayOfMonth: string;
+    eveningReminder: string;
+    everyDayAt: string;
+    appLock: string;
+    faceIdOnOpen: string;
+    appLockGate: {
+      title: string;
+      subtitle: string;
+      setPasscode: string;
+      enterPasscode: string;
+      wrongPasscode: string;
+      unlock: string;
+    };
+    hideEntryTextInPreviews: string;
+    titlesOnlyOnPagesList: string;
     data: string;
     exportData: string;
     clearAllData: string;
+    deleteEverything: string;
     language: string;
     english: string;
     spanish: string;
     profile: string;
     anonymous: string;
+    writingSince: string;
+    readingAndWriting: string;
+    appearance: string;
+    defaultSession: string;
+    reminders: string;
+    privacy: string;
+    yourWriting: string;
     provider: string;
     uid: string;
     replayOnboarding: string;
@@ -220,6 +290,10 @@ export interface Translations {
     close: string;
     hint: string;
     search: string;
+    style: string;
+    all: string;
+    of: string;
+    pages: string;
     words: string;
   };
   newEntry: {
@@ -234,6 +308,14 @@ export interface Translations {
     noFramework: string;
     frameworkHelp: string;
     startWriting: string;
+    continue: string;
+    chosenStyle: string;
+    autosaving: string;
+    startAnywhere: string;
+    whyThisWorks: string;
+    evidence: string;
+    leaveDraft: string;
+    defaultSession: string;
     bestUsedFor: string;
     yourEntry: string;
     wordCount: string;
@@ -249,6 +331,29 @@ export interface Translations {
     saving: string;
     saveSuccess: string;
     saveError: string;
+    emptyError: string;
+  };
+  homeHero: {
+    day: string;
+    days: string;
+    minute: string;
+    minutes: string;
+    wordsLabel: string;
+    awayShort: string;
+    awayLong: string;
+    unknownTopic: string;
+    states: Record<
+      HomeHeroState,
+      {
+        eyebrow?: string;
+        title: string;
+        subhead?: string;
+        body?: string;
+        cta?: string;
+        secondary?: string;
+        note?: string;
+      }
+    >;
   };
   entryTypes: Record<EntryType, { label: string; description: string; useFor: string }>;
   frameworks: Record<string, any>;
@@ -258,9 +363,13 @@ export const translations: Record<Language, Translations> = {
   en: {
     nav: {
       home: 'Home',
+      today: 'Today',
       journal: 'Journal',
+      pages: 'Pages',
       goals: 'Goals',
+      practice: 'Practice',
       progress: 'Progress',
+      you: 'You',
       settings: 'Settings',
     },
     home: {
@@ -291,6 +400,13 @@ export const translations: Record<Language, Translations> = {
       recentEntriesDescription: 'Your recent journal entries will appear here.',
       quickStartTitle: 'Quick Start',
       exploreAll: 'Explore all',
+      yourPages: 'Your pages',
+      writtenThisYear: '{count} written this year',
+      wordsThisYear: '{count} words',
+      newPage: 'New page',
+      searchYourPages: 'Search your pages',
+      showMore: '+ {count} more',
+      showFewer: 'Show fewer',
       quickStart: {
         morning_checkin: {
           title: 'Morning Check-In',
@@ -316,10 +432,12 @@ export const translations: Record<Language, Translations> = {
       list: {
         total: '{count} total',
         emptyTitle: 'No entries yet',
+        noMatches: 'No pages match your search.',
         structured: 'structured',
         words: 'words',
         mood: 'Mood',
         deleteEntry: 'Delete entry',
+        deleteConfirm: 'Delete this entry? This cannot be undone.',
       },
     },
     guidance: {
@@ -539,9 +657,41 @@ export const translations: Record<Language, Translations> = {
         },
       },
     },
+    practice: {
+      title: 'Practice',
+      record: 'Record',
+      intentions: 'Intentions',
+      subtitle: 'A record of what you did, not a verdict on it.',
+      switchDescription: 'Two views of the same practice. The app opens on Record; the last view you used is remembered.',
+      currentRun: 'CURRENT RUN',
+      daysInARow: 'days in a row',
+      lastFourWeeks: 'Last four weeks.',
+      longestRun: 'Longest run: {count} days, in {month}.',
+      thisWeek: 'THIS WEEK',
+      howTheDaysSat: 'HOW THE DAYS SAT',
+      stylesYouReachFor: 'STYLES YOU REACH FOR',
+      noData: 'No data yet. Start writing.',
+      noSuggestions: 'No suggestions yet.',
+      nothingSet: 'Nothing set yet.',
+      setFirst: 'Set your first intention',
+      intentionDescription: 'An intention is one sentence you would like to be true in a month. You can change it whenever it stops being true.',
+      whyItWorks: 'People who write the intention down, and where and when they will act on it, follow through more often than people who only hold it in mind. That is the only reason this screen exists.',
+      suggested: 'SUGGESTED FROM YOUR PAGES',
+      open: 'OPEN',
+      kept: 'KEPT',
+      average: 'AVERAGE',
+      newIntention: 'New intention',
+      newIntentionPlaceholder: 'e.g. Write four evenings a week',
+      target: 'Target',
+      saveIntention: 'Save intention',
+      deleteConfirm: 'Delete this intention? This cannot be undone.',
+      keptIn: 'Kept in {month}',
+      notStarted: 'Not started',
+      setIn: 'Set in {month}',
+    },
     settings: {
-      title: 'Settings',
-      subtitle: 'Customize your journaling experience',
+      title: 'You',
+      subtitle: 'Reminders, privacy, export and account settings',
       preferences: 'Preferences',
       journalingPreferences: 'Journaling Preferences',
       theme: 'Theme',
@@ -554,18 +704,42 @@ export const translations: Record<Language, Translations> = {
       minutes: 'minutes',
       morningPages: 'Morning Pages',
       eveningReview: 'Evening Review',
+      monthlyReread: 'Monthly re-read',
+      lastDayOfMonth: 'On the last day of the month',
+      eveningReminder: 'Evening reminder',
+      everyDayAt: 'Every day at 9:30 pm',
+      appLock: 'App lock',
+      faceIdOnOpen: 'Face ID on open',
+      appLockGate: {
+        title: 'Journal is locked',
+        subtitle: 'Web apps can use a passcode. Face ID requires a native wrapper.',
+        setPasscode: 'Set a 4-digit passcode',
+        enterPasscode: 'Enter your passcode',
+        wrongPasscode: 'Wrong passcode. Try again.',
+        unlock: 'Unlock',
+      },
+      hideEntryTextInPreviews: 'Hide entry text in previews',
+      titlesOnlyOnPagesList: 'Titles only on the Pages list',
       data: 'Data',
-      exportData: 'Export Data',
-      clearAllData: 'Clear All Data',
+      exportData: 'Export every page',
+      clearAllData: 'Delete everything',
+      deleteEverything: 'Delete everything',
       language: 'Language',
       english: 'English',
       spanish: 'Español',
       profile: 'Profile',
-      anonymous: 'Anonymous',
+      anonymous: 'You',
+      writingSince: 'writing since {date}',
+      readingAndWriting: 'Reading and Writing',
+      appearance: 'Appearance',
+      defaultSession: 'Default session',
+      reminders: 'Reminders',
+      privacy: 'Privacy',
+      yourWriting: 'Your Writing',
       provider: 'Provider: Google',
       uid: 'UID',
-      replayOnboarding: 'Replay Onboarding',
-      clearDataWarning: 'Clears journal entries, goals, and progress from this device and your cloud account if you are signed in. This cannot be undone.',
+      replayOnboarding: 'Replay the introduction',
+      clearDataWarning: 'Deleting is immediate and cannot be undone — we keep no copy.',
       clearModal: {
         title: 'Clear all data?',
         description: 'This will permanently delete all your journal entries, goals, and progress data.',
@@ -584,6 +758,10 @@ export const translations: Record<Language, Translations> = {
       close: 'Close',
       hint: 'Hint',
       search: 'Search',
+      style: 'Style',
+      all: 'All styles',
+      of: 'of',
+      pages: 'pages',
       words: 'words',
     },
     newEntry: {
@@ -598,6 +776,14 @@ export const translations: Record<Language, Translations> = {
       noFramework: 'No specific framework, just use the entry type',
       frameworkHelp: 'Frameworks add curated prompts from specific research or traditions. Most of the time, the entry type itself is enough. Tap the info icon once you select one to learn more.',
       startWriting: 'Start Writing',
+      continue: 'Continue',
+      chosenStyle: 'Chosen style',
+      autosaving: 'Autosaving',
+      startAnywhere: 'Start anywhere...',
+      whyThisWorks: 'Why this works',
+      evidence: 'Evidence from research and tradition',
+      leaveDraft: 'Leave this entry? Your draft will not be saved.',
+      defaultSession: 'Default session',
       bestUsedFor: 'Best used for:',
       yourEntry: 'Your Entry',
       wordCount: '{count} words',
@@ -628,6 +814,81 @@ export const translations: Record<Language, Translations> = {
       saving: 'Saving...',
       saveSuccess: 'Entry saved successfully!',
       saveError: 'Error saving entry: {message}',
+      emptyError: 'Please write something before saving.',
+    },
+    homeHero: {
+      day: 'day',
+      days: 'days',
+      minute: 'minute',
+      minutes: 'minutes',
+      wordsLabel: 'words',
+      awayShort: 'a while',
+      awayLong: 'a fortnight',
+      unknownTopic: 'the last thing you wrote',
+      states: {
+        coldStart: {
+          eyebrow: 'Journal',
+          title: 'Start with one *honest* sentence.',
+          body: 'No account yet. Nothing you write leaves this phone until you ask it to.',
+          cta: 'Write my first page',
+          note: 'Prompts here come from expressive writing, CBT and Stoic practice. You can read the research behind any of them before you write.',
+        },
+        morning: {
+          eyebrow: '{{date}} · Day {{dayCount}}',
+          title: 'What are you *carrying* into today?',
+          subhead: 'This morning · 5 min',
+          body: 'Name the mood, then one thing you intend to do about it.',
+          cta: 'Start writing',
+          secondary: 'Another',
+        },
+        midday: {
+          eyebrow: '{{date}} · Day {{dayCount}}',
+          title: 'Something on your mind *now*?',
+          body: "Middle of the day is for the thing you cannot put down, not for a practice. Two minutes is a page.",
+          cta: 'Open a blank page',
+          secondary: 'Pick a style',
+        },
+        evening: {
+          eyebrow: '{{date}} · Day {{dayCount}}',
+          title: 'What did today *ask of* you?',
+          subhead: "Tonight's practice · 10 min",
+          body: 'Name one thing you handled well, one you would do differently, and one you can let go of.',
+          cta: 'Start writing',
+          secondary: 'Another',
+        },
+        late: {
+          eyebrow: '{{weekday}} · {{time}}',
+          title: 'Put it down and *sleep* on it.',
+          body: 'Three lines is enough tonight. The long version can wait for tomorrow.',
+          cta: 'Write three lines',
+          secondary: 'Not tonight',
+          note: 'Nothing resets if you skip. Your run counts days you wrote, not days in a row you did not miss.',
+        },
+        written: {
+          eyebrow: '{{date}} · Day {{dayCount}}',
+          title: 'Written. *{{dayCount}} {{dayText}}* of pages behind you.',
+          body: '{{typeLabel}}, {{time}} — {{words}} {{wordsLabel}} in {{minutes}} {{minutesLabel}}.',
+          cta: 'Add to today',
+          secondary: 'Read it back',
+          note: 'Your page is saved on this device.',
+        },
+        unfinished: {
+          eyebrow: '{{date}}',
+          title: 'You left something *half said*.',
+          body: 'Started {{draftDay}} · {{draftWords}} {{wordsLabel}} · {{draftType}}',
+          cta: 'Finish it',
+          secondary: 'Start something else',
+          note: 'A draft is in progress. Finish it or start something new.',
+        },
+        return: {
+          eyebrow: '{{date}}',
+          title: 'It has been *{{away}}*. Start where you are.',
+          body: 'No catching up to do. The last thing you wrote was about {{lastTopic}} — you can pick that up or leave it.',
+          cta: "Write today's page",
+          secondary: 'Re-read that one',
+          note: 'No page in a week. Never mentions the broken run.',
+        },
+      },
     },
     entryTypes: {
       expressive: {
@@ -905,9 +1166,13 @@ export const translations: Record<Language, Translations> = {
   es: {
     nav: {
       home: 'Inicio',
+      today: 'Hoy',
       journal: 'Diario',
+      pages: 'Páginas',
       goals: 'Metas',
+      practice: 'Práctica',
       progress: 'Progreso',
+      you: 'Tú',
       settings: 'Configuración',
     },
     home: {
@@ -938,6 +1203,13 @@ export const translations: Record<Language, Translations> = {
       recentEntriesDescription: 'Tus entradas recientes aparecerán aquí.',
       quickStartTitle: 'Inicio Rápido',
       exploreAll: 'Explorar todo',
+      yourPages: 'Tus páginas',
+      writtenThisYear: '{count} escritas este año',
+      wordsThisYear: '{count} palabras',
+      newPage: 'Nueva página',
+      searchYourPages: 'Busca tus páginas',
+      showMore: '+ {count} más',
+      showFewer: 'Mostrar menos',
       quickStart: {
         morning_checkin: {
           title: 'Check-In de la Mañana',
@@ -963,10 +1235,12 @@ export const translations: Record<Language, Translations> = {
       list: {
         total: '{count} total',
         emptyTitle: 'Aún no hay entradas',
+        noMatches: 'Ninguna página coincide con tu búsqueda.',
         structured: 'estructurado',
         words: 'palabras',
         mood: 'Estado de ánimo',
         deleteEntry: 'Eliminar entrada',
+        deleteConfirm: '¿Eliminar esta entrada? Esta acción no se puede deshacer.',
       },
     },
     guidance: {
@@ -1186,9 +1460,41 @@ export const translations: Record<Language, Translations> = {
         },
       },
     },
+    practice: {
+      title: 'Práctica',
+      record: 'Registro',
+      intentions: 'Intenciones',
+      subtitle: 'Un registro de lo que hiciste, no un veredicto sobre ello.',
+      switchDescription: 'Dos vistas de la misma práctica. La app abre en Registro; la última vista que usaste se recuerda.',
+      currentRun: 'RACHA ACTUAL',
+      daysInARow: 'días seguidos',
+      lastFourWeeks: 'Últimas cuatro semanas.',
+      longestRun: 'Racha más larga: {count} días, en {month}.',
+      thisWeek: 'ESTA SEMANA',
+      howTheDaysSat: 'CÓMO ESTUVIERON LOS DÍAS',
+      stylesYouReachFor: 'ESTILOS A LOS QUE RECURRES',
+      noData: 'Aún no hay datos. Empieza a escribir.',
+      noSuggestions: 'Aún no hay sugerencias.',
+      nothingSet: 'Nada establecido todavía.',
+      setFirst: 'Establece tu primera intención',
+      intentionDescription: 'Una intención es una oración que te gustaría que fuera cierta en un mes. Puedes cambiarla cuando deje de serlo.',
+      whyItWorks: 'Las personas que escriben la intención, dónde y cuándo actuarán sobre ella, la siguen más a menudo que quienes solo la mantienen en mente. Esa es la única razón de que esta pantalla exista.',
+      suggested: 'SUGERIDO DE TUS PÁGINAS',
+      open: 'ABIERTAS',
+      kept: 'CUMPLIDAS',
+      average: 'PROMEDIO',
+      newIntention: 'Nueva intención',
+      newIntentionPlaceholder: 'p. ej. Escribir cuatro tardes a la semana',
+      target: 'Objetivo',
+      saveIntention: 'Guardar intención',
+      deleteConfirm: '¿Eliminar esta intención? Esta acción no se puede deshacer.',
+      keptIn: 'Cumplida en {month}',
+      notStarted: 'Sin empezar',
+      setIn: 'Establecida en {month}',
+    },
     settings: {
-      title: 'Configuración',
-      subtitle: 'Personaliza tu experiencia de diario',
+      title: 'Tú',
+      subtitle: 'Recordatorios, privacidad, exportación y ajustes de la cuenta',
       preferences: 'Preferencias',
       journalingPreferences: 'Preferencias de Diario',
       theme: 'Tema',
@@ -1201,18 +1507,42 @@ export const translations: Record<Language, Translations> = {
       minutes: 'minutos',
       morningPages: 'Páginas de la Mañana',
       eveningReview: 'Revisión Vespertina',
+      monthlyReread: 'Relectura mensual',
+      lastDayOfMonth: 'El último día del mes',
+      eveningReminder: 'Recordatorio de la tarde',
+      everyDayAt: 'Todos los días a las 9:30 pm',
+      appLock: 'Bloqueo de la app',
+      faceIdOnOpen: 'Face ID al abrir',
+      appLockGate: {
+        title: 'Diario bloqueado',
+        subtitle: 'Las apps web pueden usar un código. Face ID requiere una app nativa.',
+        setPasscode: 'Crea un código de 4 dígitos',
+        enterPasscode: 'Ingresa tu código',
+        wrongPasscode: 'Código incorrecto. Inténtalo de nuevo.',
+        unlock: 'Desbloquear',
+      },
+      hideEntryTextInPreviews: 'Ocultar texto de entradas en vistas previas',
+      titlesOnlyOnPagesList: 'Solo títulos en la lista de Páginas',
       data: 'Datos',
-      exportData: 'Exportar Datos',
-      clearAllData: 'Borrar Todos los Datos',
+      exportData: 'Exportar todas las páginas',
+      clearAllData: 'Borrar todo',
+      deleteEverything: 'Borrar todo',
       language: 'Idioma',
       english: 'English',
       spanish: 'Español',
       profile: 'Perfil',
-      anonymous: 'Anónimo',
+      anonymous: 'Tú',
+      writingSince: 'escribiendo desde {date}',
+      readingAndWriting: 'Lectura y Escritura',
+      appearance: 'Apariencia',
+      defaultSession: 'Sesión predeterminada',
+      reminders: 'Recordatorios',
+      privacy: 'Privacidad',
+      yourWriting: 'Tu Escritura',
       provider: 'Proveedor: Google',
       uid: 'UID',
-      replayOnboarding: 'Repetir Onboarding',
-      clearDataWarning: 'Borra las entradas, metas y progreso de este dispositivo y de tu cuenta en la nube si iniciaste sesión. Esto no se puede deshacer.',
+      replayOnboarding: 'Repetir introducción',
+      clearDataWarning: 'El borrado es inmediato y no se puede deshacer. No guardamos copia.',
       clearModal: {
         title: '¿Borrar todos los datos?',
         description: 'Esto eliminará permanentemente todas tus entradas de diario, metas y datos de progreso.',
@@ -1231,6 +1561,10 @@ export const translations: Record<Language, Translations> = {
       close: 'Cerrar',
       hint: 'Consejo',
       search: 'Buscar',
+      style: 'Estilo',
+      all: 'Todos los estilos',
+      of: 'de',
+      pages: 'páginas',
       words: 'palabras',
     },
     newEntry: {
@@ -1245,6 +1579,14 @@ export const translations: Record<Language, Translations> = {
       noFramework: 'Sin marco específico, solo usar el tipo de entrada',
       frameworkHelp: 'Los marcos añaden guías de investigaciones o tradiciones específicas. La mayoría de las veces, el tipo de entrada es suficiente. Toca el ícono de información una vez que selecciones uno para saber más.',
       startWriting: 'Empezar a Escribir',
+      continue: 'Continuar',
+      chosenStyle: 'Estilo elegido',
+      autosaving: 'Guardando automáticamente',
+      startAnywhere: 'Empieza donde quieras...',
+      whyThisWorks: 'Por qué funciona',
+      evidence: 'Evidencia de investigación y tradición',
+      leaveDraft: '¿Salir de esta entrada? Tu borrador no se guardará.',
+      defaultSession: 'Sesión predeterminada',
       bestUsedFor: 'Mejor para:',
       yourEntry: 'Tu Entrada',
       wordCount: '{count} palabras',
@@ -1275,6 +1617,81 @@ export const translations: Record<Language, Translations> = {
       saving: 'Guardando...',
       saveSuccess: '¡Entrada guardada con éxito!',
       saveError: 'Error al guardar la entrada: {message}',
+      emptyError: 'Escribe algo antes de guardar.',
+    },
+    homeHero: {
+      day: 'día',
+      days: 'días',
+      minute: 'minuto',
+      minutes: 'minutos',
+      wordsLabel: 'palabras',
+      awayShort: 'un tiempo',
+      awayLong: 'quince días',
+      unknownTopic: 'lo último que escribiste',
+      states: {
+        coldStart: {
+          eyebrow: 'Diario',
+          title: 'Empieza con una frase *honesta*.',
+          body: 'Aún no hay cuenta. Nada de lo que escribas sale de este teléfono hasta que lo pidas.',
+          cta: 'Escribir mi primera página',
+          note: 'Los prompts vienen de escritura expresiva, CBT y práctica estoica. Puedes leer la investigación detrás de cada uno antes de escribir.',
+        },
+        morning: {
+          eyebrow: '{{date}} · Día {{dayCount}}',
+          title: '¿Qué *llevas* a tu día?',
+          subhead: 'Esta mañana · 5 min',
+          body: 'Nombra el estado de ánimo, luego una cosa que vas a hacer al respecto.',
+          cta: 'Empezar a escribir',
+          secondary: 'Otra',
+        },
+        midday: {
+          eyebrow: '{{date}} · Día {{dayCount}}',
+          title: '¿Hay algo en tu mente *ahora*?',
+          body: 'El mediodía es para lo que no puedes soltar, no para una práctica. Dos minutos son una página.',
+          cta: 'Abrir una página en blanco',
+          secondary: 'Elegir estilo',
+        },
+        evening: {
+          eyebrow: '{{date}} · Día {{dayCount}}',
+          title: '¿Qué te *pidió* hoy?',
+          subhead: 'Práctica de esta noche · 10 min',
+          body: 'Nombra una cosa que manejaste bien, una que harías diferente, y una que puedes soltar.',
+          cta: 'Empezar a escribir',
+          secondary: 'Otra',
+        },
+        late: {
+          eyebrow: '{{weekday}} · {{time}}',
+          title: 'Déjalo y *duérmete* sobre ello.',
+          body: 'Tres líneas son suficientes esta noche. La versión larga puede esperar hasta mañana.',
+          cta: 'Escribir tres líneas',
+          secondary: 'Esta noche no',
+          note: 'Nada se reinicia si lo saltas. Tu racha cuenta los días que escribiste, no los que no fallaste.',
+        },
+        written: {
+          eyebrow: '{{date}} · Día {{dayCount}}',
+          title: 'Escrito. *{{dayCount}} {{dayText}}* de páginas detrás de ti.',
+          body: '{{typeLabel}}, {{time}} — {{words}} {{wordsLabel}} en {{minutes}} {{minutesLabel}}.',
+          cta: 'Agregar a hoy',
+          secondary: 'Leerla de nuevo',
+          note: 'Tu página está guardada en este dispositivo.',
+        },
+        unfinished: {
+          eyebrow: '{{date}}',
+          title: 'Dejaste algo a *medias*.',
+          body: 'Empezado el {{draftDay}} · {{draftWords}} {{wordsLabel}} · {{draftType}}',
+          cta: 'Terminarla',
+          secondary: 'Empezar algo nuevo',
+          note: 'Tienes un borrador en progreso. Termínalo o empieza algo nuevo.',
+        },
+        return: {
+          eyebrow: '{{date}}',
+          title: 'Ha pasado *{{away}}*. Empieza donde estás.',
+          body: 'No hay nada que ponerte al día. Lo último que escribiste fue sobre {{lastTopic}} — puedes retomarlo o dejarlo.',
+          cta: 'Escribir la página de hoy',
+          secondary: 'Releer esa',
+          note: 'Sin página en una semana. Nunca menciones la racha rota.',
+        },
+      },
     },
     entryTypes: {
       expressive: {

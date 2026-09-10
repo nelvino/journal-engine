@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useStorage } from '@/lib/useStorage';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -13,36 +14,33 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const storage = useStorage();
   const [theme, setThemeState] = useState<Theme>('light');
   const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>('light');
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    // Load theme from localStorage
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) {
-      setThemeState(savedTheme);
-    }
-  }, []);
+    storage.get<Theme>('theme').then((saved) => {
+      if (saved) {
+        setThemeState(saved);
+      }
+      setInitialized(true);
+    });
+  }, [storage]);
 
   useEffect(() => {
-    // Calculate effective theme
-    let resolvedTheme: 'light' | 'dark';
-    
-    if (theme === 'system') {
-      resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    } else {
-      resolvedTheme = theme;
-    }
-    
+    const resolvedTheme =
+      theme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        : theme;
+
     setEffectiveTheme(resolvedTheme);
-    
-    // Apply theme to document
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(resolvedTheme);
-    
-    // Save to localStorage
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    if (initialized) {
+      storage.set('theme', theme);
+    }
+  }, [theme, storage, initialized]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

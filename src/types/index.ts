@@ -32,6 +32,7 @@ export interface JournalEntry {
   frameworkId?: string;
   content: {
     text: string;
+    questions?: string[];
     mood?: MoodRating;
     emotions?: string[];
     tags?: string[];

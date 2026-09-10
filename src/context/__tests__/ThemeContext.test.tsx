@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider } from '@/context/ThemeContext';
 
 describe('ThemeProvider', () => {
@@ -24,14 +24,12 @@ describe('ThemeProvider', () => {
     );
 
     // Check that document has a theme class
-    const hasThemeClass = document.documentElement.classList.contains('light') || 
+    const hasThemeClass = document.documentElement.classList.contains('light') ||
                          document.documentElement.classList.contains('dark');
     expect(hasThemeClass).toBe(true);
   });
 
-  it('should save theme preference to localStorage', () => {
-    const localStorageSetItemSpy = jest.spyOn(Storage.prototype, 'setItem');
-
+  it('should save theme preference to localStorage', async () => {
     // Set a theme in localStorage before mounting
     localStorage.setItem('theme', 'dark');
 
@@ -41,9 +39,9 @@ describe('ThemeProvider', () => {
       </ThemeProvider>
     );
 
-    // Verify localStorage was read (indirectly tested through component behavior)
-    expect(localStorage.getItem('theme')).toBe('dark');
-    
-    localStorageSetItemSpy.mockRestore();
+    // storage.get is async; wait for the value to be saved back
+    await waitFor(() =>
+      expect(localStorage.getItem('theme')).toBe(JSON.stringify('dark'))
+    );
   });
 });

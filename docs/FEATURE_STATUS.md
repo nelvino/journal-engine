@@ -1,5 +1,7 @@
 # Feature Implementation Status
 
+> **Note**: This file is historical. The current design-system state is documented in [CURRENT_STATE.md](./CURRENT_STATE.md).
+
 ## ✅ Completed Features
 
 ### Core Infrastructure
