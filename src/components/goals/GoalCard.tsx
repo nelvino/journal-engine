@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { useLanguage } from '@/context/LanguageContext';
 import type { Goal } from '@/types';
 import { Target, Calendar, Check, Trash2, Edit3, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -15,6 +16,7 @@ interface GoalCardProps {
 }
 
 export const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate, onDelete, onComplete }) => {
+  const { t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
   const [progressInput, setProgressInput] = useState(goal.progress.current.toString());
 
@@ -53,8 +55,8 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate, onDelete, on
               <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
                 <Calendar className="h-3 w-3" />
                 <span>{new Date(goal.targetDate).toLocaleDateString()}</span>
-                {isOverdue && <span className="text-error-600 font-medium">Overdue</span>}
-                {isCompleted && <span className="text-success-600 font-medium">Completed</span>}
+                {isOverdue && <span className="text-error-600 font-medium">{t.goals.card.overdue}</span>}
+                {isCompleted && <span className="text-success-600 font-medium">{t.goals.card.completed}</span>}
               </div>
             </div>
           </div>
@@ -102,7 +104,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate, onDelete, on
 
         {totalMilestones > 0 && (
           <div className="text-sm text-muted-foreground">
-            Milestones: {completedMilestones}/{totalMilestones} completed
+            {t.goals.card.milestoneCount.replace('{completed}', String(completedMilestones)).replace('{total}', String(totalMilestones))}
           </div>
         )}
 
@@ -110,7 +112,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate, onDelete, on
           <div className="space-y-4 pt-4 border-t border-border">
             <div>
               <label className="block text-sm font-medium text-card-foreground mb-2">
-                Update Progress
+                {t.goals.card.updateProgress}
               </label>
               <div className="flex gap-2">
                 <input
@@ -120,35 +122,35 @@ export const GoalCard: React.FC<GoalCardProps> = ({ goal, onUpdate, onDelete, on
                   className="flex-1 px-4 py-2 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 />
                 <Button variant="outline" onClick={handleProgressUpdate}>
-                  Update
+                  {t.goals.card.update}
                 </Button>
               </div>
             </div>
 
             {goal.smartElements && (goal.smartElements.specific || goal.smartElements.measurable) && (
               <div className="space-y-2">
-                <h4 className="text-sm font-medium text-card-foreground">SMART Elements</h4>
+                <h4 className="text-sm font-medium text-card-foreground">{t.goals.card.smartElements}</h4>
                 {goal.smartElements.specific && (
-                  <p className="text-sm text-muted-foreground"><span className="font-medium">Specific:</span> {goal.smartElements.specific}</p>
+                  <p className="text-sm text-muted-foreground"><span className="font-medium">{t.goals.card.specific}</span> {goal.smartElements.specific}</p>
                 )}
                 {goal.smartElements.measurable && (
-                  <p className="text-sm text-muted-foreground"><span className="font-medium">Measurable:</span> {goal.smartElements.measurable}</p>
+                  <p className="text-sm text-muted-foreground"><span className="font-medium">{t.goals.card.measurable}</span> {goal.smartElements.measurable}</p>
                 )}
                 {goal.smartElements.achievable && (
-                  <p className="text-sm text-muted-foreground"><span className="font-medium">Achievable:</span> {goal.smartElements.achievable}</p>
+                  <p className="text-sm text-muted-foreground"><span className="font-medium">{t.goals.card.achievable}</span> {goal.smartElements.achievable}</p>
                 )}
                 {goal.smartElements.relevant && (
-                  <p className="text-sm text-muted-foreground"><span className="font-medium">Relevant:</span> {goal.smartElements.relevant}</p>
+                  <p className="text-sm text-muted-foreground"><span className="font-medium">{t.goals.card.relevant}</span> {goal.smartElements.relevant}</p>
                 )}
                 {goal.smartElements.timeBound && (
-                  <p className="text-sm text-muted-foreground"><span className="font-medium">Time-bound:</span> {goal.smartElements.timeBound}</p>
+                  <p className="text-sm text-muted-foreground"><span className="font-medium">{t.goals.card.timeBound}</span> {goal.smartElements.timeBound}</p>
                 )}
               </div>
             )}
 
             {goal.milestones.length > 0 && (
               <div className="space-y-2">
-                <h4 className="text-sm font-medium text-card-foreground">Milestones</h4>
+                <h4 className="text-sm font-medium text-card-foreground">{t.goals.card.milestones}</h4>
                 {goal.milestones.map((milestone) => (
                   <label key={milestone.id} className="flex items-start gap-2 p-2 rounded-lg hover:bg-muted transition-colors cursor-pointer">
                     <input

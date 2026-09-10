@@ -41,11 +41,68 @@ export interface Translations {
   };
   goals: {
     title: string;
-    setGoals: string;
-    setGoalsDescription: string;
+    subtitle: string;
     createNewGoal: string;
-    activeGoals: string;
+    activeGoalsTitle: string;
     activeGoalsDescription: string;
+    completedGoalsTitle: string;
+    loading: string;
+    empty: {
+      title: string;
+      hint: string;
+    };
+    stats: {
+      active: string;
+      completed: string;
+      avgProgress: string;
+    };
+    form: {
+      title: string;
+      goalTitle: string;
+      goalTitlePlaceholder: string;
+      description: string;
+      descriptionPlaceholder: string;
+      category: string;
+      timeframe: string;
+      startDate: string;
+      targetDate: string;
+      targetValue: string;
+      unit: string;
+      unitPlaceholder: string;
+      smartElements: string;
+      smartIntro: string;
+      specific: string;
+      specificPlaceholder: string;
+      measurable: string;
+      measurablePlaceholder: string;
+      achievable: string;
+      achievablePlaceholder: string;
+      relevant: string;
+      relevantPlaceholder: string;
+      timeBound: string;
+      timeBoundPlaceholder: string;
+      milestones: string;
+      addMilestone: string;
+      milestonePlaceholder: string;
+      cancel: string;
+      createGoal: string;
+    };
+    card: {
+      overdue: string;
+      completed: string;
+      updateProgress: string;
+      update: string;
+      smartElements: string;
+      specific: string;
+      measurable: string;
+      achievable: string;
+      relevant: string;
+      timeBound: string;
+      milestones: string;
+      milestoneCount: string;
+    };
+    categories: Record<string, string>;
+    timeframes: Record<string, string>;
   };
   progress: {
     title: string;
@@ -58,6 +115,7 @@ export interface Translations {
   };
   settings: {
     title: string;
+    subtitle: string;
     preferences: string;
     journalingPreferences: string;
     theme: string;
@@ -74,6 +132,23 @@ export interface Translations {
     exportData: string;
     clearAllData: string;
     language: string;
+    english: string;
+    spanish: string;
+    profile: string;
+    anonymous: string;
+    provider: string;
+    uid: string;
+    replayOnboarding: string;
+    clearDataWarning: string;
+    clearModal: {
+      title: string;
+      description: string;
+      cloudWarning: string;
+      localOnlyWarning: string;
+      cleared: string;
+      cancel: string;
+      clearData: string;
+    };
   };
   common: {
     cancel: string;
@@ -154,11 +229,85 @@ export const translations: Record<Language, Translations> = {
     },
     goals: {
       title: 'Goals',
-      setGoals: 'Set Your Goals',
-      setGoalsDescription: 'Create SMART goals and track your progress over time.',
+      subtitle: 'Set meaningful goals and track your progress',
       createNewGoal: 'Create New Goal',
-      activeGoals: 'Active Goals',
+      activeGoalsTitle: 'Active Goals',
       activeGoalsDescription: 'Your active goals will appear here.',
+      completedGoalsTitle: 'Completed Goals',
+      loading: 'Loading goals...',
+      empty: {
+        title: 'No active goals yet',
+        hint: 'Set a goal to start tracking your progress',
+      },
+      stats: {
+        active: 'Active Goals',
+        completed: 'Completed',
+        avgProgress: 'Avg Progress',
+      },
+      form: {
+        title: 'Create New Goal',
+        goalTitle: 'Goal Title',
+        goalTitlePlaceholder: 'e.g., Walk 10,000 steps daily',
+        description: 'Description',
+        descriptionPlaceholder: 'Why is this goal important to you?',
+        category: 'Category',
+        timeframe: 'Timeframe',
+        startDate: 'Start Date',
+        targetDate: 'Target Date',
+        targetValue: 'Target Value',
+        unit: 'Unit (e.g., steps, pages, minutes)',
+        unitPlaceholder: 'steps',
+        smartElements: 'SMART Elements',
+        smartIntro: "Based on Doran's SMART criteria (1981) and Locke & Latham's goal-setting theory. Making goals Specific, Measurable, Achievable, Relevant, and Time-bound improves clarity and commitment.",
+        specific: 'Specific: What exactly will you do?',
+        specificPlaceholder: 'e.g., Walk outside for 30 minutes',
+        measurable: 'Measurable: How will you track progress?',
+        measurablePlaceholder: 'e.g., Track steps with my phone',
+        achievable: 'Achievable: Why is this realistic?',
+        achievablePlaceholder: 'e.g., I already walk 5,000 steps',
+        relevant: 'Relevant: Why does this matter?',
+        relevantPlaceholder: 'e.g., Improves my energy and mood',
+        timeBound: 'Time-bound: When will you do it?',
+        timeBoundPlaceholder: 'e.g., Every morning before work',
+        milestones: 'Milestones',
+        addMilestone: 'Add milestone',
+        milestonePlaceholder: 'Milestone description',
+        cancel: 'Cancel',
+        createGoal: 'Create Goal',
+      },
+      card: {
+        overdue: 'Overdue',
+        completed: 'Completed',
+        updateProgress: 'Update Progress',
+        update: 'Update',
+        smartElements: 'SMART Elements',
+        specific: 'Specific:',
+        measurable: 'Measurable:',
+        achievable: 'Achievable:',
+        relevant: 'Relevant:',
+        timeBound: 'Time-bound:',
+        milestones: 'Milestones',
+        milestoneCount: 'Milestones: {completed}/{total} completed',
+      },
+      categories: {
+        personal_growth: 'Personal Growth',
+        health: 'Health',
+        relationships: 'Relationships',
+        career: 'Career',
+        financial: 'Financial',
+        spiritual: 'Spiritual',
+        creative: 'Creative',
+        educational: 'Educational',
+        contribution: 'Contribution',
+      },
+      timeframes: {
+        daily: 'Daily',
+        weekly: 'Weekly',
+        monthly: 'Monthly',
+        quarterly: 'Quarterly',
+        yearly: 'Yearly',
+        long_term: 'Long Term',
+      },
     },
     progress: {
       title: 'Progress',
@@ -171,6 +320,7 @@ export const translations: Record<Language, Translations> = {
     },
     settings: {
       title: 'Settings',
+      subtitle: 'Customize your journaling experience',
       preferences: 'Preferences',
       journalingPreferences: 'Journaling Preferences',
       theme: 'Theme',
@@ -187,6 +337,23 @@ export const translations: Record<Language, Translations> = {
       exportData: 'Export Data',
       clearAllData: 'Clear All Data',
       language: 'Language',
+      english: 'English',
+      spanish: 'Español',
+      profile: 'Profile',
+      anonymous: 'Anonymous',
+      provider: 'Provider: Google',
+      uid: 'UID',
+      replayOnboarding: 'Replay Onboarding',
+      clearDataWarning: 'Clears journal entries, goals, and progress from this device and your cloud account if you are signed in. This cannot be undone.',
+      clearModal: {
+        title: 'Clear all data?',
+        description: 'This will permanently delete all your journal entries, goals, and progress data.',
+        cloudWarning: 'You are signed in as {email}. This will also delete your cloud data from Firebase.',
+        localOnlyWarning: 'You are not signed in. This will only clear data stored on this device.',
+        cleared: 'Your data has been cleared.',
+        cancel: 'Cancel',
+        clearData: 'Clear Data',
+      },
     },
     common: {
       cancel: 'Cancel',
@@ -550,11 +717,85 @@ export const translations: Record<Language, Translations> = {
     },
     goals: {
       title: 'Metas',
-      setGoals: 'Establece tus Metas',
-      setGoalsDescription: 'Crea metas SMART y rastrea tu progreso con el tiempo.',
+      subtitle: 'Establece metas significativas y rastrea tu progreso',
       createNewGoal: 'Crear Nueva Meta',
-      activeGoals: 'Metas Activas',
+      activeGoalsTitle: 'Metas Activas',
       activeGoalsDescription: 'Tus metas activas aparecerán aquí.',
+      completedGoalsTitle: 'Metas Completadas',
+      loading: 'Cargando metas...',
+      empty: {
+        title: 'Aún no hay metas activas',
+        hint: 'Establece una meta para empezar a rastrear tu progreso',
+      },
+      stats: {
+        active: 'Metas Activas',
+        completed: 'Completadas',
+        avgProgress: 'Progreso Promedio',
+      },
+      form: {
+        title: 'Crear Nueva Meta',
+        goalTitle: 'Título de la Meta',
+        goalTitlePlaceholder: 'p. ej., Caminar 10,000 pasos diarios',
+        description: 'Descripción',
+        descriptionPlaceholder: '¿Por qué es importante esta meta para ti?',
+        category: 'Categoría',
+        timeframe: 'Plazo',
+        startDate: 'Fecha de Inicio',
+        targetDate: 'Fecha Objetivo',
+        targetValue: 'Valor Objetivo',
+        unit: 'Unidad (p. ej., pasos, páginas, minutos)',
+        unitPlaceholder: 'pasos',
+        smartElements: 'Elementos SMART',
+        smartIntro: 'Basado en los criterios SMART de Doran (1981) y la teoría de fijación de metas de Locke y Latham. Hacer metas Específicas, Medibles, Alcanzables, Relevantes y con Tiempo definido mejora la claridad y el compromiso.',
+        specific: 'Específico: ¿Qué harás exactamente?',
+        specificPlaceholder: 'p. ej., Caminar afuera durante 30 minutos',
+        measurable: 'Medible: ¿Cómo rastrearás el progreso?',
+        measurablePlaceholder: 'p. ej., Rastrear pasos con mi teléfono',
+        achievable: 'Alcanzable: ¿Por qué es realista?',
+        achievablePlaceholder: 'p. ej., Ya camino 5,000 pasos',
+        relevant: 'Relevante: ¿Por qué importa?',
+        relevantPlaceholder: 'p. ej., Mejora mi energía y estado de ánimo',
+        timeBound: 'Con Tiempo definido: ¿Cuándo lo harás?',
+        timeBoundPlaceholder: 'p. ej., Cada mañana antes del trabajo',
+        milestones: 'Hitos',
+        addMilestone: 'Agregar hito',
+        milestonePlaceholder: 'Descripción del hito',
+        cancel: 'Cancelar',
+        createGoal: 'Crear Meta',
+      },
+      card: {
+        overdue: 'Atrasada',
+        completed: 'Completada',
+        updateProgress: 'Actualizar Progreso',
+        update: 'Actualizar',
+        smartElements: 'Elementos SMART',
+        specific: 'Específico:',
+        measurable: 'Medible:',
+        achievable: 'Alcanzable:',
+        relevant: 'Relevante:',
+        timeBound: 'Con Tiempo definido:',
+        milestones: 'Hitos',
+        milestoneCount: 'Hitos: {completed}/{total} completados',
+      },
+      categories: {
+        personal_growth: 'Crecimiento Personal',
+        health: 'Salud',
+        relationships: 'Relaciones',
+        career: 'Carrera',
+        financial: 'Finanzas',
+        spiritual: 'Espiritual',
+        creative: 'Creativo',
+        educational: 'Educativo',
+        contribution: 'Contribución',
+      },
+      timeframes: {
+        daily: 'Diario',
+        weekly: 'Semanal',
+        monthly: 'Mensual',
+        quarterly: 'Trimestral',
+        yearly: 'Anual',
+        long_term: 'Largo Plazo',
+      },
     },
     progress: {
       title: 'Progreso',
@@ -567,6 +808,7 @@ export const translations: Record<Language, Translations> = {
     },
     settings: {
       title: 'Configuración',
+      subtitle: 'Personaliza tu experiencia de diario',
       preferences: 'Preferencias',
       journalingPreferences: 'Preferencias de Diario',
       theme: 'Tema',
@@ -583,6 +825,23 @@ export const translations: Record<Language, Translations> = {
       exportData: 'Exportar Datos',
       clearAllData: 'Borrar Todos los Datos',
       language: 'Idioma',
+      english: 'English',
+      spanish: 'Español',
+      profile: 'Perfil',
+      anonymous: 'Anónimo',
+      provider: 'Proveedor: Google',
+      uid: 'UID',
+      replayOnboarding: 'Repetir Onboarding',
+      clearDataWarning: 'Borra las entradas, metas y progreso de este dispositivo y de tu cuenta en la nube si iniciaste sesión. Esto no se puede deshacer.',
+      clearModal: {
+        title: '¿Borrar todos los datos?',
+        description: 'Esto eliminará permanentemente todas tus entradas de diario, metas y datos de progreso.',
+        cloudWarning: 'Has iniciado sesión como {email}. Esto también borrará tus datos de la nube de Firebase.',
+        localOnlyWarning: 'No has iniciado sesión. Esto solo borrará los datos almacenados en este dispositivo.',
+        cleared: 'Tus datos han sido borrados.',
+        cancel: 'Cancelar',
+        clearData: 'Borrar Datos',
+      },
     },
     common: {
       cancel: 'Cancelar',

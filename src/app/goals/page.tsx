@@ -29,7 +29,7 @@ export default function GoalsPage() {
               {t.goals.title}
             </h1>
             <p className="text-muted-foreground">
-              Set meaningful goals and track your progress
+              {t.goals.subtitle}
             </p>
           </div>
 
@@ -39,17 +39,17 @@ export default function GoalsPage() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
                 <div>
                   <div className="text-3xl font-bold text-primary-700">{activeGoals.length}</div>
-                  <div className="text-sm text-muted-foreground">Active Goals</div>
+                  <div className="text-sm text-muted-foreground">{t.goals.stats.active}</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-success-700">{completedGoals.length}</div>
-                  <div className="text-sm text-muted-foreground">Completed</div>
+                  <div className="text-sm text-muted-foreground">{t.goals.stats.completed}</div>
                 </div>
                 <div className="col-span-2 md:col-span-1">
                   <div className="text-3xl font-bold text-warning-700">
                     {goals.length > 0 ? Math.round(goals.reduce((sum, g) => sum + g.progress.percentage, 0) / goals.length) : 0}%
                   </div>
-                  <div className="text-sm text-muted-foreground">Avg Progress</div>
+                  <div className="text-sm text-muted-foreground">{t.goals.stats.avgProgress}</div>
                 </div>
               </div>
             </CardContent>
@@ -83,10 +83,10 @@ export default function GoalsPage() {
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2">
               <Target className="h-6 w-6 text-primary-700" />
-              Active Goals
+              {t.goals.activeGoalsTitle}
             </h2>
             {loading ? (
-              <p className="text-muted-foreground">Loading goals...</p>
+              <p className="text-muted-foreground">{t.goals.loading}</p>
             ) : activeGoals.length === 0 ? (
               <Card variant="elevated">
                 <CardContent className="text-center py-8">
@@ -94,11 +94,11 @@ export default function GoalsPage() {
                     <Target className="h-8 w-8 text-muted-foreground" />
                   </div>
                   <p className="text-muted-foreground mb-4">
-                    {t.goals.activeGoalsDescription}
+                    {t.goals.empty.title}
                   </p>
                   <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                     <TrendingUp className="h-4 w-4" />
-                    <span>Set a goal to start tracking your progress</span>
+                    <span>{t.goals.empty.hint}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -120,7 +120,7 @@ export default function GoalsPage() {
             <div className="space-y-4">
               <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2">
                 <TrendingUp className="h-6 w-6 text-success-700" />
-                Completed Goals
+                {t.goals.completedGoalsTitle}
               </h2>
               {completedGoals.map((goal) => (
                 <GoalCard

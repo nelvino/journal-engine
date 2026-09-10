@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
+import { useLanguage } from '@/context/LanguageContext';
 import type { Goal, GoalCategory, GoalTimeframe } from '@/types';
 import { Plus } from 'lucide-react';
 
@@ -35,6 +36,7 @@ const timeframes: { value: GoalTimeframe; label: string }[] = [
 ];
 
 export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, onCancel }) => {
+  const { t } = useLanguage();
   const today = new Date().toISOString().split('T')[0];
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -100,55 +102,55 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, onCancel }) => {
   return (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>Create New Goal</CardTitle>
+        <CardTitle>{t.goals.form.title}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <Input
-            label="Goal Title"
+            label={t.goals.form.goalTitle}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g., Walk 10,000 steps daily"
+            placeholder={t.goals.form.goalTitlePlaceholder}
             required
           />
 
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-2">
-              Description
+              {t.goals.form.description}
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Why is this goal important to you?"
+              placeholder={t.goals.form.descriptionPlaceholder}
               className="w-full min-h-[80px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
             />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             <Select
-              label="Category"
+              label={t.goals.form.category}
               value={category}
               onChange={(value) => setCategory(value as GoalCategory)}
-              options={categories}
+              options={categories.map(c => ({ ...c, label: t.goals.categories[c.value] }))}
             />
             <Select
-              label="Timeframe"
+              label={t.goals.form.timeframe}
               value={timeframe}
               onChange={(value) => setTimeframe(value as GoalTimeframe)}
-              options={timeframes}
+              options={timeframes.map(tf => ({ ...tf, label: t.goals.timeframes[tf.value] }))}
             />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             <Input
-              label="Start Date"
+              label={t.goals.form.startDate}
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               required
             />
             <Input
-              label="Target Date"
+              label={t.goals.form.targetDate}
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
@@ -158,7 +160,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, onCancel }) => {
 
           <div className="grid md:grid-cols-2 gap-4">
             <Input
-              label="Target Value"
+              label={t.goals.form.targetValue}
               type="number"
               min={1}
               value={target}
@@ -166,63 +168,63 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, onCancel }) => {
               required
             />
             <Input
-              label="Unit (e.g., steps, pages, minutes)"
+              label={t.goals.form.unit}
               value={unit}
               onChange={(e) => setUnit(e.target.value)}
-              placeholder="steps"
+              placeholder={t.goals.form.unitPlaceholder}
             />
           </div>
 
           <Card variant="bordered" className="bg-muted">
             <CardHeader>
-              <CardTitle className="text-base">SMART Elements</CardTitle>
+              <CardTitle className="text-base">{t.goals.form.smartElements}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Based on Doran's SMART criteria (1981) and Locke & Latham's goal-setting theory. Making goals Specific, Measurable, Achievable, Relevant, and Time-bound improves clarity and commitment.
+                {t.goals.form.smartIntro}
               </p>
               <Input
-                label="Specific: What exactly will you do?"
+                label={t.goals.form.specific}
                 value={specific}
                 onChange={(e) => setSpecific(e.target.value)}
-                placeholder="e.g., Walk outside for 30 minutes"
+                placeholder={t.goals.form.specificPlaceholder}
               />
               <Input
-                label="Measurable: How will you track progress?"
+                label={t.goals.form.measurable}
                 value={measurable}
                 onChange={(e) => setMeasurable(e.target.value)}
-                placeholder="e.g., Track steps with my phone"
+                placeholder={t.goals.form.measurablePlaceholder}
               />
               <Input
-                label="Achievable: Why is this realistic?"
+                label={t.goals.form.achievable}
                 value={achievable}
                 onChange={(e) => setAchievable(e.target.value)}
-                placeholder="e.g., I already walk 5,000 steps"
+                placeholder={t.goals.form.achievablePlaceholder}
               />
               <Input
-                label="Relevant: Why does this matter?"
+                label={t.goals.form.relevant}
                 value={relevant}
                 onChange={(e) => setRelevant(e.target.value)}
-                placeholder="e.g., Improves my energy and mood"
+                placeholder={t.goals.form.relevantPlaceholder}
               />
               <Input
-                label="Time-bound: When will you do it?"
+                label={t.goals.form.timeBound}
                 value={timeBound}
                 onChange={(e) => setTimeBound(e.target.value)}
-                placeholder="e.g., Every morning before work"
+                placeholder={t.goals.form.timeBoundPlaceholder}
               />
             </CardContent>
           </Card>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-card-foreground">Milestones</label>
+              <label className="text-sm font-medium text-card-foreground">{t.goals.form.milestones}</label>
               <button
                 type="button"
                 onClick={addMilestone}
                 className="text-sm text-primary-700 hover:text-primary-800 font-medium transition-colors flex items-center gap-1"
               >
-                <Plus className="h-4 w-4" /> Add milestone
+                <Plus className="h-4 w-4" /> {t.goals.form.addMilestone}
               </button>
             </div>
             {milestones.map((milestone, index) => (
@@ -231,7 +233,7 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, onCancel }) => {
                   type="text"
                   value={milestone.title}
                   onChange={(e) => updateMilestone(index, 'title', e.target.value)}
-                  placeholder="Milestone description"
+                  placeholder={t.goals.form.milestonePlaceholder}
                   className="flex-1 px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 />
                 <input
@@ -253,10 +255,10 @@ export const GoalForm: React.FC<GoalFormProps> = ({ onSubmit, onCancel }) => {
 
           <div className="flex justify-end gap-4">
             <Button variant="outline" onClick={onCancel}>
-              Cancel
+              {t.goals.form.cancel}
             </Button>
             <Button variant="primary" type="submit" icon={<Plus className="h-4 w-4" />}>
-              Create Goal
+              {t.goals.form.createGoal}
             </Button>
           </div>
         </form>

@@ -56,7 +56,7 @@ export default function SettingsPage() {
               {t.settings.title}
             </h1>
             <p className="text-muted-foreground">
-              Customize your journaling experience
+              {t.settings.subtitle}
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export default function SettingsPage() {
           {user && (
             <Card variant="elevated">
               <CardHeader>
-                <CardTitle>Profile</CardTitle>
+                <CardTitle>{t.settings.profile}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-4">
@@ -81,7 +81,7 @@ export default function SettingsPage() {
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-foreground truncate">{user.displayName || 'Anonymous'}</p>
+                    <p className="font-semibold text-foreground truncate">{user.displayName || t.settings.anonymous}</p>
                     <p className="text-sm text-muted-foreground truncate">{user.email}</p>
                   </div>
                 </div>
@@ -93,11 +93,11 @@ export default function SettingsPage() {
                   </div>
                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
                     <Shield className="h-4 w-4 shrink-0" />
-                    <span>Provider: Google</span>
+                    <span>{t.settings.provider}</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
                     <User className="h-4 w-4 shrink-0" />
-                    <span className="font-mono text-xs break-all">UID: {user.uid}</span>
+                    <span className="font-mono text-xs break-all">{t.settings.uid}: {user.uid}</span>
                   </div>
                 </div>
               </CardContent>
@@ -130,7 +130,7 @@ export default function SettingsPage() {
                         : 'bg-muted text-secondary-700 hover:bg-secondary-100'
                     }`}
                   >
-                    English
+                    {t.settings.english}
                   </button>
                   <button
                     onClick={() => setLanguage('es')}
@@ -140,7 +140,7 @@ export default function SettingsPage() {
                         : 'bg-muted text-secondary-700 hover:bg-secondary-100'
                     }`}
                   >
-                    Español
+                    {t.settings.spanish}
                   </button>
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function SettingsPage() {
                 icon={<HelpCircle className="h-4 w-4" />}
                 onClick={restartOnboarding}
               >
-                Replay Onboarding
+                {t.settings.replayOnboarding}
               </Button>
               <Button
                 variant="outline"
@@ -235,30 +235,30 @@ export default function SettingsPage() {
                 {t.settings.clearAllData}
               </Button>
               <p className="text-xs text-muted-foreground">
-                Clears journal entries, goals, and progress from this device and your cloud account if you are signed in. This cannot be undone.
+                {t.settings.clearDataWarning}
               </p>
             </CardContent>
           </Card>
         </div>
       </main>
 
-      <Modal isOpen={showClearModal} onClose={() => setShowClearModal(false)} title="Clear all data?">
+      <Modal isOpen={showClearModal} onClose={() => setShowClearModal(false)} title={t.settings.clearModal.title}>
         <div className="space-y-4">
           <p className="text-muted-foreground leading-relaxed">
-            This will permanently delete all your journal entries, goals, and progress data.
+            {t.settings.clearModal.description}
           </p>
           {user && (
             <p className="text-sm text-warning-700 bg-warning-50 p-3 rounded-xl">
-              You are signed in as {user.email}. This will also delete your cloud data from Firebase.
+              {t.settings.clearModal.cloudWarning.replace('{email}', user.email || '')}
             </p>
           )}
           {!user && (
             <p className="text-sm text-muted-foreground bg-muted p-3 rounded-xl">
-              You are not signed in. This will only clear data stored on this device.
+              {t.settings.clearModal.localOnlyWarning}
             </p>
           )}
           {cleared ? (
-            <p className="text-success-700 font-medium">Your data has been cleared.</p>
+            <p className="text-success-700 font-medium">{t.settings.clearModal.cleared}</p>
           ) : (
             <div className="flex gap-3 pt-2">
               <Button
@@ -267,7 +267,7 @@ export default function SettingsPage() {
                 onClick={() => setShowClearModal(false)}
                 disabled={clearing}
               >
-                Cancel
+                {t.settings.clearModal.cancel}
               </Button>
               <Button
                 variant="primary"
@@ -276,7 +276,7 @@ export default function SettingsPage() {
                 loading={clearing}
                 icon={<Trash2 className="h-4 w-4" />}
               >
-                Clear Data
+                {t.settings.clearModal.clearData}
               </Button>
             </div>
           )}
