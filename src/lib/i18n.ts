@@ -309,6 +309,11 @@ export interface Translations {
     getStarted: string;
     skip: string;
   };
+  notFound: {
+    title: string;
+    description: string;
+    home: string;
+  };
   common: {
     cancel: string;
     back: string;
@@ -825,6 +830,11 @@ export const translations: Record<Language, Translations> = {
       back: 'Back',
       getStarted: 'Get started',
       skip: 'Skip onboarding',
+    },
+    notFound: {
+      title: 'Page not found',
+      description: 'The page you are looking for does not exist.',
+      home: 'Go to Today',
     },
     common: {
       cancel: 'Cancel',
@@ -1672,6 +1682,11 @@ export const translations: Record<Language, Translations> = {
       back: 'Atrás',
       getStarted: 'Empezar',
       skip: 'Saltar onboarding',
+    },
+    notFound: {
+      title: 'Página no encontrada',
+      description: 'La página que buscas no existe.',
+      home: 'Ir a Hoy',
     },
     common: {
       cancel: 'Cancelar',
