@@ -57,13 +57,15 @@ function ToggleRow({
   checked: boolean;
   onChange: (v: boolean) => void;
 }) {
+  const id = React.useId();
+  const captionId = `${id}-caption`;
   return (
     <div className="flex items-center justify-between border-b border-rule py-4">
       <div>
-        <h3 className="font-serif text-[19px] leading-[25px] text-ink">{label}</h3>
-        <p className="font-sans text-[11px] leading-[16px] text-ink-caption mt-0.5">{caption}</p>
+        <label htmlFor={id} className="block font-serif text-[19px] leading-[25px] text-ink">{label}</label>
+        <p id={captionId} className="font-sans text-[11px] leading-[16px] text-ink-caption mt-0.5">{caption}</p>
       </div>
-      <Switch checked={checked} onChange={onChange} />
+      <Switch id={id} checked={checked} onChange={onChange} aria-describedby={captionId} />
     </div>
   );
 }

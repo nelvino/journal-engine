@@ -14,6 +14,9 @@ export const AppLockGate: React.FC = () => {
   const [hasPin, setHasPin] = useState<boolean | null>(null);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState<'set' | 'enter'>('enter');
+  const titleId = React.useId();
+  const descId = React.useId();
+  const inputId = React.useId();
 
   useEffect(() => {
     let mounted = true;
@@ -63,25 +66,28 @@ export const AppLockGate: React.FC = () => {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={t.settings.appLockGate.title}
+        aria-labelledby={titleId}
+        aria-describedby={descId}
         className="fixed inset-0 z-[100] bg-paper flex items-center justify-center px-6"
       >
         <div className="w-full max-w-[430px]">
           <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4 mb-2">
             {t.settings.appLock}
           </p>
-          <h1 className="font-serif text-[30px] leading-[34px] text-ink mb-2">
+          <h1 id={titleId} className="font-serif text-[30px] leading-[34px] text-ink mb-2">
             {mode === 'set' ? t.settings.appLockGate.setPasscode : t.settings.appLockGate.enterPasscode}
           </h1>
-          <p className="font-sans text-[13.5px] leading-[21px] text-ink-secondary mb-6">
+          <p id={descId} className="font-sans text-[13.5px] leading-[21px] text-ink-secondary mb-6">
             {t.settings.appLockGate.subtitle}
           </p>
           <input
+            id={inputId}
             type="password"
             inputMode="numeric"
             pattern="[0-9]*"
             maxLength={6}
             autoFocus
+            aria-describedby={descId}
             value={input}
             onChange={(e) => setInput(e.target.value.replace(/\D/g, ''))}
             onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}

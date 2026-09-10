@@ -31,6 +31,7 @@ function NavLink({ item, layout }: { item: NavItem; layout: 'bottom' | 'rail' })
   return (
     <Link
       href={item.href}
+      aria-current={active ? 'page' : undefined}
       className={cn(
         'group flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
         rail

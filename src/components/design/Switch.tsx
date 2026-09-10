@@ -5,14 +5,18 @@ interface SwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   id?: string;
+  'aria-label'?: string;
+  'aria-describedby'?: string;
 }
 
-export const Switch: React.FC<SwitchProps> = ({ checked, onChange, id }) => (
+export const Switch: React.FC<SwitchProps> = ({ checked, onChange, id, 'aria-label': ariaLabel, 'aria-describedby': ariaDescribedby }) => (
   <button
     id={id}
     type="button"
     role="switch"
     aria-checked={checked}
+    aria-label={ariaLabel}
+    aria-describedby={ariaDescribedby}
     onClick={() => onChange(!checked)}
     className={cn(
       'relative w-11 h-6 border border-ink transition-colors duration-[var(--dur)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',

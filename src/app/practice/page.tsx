@@ -453,6 +453,7 @@ function IntentionsView() {
             value={newText}
             onChange={(e) => setNewText(e.target.value)}
             placeholder={t.practice.newIntentionPlaceholder}
+            aria-label={t.practice.newIntention}
             className="w-full bg-transparent font-sans text-[17px] leading-[27px] text-ink placeholder:text-ink-decorative border-b-2 border-ink py-3 focus:outline-none focus:border-accent"
           />
           <SelectRow

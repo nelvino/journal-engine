@@ -226,6 +226,7 @@ function NewEntryContent() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder={t.newEntry.searchPlaceholder}
+                  aria-label={t.common.search}
                   className="flex-1 bg-transparent font-sans text-[15px] leading-5 text-ink placeholder:text-ink-decorative focus:outline-none"
                 />
               </div>

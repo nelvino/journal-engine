@@ -21,6 +21,7 @@ export const TabBar: React.FC<TabBarProps> = ({ tabs, active, onChange, classNam
       return (
         <button
           key={tab.id}
+          type="button"
           onClick={() => onChange(tab.id)}
           className={cn(
             'flex-1 flex flex-col items-center justify-start h-14 pb-6 pt-2 min-w-0',

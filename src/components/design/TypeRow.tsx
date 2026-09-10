@@ -29,9 +29,11 @@ export const TypeRow: React.FC<TypeRowProps> = ({
 
   return (
     <button
+      type="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       aria-disabled={disabled}
+      aria-pressed={selected}
       className={cn(
         'w-full grid grid-cols-[44px_1fr] items-start py-4 text-left min-h-[44px]',
         'transition-[background-color,border-color,color] duration-[var(--dur)]',

@@ -19,6 +19,7 @@ export const Segmented: React.FC<SegmentedProps> = ({ value, options, onChange }
       return (
         <button
           key={option.value}
+          type="button"
           onClick={() => onChange(option.value)}
           role="tab"
           aria-selected={selected}

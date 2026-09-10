@@ -8,6 +8,10 @@ interface RuledFieldProps extends React.TextareaHTMLAttributes<HTMLTextAreaEleme
   minHeight?: number;
 }
 
+function describedBy(...ids: (string | undefined)[]) {
+  return ids.filter(Boolean).join(' ') || undefined;
+}
+
 export const RuledField: React.FC<RuledFieldProps> = ({
   label,
   hint,
@@ -17,16 +21,19 @@ export const RuledField: React.FC<RuledFieldProps> = ({
   ...props
 }) => {
   const [focused, setFocused] = useState(false);
+  const id = React.useId();
+  const hintId = hint ? `${id}-hint` : undefined;
+  const errorId = error ? `${id}-error` : undefined;
 
   return (
     <div className={cn('w-full', className)}>
       {label && (
-        <label className="block font-serif text-[17px] leading-[25px] text-ink mb-1">
+        <label htmlFor={id} className="block font-serif text-[17px] leading-[25px] text-ink mb-1">
           {label}
         </label>
       )}
       {hint && (
-        <p className="font-sans text-[11.5px] leading-[19px] text-ink-caption mb-2">
+        <p id={hintId} className="font-sans text-[11.5px] leading-[19px] text-ink-caption mb-2">
           {hint}
         </p>
       )}
@@ -37,6 +44,9 @@ export const RuledField: React.FC<RuledFieldProps> = ({
         )}
       >
         <textarea
+          id={id}
+          aria-invalid={!!error}
+          aria-describedby={describedBy(hintId, errorId)}
           className="w-full resize-none bg-transparent font-serif text-[16px] text-ink placeholder:text-ink-decorative focus:outline-none"
           style={{
             minHeight: `${minHeight}px`,
@@ -51,7 +61,7 @@ export const RuledField: React.FC<RuledFieldProps> = ({
         />
       </div>
       {error && (
-        <p className="font-sans text-[11px] leading-4 text-danger mt-1">{error}</p>
+        <p id={errorId} className="font-sans text-[11px] leading-4 text-danger mt-1">{error}</p>
       )}
     </div>
   );
