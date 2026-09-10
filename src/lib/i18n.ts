@@ -335,6 +335,11 @@ export interface Translations {
     saveError: string;
     emptyError: string;
   };
+  appUpdate: {
+    title: string;
+    message: string;
+    now: string;
+  };
   homeHero: {
     day: string;
     days: string;
@@ -751,6 +756,11 @@ export const translations: Record<Language, Translations> = {
         cancel: 'Cancel',
         clearData: 'Clear Data',
       },
+    },
+    appUpdate: {
+      title: 'Update available',
+      message: 'A new version of the app is ready. Refresh to use it.',
+      now: 'Refresh now',
     },
     common: {
       cancel: 'Cancel',
@@ -1556,6 +1566,11 @@ export const translations: Record<Language, Translations> = {
         cancel: 'Cancelar',
         clearData: 'Borrar Datos',
       },
+    },
+    appUpdate: {
+      title: 'Actualización disponible',
+      message: 'Hay una nueva versión de la app. Actualiza para usarla.',
+      now: 'Actualizar ahora',
     },
     common: {
       cancel: 'Cancelar',
