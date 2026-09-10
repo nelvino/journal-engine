@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
+import Link from 'next/link';
 import { Shell } from '@/components/design/Shell';
 import { Segmented } from '@/components/design/Segmented';
 import { Button } from '@/components/design/Button';
@@ -42,28 +43,39 @@ function getStreaks(dates: string[]) {
 
   let longest = 0;
   let run = 0;
+  let runStart: string | null = null;
+  let longestEnd: string | null = null;
   const allDates = [...set].sort();
   for (let i = 0; i < allDates.length; i++) {
     if (i > 0) {
-      const prev = new Date(allDates[i - 1]);
-      const curr = new Date(allDates[i]);
+      const prev = localDateFromISO(allDates[i - 1]);
+      const curr = localDateFromISO(allDates[i]);
       const diff = (curr.getTime() - prev.getTime()) / MS_PER_DAY;
       if (diff === 1) {
         run++;
       } else {
         run = 1;
+        runStart = allDates[i];
       }
     } else {
       run = 1;
+      runStart = allDates[i];
     }
-    longest = Math.max(longest, run);
+    if (run > longest) {
+      longest = run;
+      longestEnd = allDates[i];
+    }
   }
 
-  return { current: current || (set.has(today) ? 1 : 0), longest };
+  return {
+    current: current || (set.has(today) ? 1 : 0),
+    longest,
+    longestRunEnd: longestEnd || '',
+  };
 }
 
-function formatMonth(iso: string) {
-  return localDateFromISO(iso).toLocaleDateString('en-GB', { month: 'long' });
+function formatMonth(iso: string, language: 'en' | 'es') {
+  return localDateFromISO(iso).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-GB', { month: 'long' });
 }
 
 const targetOptions = [1, 2, 3, 4, 5, 6, 7].map((n) => ({
@@ -96,7 +108,7 @@ function Pips({
 }
 
 function RecordView() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const storage = useStorage();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [intentions, setIntentions] = useState<Intention[]>([]);
@@ -155,12 +167,16 @@ function RecordView() {
   const styleData = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const e of entries) {
-      const label = t.entryTypes[e.entryType]?.label || e.entryType;
-      counts[label] = (counts[label] || 0) + 1;
+      counts[e.entryType] = (counts[e.entryType] || 0) + 1;
     }
     const items = Object.entries(counts).sort((a, b) => b[1] - a[1]);
     const max = Math.max(1, ...items.map(([, c]) => c));
-    return items.map(([label, count]) => ({ label, count, pct: (count / max) * 100 }));
+    return items.map(([entryType, count]) => ({
+      entryType,
+      label: t.entryTypes[entryType as JournalEntry['entryType']]?.label || entryType,
+      count,
+      pct: (count / max) * 100,
+    }));
   }, [entries, t.entryTypes]);
 
   const hasData = entries.length > 0;
@@ -225,9 +241,17 @@ function RecordView() {
         <p className="font-sans text-[11px] leading-[16px] opacity-70">
           {t.practice.lastFourWeeks}{' '}
           {streaks.longest > 0
-            ? t.practice.longestRun
-                .replace('{count}', String(streaks.longest))
-                .replace('{month}', 'January')
+            ? (() => {
+                const month = streaks.longestRunEnd
+                  ? localDateFromISO(streaks.longestRunEnd).toLocaleDateString(
+                      language === 'es' ? 'es-ES' : 'en-GB',
+                      { month: 'long' }
+                    )
+                  : '';
+                return t.practice.longestRun
+                  .replace('{count}', String(streaks.longest))
+                  .replace('{month}', month);
+              })()
             : ''}
         </p>
       </div>
@@ -284,18 +308,22 @@ function RecordView() {
         </h2>
         {hasData ? (
           <div className="space-y-4">
-            {styleData.map(({ label, count, pct }) => (
-              <div key={label}>
+            {styleData.map(({ entryType, label, count, pct }) => (
+              <Link
+                key={entryType}
+                href={`/journal/new?type=${entryType}`}
+                className="block transition-opacity duration-[var(--dur)] hover:opacity-80"
+              >
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-serif text-[19px] leading-[25px] text-ink">{label}</h3>
                   <span className="font-sans text-[11px] text-ink-caption">
-                    {count} {t.common.words}
+                    {count} {t.common.pages}
                   </span>
                 </div>
                 <div className="h-1 bg-rule">
                   <div className="h-full bg-accent" style={{ width: `${pct}%` }} />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         ) : (
@@ -307,7 +335,7 @@ function RecordView() {
 }
 
 function IntentionsView() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const storage = useStorage();
   const [intentions, setIntentions] = useState<Intention[]>([]);
   const [showAdd, setShowAdd] = useState(false);
@@ -479,7 +507,7 @@ function IntentionsView() {
                   </span>
                 </div>
                 <p className="font-sans text-[11px] text-ink-caption mb-3">
-                  {t.practice.setIn.replace('{month}', formatMonth(i.createdAt))}
+                  {t.practice.setIn.replace('{month}', formatMonth(i.createdAt, language))}
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="flex-1">
@@ -517,7 +545,7 @@ function IntentionsView() {
                 <div className="flex items-start justify-between gap-3 mb-1">
                   <h3 className="font-serif text-[19px] leading-[25px] text-ink opacity-60">{i.text}</h3>
                   <span className="font-sans text-[11px] text-ink-caption shrink-0">
-                    {t.practice.keptIn.replace('{month}', formatMonth(i.keptAt || i.createdAt))}
+                    {t.practice.keptIn.replace('{month}', formatMonth(i.keptAt || i.createdAt, language))}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
