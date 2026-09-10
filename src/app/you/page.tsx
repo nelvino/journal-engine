@@ -14,7 +14,7 @@ import { useOnboarding } from '@/context/OnboardingContext';
 import { useStorage } from '@/lib/useStorage';
 import { useToast } from '@/context/ToastContext';
 import { localDateFromISO } from '@/lib/utils';
-import { Download, HelpCircle, Trash2 } from 'lucide-react';
+import { Download, HelpCircle, LogIn, LogOut, Trash2 } from 'lucide-react';
 import type { JournalEntry } from '@/types';
 
 const USER_DATA_KEYS = [
@@ -73,7 +73,7 @@ function ToggleRow({
 export default function YouPage() {
   const { t, language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
-  const { user } = useAuth();
+  const { user, loginWithGoogle, logout } = useAuth();
   const { restartOnboarding } = useOnboarding();
   const storage = useStorage();
   const { addToast } = useToast();
@@ -303,6 +303,41 @@ export default function YouPage() {
             checked={hidePreviews}
             onChange={setHidePreviews}
           />
+        </section>
+
+        <section>
+          <SectionHeading>{t.settings.account}</SectionHeading>
+          <div className="space-y-3">
+            {user ? (
+              <>
+                <p className="font-sans text-[11px] leading-[16px] text-ink-caption">
+                  {t.settings.signedInAs.replace('{email}', user.email ?? '')}
+                </p>
+                <Button
+                  variant="outline"
+                  className="w-full h-14 inline-flex items-center justify-center gap-2"
+                  onClick={logout}
+                >
+                  <LogOut className="w-4 h-4" strokeWidth={1.5} />
+                  {t.settings.signOut}
+                </Button>
+              </>
+            ) : (
+              <>
+                <p className="font-sans text-[11px] leading-[16px] text-ink-caption">
+                  {t.settings.signInDescription}
+                </p>
+                <Button
+                  variant="dark"
+                  className="w-full h-14 inline-flex items-center justify-center gap-2"
+                  onClick={loginWithGoogle}
+                >
+                  <LogIn className="w-4 h-4" strokeWidth={1.5} />
+                  {t.settings.signIn}
+                </Button>
+              </>
+            )}
+          </div>
         </section>
 
         <section>

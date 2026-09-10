@@ -267,6 +267,13 @@ export interface Translations {
     reminders: string;
     privacy: string;
     yourWriting: string;
+    account: string;
+    notSignedIn: string;
+    signedInAs: string;
+    signInDescription: string;
+    signOutDescription: string;
+    signIn: string;
+    signOut: string;
     provider: string;
     uid: string;
     replayOnboarding: string;
@@ -776,6 +783,13 @@ export const translations: Record<Language, Translations> = {
       reminders: 'Reminders',
       privacy: 'Privacy',
       yourWriting: 'Your Writing',
+      account: 'Account',
+      notSignedIn: 'Not signed in',
+      signedInAs: 'Signed in as {email}',
+      signInDescription: 'Sign in to back up and sync your pages to your Google account.',
+      signOutDescription: 'Signing out keeps your pages on this device.',
+      signIn: 'Sign in with Google',
+      signOut: 'Sign out',
       provider: 'Provider: Google',
       uid: 'UID',
       replayOnboarding: 'Replay the introduction',
@@ -1627,6 +1641,13 @@ export const translations: Record<Language, Translations> = {
       reminders: 'Recordatorios',
       privacy: 'Privacidad',
       yourWriting: 'Tu Escritura',
+      account: 'Cuenta',
+      notSignedIn: 'No has iniciado sesión',
+      signedInAs: 'Sesión iniciada como {email}',
+      signInDescription: 'Inicia sesión para respaldar y sincronizar tus páginas con tu cuenta de Google.',
+      signOutDescription: 'Cerrar sesión mantiene tus páginas en este dispositivo.',
+      signIn: 'Iniciar sesión con Google',
+      signOut: 'Cerrar sesión',
       provider: 'Proveedor: Google',
       uid: 'UID',
       replayOnboarding: 'Repetir introducción',
