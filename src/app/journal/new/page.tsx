@@ -85,27 +85,6 @@ const defaultMood = {
 
 const topEntryTypeValues: EntryType[] = ['expressive', 'future_self', 'cbt', 'gratitude'];
 
-function getContentPlaceholder(entryType: EntryType): string {
-  switch (entryType) {
-    case 'future_self':
-      return 'Use this space to write a free-form reflection or summary based on the prompts above. This is what gets saved as your main journal entry.';
-    case 'cbt':
-      return 'Summarize the situation and what you learned from the thought record. This is what gets saved as your main journal entry.';
-    case 'gratitude':
-      return 'Write a free-form gratitude reflection, or summarize the items above. This is what gets saved as your main journal entry.';
-    case 'self_compassion':
-      return 'Write a free-form reflection on the difficulty and your kind response. This is what gets saved as your main journal entry.';
-    case 'stoic_morning':
-    case 'stoic_evening':
-      return 'Write a free-form reflection on your Stoic practice. This is what gets saved as your main journal entry.';
-    case 'confucian':
-      return 'Write a free-form reflection on your Confucian self-examination. This is what gets saved as your main journal entry.';
-    case 'expressive':
-    default:
-      return 'Start writing your thoughts here...';
-  }
-}
-
 function NewEntryPageContent() {
   const { t } = useLanguage();
   const storage = useStorage();
@@ -143,9 +122,9 @@ function NewEntryPageContent() {
   const selectedEntryTypeOption = entryTypeOptions.find(o => o.value === entryType) || entryTypeOptions[0];
 
   const filteredEntryTypes = entryTypeOptions.filter(option =>
-    option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    option.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    option.useFor.toLowerCase().includes(searchQuery.toLowerCase())
+    t.entryTypes[option.value].label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.entryTypes[option.value].description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.entryTypes[option.value].useFor.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const visibleEntryTypes = showAllTypes
@@ -205,14 +184,14 @@ function NewEntryPageContent() {
 
       await storage.addToArray<JournalEntry>('journal_entries', entry);
 
-      addToast('Entry saved successfully!', 'success');
+      addToast(t.newEntry.saveSuccess, 'success');
       resetForm();
       setTimeout(() => {
         window.location.href = '/journal';
       }, 1500);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Something went wrong while saving.';
-      addToast(`Error saving entry: ${message}`, 'error');
+      addToast(t.newEntry.saveError.replace('{message}', message), 'error');
       console.error('Error saving entry:', error);
       setIsSaving(false);
     }
@@ -260,9 +239,9 @@ function NewEntryPageContent() {
   const renderStep1 = () => (
     <Card variant="elevated">
       <CardHeader>
-        <CardTitle>What do you need today?</CardTitle>
+        <CardTitle>{t.newEntry.whatDoYouNeed}</CardTitle>
         <p className="text-sm text-muted-foreground mt-1">
-          Pick a journaling style. Each has guided prompts backed by research or tradition.
+          {t.newEntry.whatDoYouNeedDescription}
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -275,7 +254,7 @@ function NewEntryPageContent() {
               setSearchQuery(e.target.value);
               setShowAllTypes(true);
             }}
-            placeholder="Search entry types..."
+            placeholder={t.newEntry.searchPlaceholder}
             className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
           />
         </div>
@@ -300,9 +279,9 @@ function NewEntryPageContent() {
                   {option.icon}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="font-semibold text-card-foreground text-sm">{option.label}</h4>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{option.description}</p>
-                  <p className="text-xs text-primary-700 mt-2 font-medium">{option.useFor}</p>
+                  <h4 className="font-semibold text-card-foreground text-sm">{t.entryTypes[option.value].label}</h4>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{t.entryTypes[option.value].description}</p>
+                  <p className="text-xs text-primary-700 mt-2 font-medium">{t.entryTypes[option.value].useFor}</p>
                 </div>
               </div>
             </button>
@@ -315,7 +294,7 @@ function NewEntryPageContent() {
             onClick={() => setShowAllTypes(!showAllTypes)}
             className="w-full py-3 border-2 border-dashed border-border rounded-xl text-muted-foreground hover:border-primary hover:text-primary-700 transition-colors text-sm font-medium"
           >
-            {showAllTypes ? 'Show only common options' : `Show all ${entryTypeOptions.length} entry types`}
+            {showAllTypes ? t.newEntry.showCommon : t.newEntry.showAll.replace('{count}', String(entryTypeOptions.length))}
           </button>
         )}
       </CardContent>
@@ -330,21 +309,21 @@ function NewEntryPageContent() {
             {selectedEntryTypeOption.icon}
           </div>
           <div>
-            <CardTitle>{selectedEntryTypeOption.label}</CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">{selectedEntryTypeOption.description}</p>
+            <CardTitle>{t.entryTypes[entryType].label}</CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">{t.entryTypes[entryType].description}</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="p-4 bg-muted rounded-xl">
-          <p className="text-sm text-card-foreground font-medium mb-1">Best used for:</p>
-          <p className="text-sm text-muted-foreground">{selectedEntryTypeOption.useFor}</p>
+          <p className="text-sm text-card-foreground font-medium mb-1">{t.newEntry.bestUsedFor}</p>
+          <p className="text-sm text-muted-foreground">{t.entryTypes[entryType].useFor}</p>
         </div>
 
         <div>
           <div className="flex items-center mb-2">
             <label className="text-sm font-medium text-card-foreground">
-              Apply a Research Framework (optional)
+              {t.newEntry.applyFramework}
             </label>
             <FrameworkInfo framework={frameworks.find(f => f.id === frameworkId) || null} />
           </div>
@@ -352,21 +331,21 @@ function NewEntryPageContent() {
             value={frameworkId}
             onChange={setFrameworkId}
             options={[
-              { value: '', label: 'No specific framework, just use the entry type' },
+              { value: '', label: t.newEntry.noFramework },
               ...frameworks.map(f => ({ value: f.id, label: f.name })),
             ]}
           />
           <p className="text-xs text-muted-foreground mt-2">
-            Frameworks add curated prompts from specific research or traditions. Most of the time, the entry type itself is enough. Tap the info icon once you select one to learn more.
+            {t.newEntry.frameworkHelp}
           </p>
         </div>
 
         <div className="flex justify-between">
           <Button variant="outline" onClick={() => setStep(1)} icon={<ChevronLeft className="h-4 w-4" />}>
-            Back
+            {t.common.back}
           </Button>
           <Button variant="primary" onClick={() => setStep(3)} icon={<ChevronRight className="h-4 w-4" />}>
-            Start Writing
+            {t.newEntry.startWriting}
           </Button>
         </div>
       </CardContent>
@@ -379,16 +358,16 @@ function NewEntryPageContent() {
         <div>
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
             {selectedEntryTypeOption.icon}
-            {selectedEntryTypeOption.label}
+            {t.entryTypes[entryType].label}
           </h2>
-          <p className="text-sm text-muted-foreground">{selectedEntryTypeOption.description}</p>
+          <p className="text-sm text-muted-foreground">{t.entryTypes[entryType].description}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => setStep(2)} icon={<ChevronLeft className="h-4 w-4" />}>
-            Back
+            {t.common.back}
           </Button>
           <Button variant="ghost" size="sm" onClick={handleCancel} icon={<X className="h-4 w-4" />}>
-            Cancel
+            {t.common.cancel}
           </Button>
         </div>
       </div>
@@ -401,12 +380,12 @@ function NewEntryPageContent() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center">
-              Your Entry
-              <InputHint hint={getContentPlaceholder(entryType)} visible={content.trim().length > 0} />
+              {t.newEntry.yourEntry}
+              <InputHint hint={t.newEntry.contentPlaceholders[entryType]} visible={content.trim().length > 0} />
             </CardTitle>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="h-4 w-4" />
-              <span>{wordCount} words</span>
+              <span>{t.newEntry.wordCount.replace('{count}', String(wordCount))}</span>
             </div>
           </div>
         </CardHeader>
@@ -414,7 +393,7 @@ function NewEntryPageContent() {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder={getContentPlaceholder(entryType)}
+            placeholder={t.newEntry.contentPlaceholders[entryType]}
             className="w-full min-h-[300px] px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 resize-none"
           />
         </CardContent>
@@ -423,16 +402,14 @@ function NewEntryPageContent() {
       {/* Mood Selection */}
       <Card variant="elevated">
         <CardHeader>
-          <CardTitle>How are you feeling?</CardTitle>
+          <CardTitle>{t.newEntry.howAreYouFeeling}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {(['overall', 'energy', 'stress', 'focus'] as const).map((key) => (
               <div key={key}>
                 <label className="block text-sm font-medium text-card-foreground mb-2">
-                  {key === 'overall' ? 'Overall Mood' :
-                   key === 'energy' ? 'Energy Level' :
-                   key === 'stress' ? 'Stress Level' : 'Focus Level'}
+                  {t.newEntry.mood[key]}
                 </label>
                 <input
                   type="range"
@@ -456,7 +433,7 @@ function NewEntryPageContent() {
       {/* Save Button */}
       <div className="flex justify-end gap-4">
         <Button variant="outline" onClick={handleCancel}>
-          Cancel
+          {t.common.cancel}
         </Button>
         <Button 
           variant="primary" 
@@ -465,7 +442,7 @@ function NewEntryPageContent() {
           loading={isSaving}
           icon={<Save className="h-4 w-4" />}
         >
-          {isSaving ? 'Saving...' : 'Save Entry'}
+          {isSaving ? t.common.saving : t.newEntry.save}
         </Button>
       </div>
     </div>
@@ -480,14 +457,14 @@ function NewEntryPageContent() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-foreground">
-                New Journal Entry
+                {t.newEntry.title}
               </h1>
               <p className="text-muted-foreground">
-                Step {step} of 3
+                {t.newEntry.stepOf.replace('{step}', String(step))}
               </p>
             </div>
             <Button variant="ghost" onClick={handleCancel} icon={<X className="h-4 w-4" />}>
-              Cancel
+              {t.common.cancel}
             </Button>
           </div>
 

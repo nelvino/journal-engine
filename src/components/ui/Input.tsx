@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/LanguageContext';
 import { Modal } from './Modal';
 
 interface InputHintProps {
@@ -12,6 +13,7 @@ interface InputHintProps {
 
 const InputHint: React.FC<InputHintProps> = ({ hint, visible }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
   if (!visible || !hint) return null;
   return (
     <>
@@ -23,7 +25,7 @@ const InputHint: React.FC<InputHintProps> = ({ hint, visible }) => {
       >
         <Info className="h-4 w-4" />
       </button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Hint" className="max-w-sm">
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={t.common.hint} className="max-w-sm">
         <p className="text-sm text-muted-foreground">{hint}</p>
       </Modal>
     </>
