@@ -1,104 +1,120 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/ui/Modal';
-import { Button } from '@/components/ui/Button';
+import { BookOpen, FileText, Target, ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/design/Button';
 import { useOnboarding } from '@/context/OnboardingContext';
-import { BookOpen, Target, Sparkles, Compass, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
-const onboardingSteps = [
-  {
-    title: 'Welcome to My Journals',
-    description: 'A private, evidence-based journaling space that combines modern research with timeless wisdom traditions. There are no made-up claims here. Just clear prompts and honest reflection.',
-    icon: <BookOpen className="h-8 w-8 text-primary-700" />,
-    color: 'bg-primary-100',
-  },
-  {
-    title: 'Choose Your Intention',
-    description: 'Start with a quick journey: Morning Check-In, Process Something Difficult, Build Your Future Self, or Evening Review. You can always explore more later.',
-    icon: <Compass className="h-8 w-8 text-accent-700" />,
-    color: 'bg-accent-100',
-  },
-  {
-    title: 'Track What Matters',
-    description: 'Set SMART goals, rate your mood, and watch simple progress charts. The app suggests daily practices based on your mood, goals, and the time of day. It gets smarter as you use it more.',
-    icon: <Target className="h-8 w-8 text-success-700" />,
-    color: 'bg-success-100',
-  },
-  {
-    title: 'A Few Minutes a Day',
-    description: 'Journaling works best when it is small and consistent. Start with 5 to 10 minutes. Missing a day is normal. The app will never shame you for it.',
-    icon: <Sparkles className="h-8 w-8 text-warning-700" />,
-    color: 'bg-warning-100',
-  },
-];
+const steps = [
+  { icon: BookOpen, titleKey: 'step1Title', descKey: 'step1Description' },
+  { icon: FileText, titleKey: 'step2Title', descKey: 'step2Description' },
+  { icon: Target, titleKey: 'step3Title', descKey: 'step3Description' },
+  { icon: ShieldCheck, titleKey: 'step4Title', descKey: 'step4Description' },
+] as const;
 
 export const OnboardingModal: React.FC = () => {
+  const { t } = useLanguage();
   const { showOnboarding, completeOnboarding } = useOnboarding();
   const [step, setStep] = useState(0);
+  const titleId = React.useId();
+  const descId = React.useId();
 
   if (!showOnboarding) return null;
 
-  const currentStep = onboardingSteps[step];
-  const isLast = step === onboardingSteps.length - 1;
+  const current = steps[step];
+  const Icon = current.icon;
+  const isFirst = step === 0;
+  const isLast = step === steps.length - 1;
+  const title = t.onboarding[current.titleKey];
+  const description = t.onboarding[current.descKey];
 
   const handleNext = () => {
     if (isLast) {
       completeOnboarding();
     } else {
-      setStep(step + 1);
+      setStep((s) => s + 1);
     }
   };
 
+  const handleBack = () => setStep((s) => Math.max(0, s - 1));
+
   return (
-    <Modal isOpen={showOnboarding} onClose={() => {}} title={currentStep.title}>
-      <div className="space-y-6">
-        <div className="flex justify-center">
-          <div className={`p-4 rounded-2xl ${currentStep.color}`}>
-            {currentStep.icon}
+    <div
+      className="fixed inset-0 z-50 bg-ink/60 p-4 flex items-center justify-center"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      aria-describedby={descId}
+    >
+      <div className="w-full max-w-[430px] bg-paper-raised border border-ink p-6 md:p-8">
+        <div className="flex flex-col items-center">
+          <div
+            className="w-16 h-16 border border-ink bg-paper flex items-center justify-center mb-6"
+            aria-hidden="true"
+          >
+            <Icon className="w-8 h-8 text-ink" strokeWidth={1.5} />
           </div>
-        </div>
 
-        <p className="text-center text-muted-foreground leading-relaxed">
-          {currentStep.description}
-        </p>
-
-        <div className="flex justify-center gap-2">
-          {onboardingSteps.map((_, index) => (
-            <div
-              key={index}
-              className={`h-2 w-2 rounded-full transition-colors ${
-                index === step ? 'bg-primary' : 'bg-muted'
-              }`}
-            />
-          ))}
-        </div>
-
-        <div className="flex justify-between pt-4">
-          <Button
-            variant="ghost"
-            onClick={() => setStep(Math.max(0, step - 1))}
-            disabled={step === 0}
-            icon={<ChevronLeft className="h-4 w-4" />}
+          <h2
+            id={titleId}
+            className="font-serif text-[30px] leading-[34px] text-ink text-center mb-3"
           >
-            Back
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleNext}
-            icon={isLast ? undefined : <ChevronRight className="h-4 w-4" />}
+            {title}
+          </h2>
+
+          <p
+            id={descId}
+            className="font-serif text-[17px] leading-[27px] text-ink-secondary text-center mb-6"
           >
-            {isLast ? 'Get Started' : 'Next'}
+            {description}
+          </p>
+
+          <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption mb-6">
+            {t.onboarding.step
+              .replace('{current}', String(step + 1))
+              .replace('{total}', String(steps.length))}
+          </p>
+
+          <div className="flex gap-2 mb-8" aria-hidden="true">
+            {steps.map((_, i) => (
+              <div
+                key={i}
+                className={`w-2 h-2 ${
+                  i === step ? 'bg-accent' : 'bg-rule'
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="w-full flex gap-3 mb-4">
+            <Button
+              variant="outline"
+              className="flex-1 h-12"
+              onClick={handleBack}
+              disabled={isFirst}
+            >
+              {t.onboarding.back}
+            </Button>
+            <Button
+              variant="dark"
+              size="lg"
+              className="flex-1 h-12"
+              onClick={handleNext}
+            >
+              {isLast ? t.onboarding.getStarted : t.onboarding.next}
+            </Button>
+          </div>
+
+          <Button
+            variant="text"
+            onClick={completeOnboarding}
+            className="h-11 text-ink-caption hover:text-ink"
+          >
+            {t.onboarding.skip}
           </Button>
         </div>
-
-        <button
-          onClick={() => completeOnboarding()}
-          className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          Skip onboarding
-        </button>
       </div>
-    </Modal>
+    </div>
   );
 };

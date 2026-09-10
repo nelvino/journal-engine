@@ -293,6 +293,21 @@ export interface Translations {
     streak: string;
     unlocked: string;
   };
+  onboarding: {
+    step1Title: string;
+    step1Description: string;
+    step2Title: string;
+    step2Description: string;
+    step3Title: string;
+    step3Description: string;
+    step4Title: string;
+    step4Description: string;
+    step: string;
+    next: string;
+    back: string;
+    getStarted: string;
+    skip: string;
+  };
   common: {
     cancel: string;
     back: string;
@@ -783,6 +798,21 @@ export const translations: Record<Language, Translations> = {
       intentions: 'intentions kept',
       streak: 'day streak',
       unlocked: 'Unlocked',
+    },
+    onboarding: {
+      step1Title: 'Welcome to Journal',
+      step1Description: 'A private, evidence-based journaling space. Nothing is made up. Each framework is backed by research or clearly marked as a tradition.',
+      step2Title: 'One page a day',
+      step2Description: 'Start from Today. The app suggests a style based on the time, your mood, and any open intentions. Just write for a few minutes.',
+      step3Title: 'Your practice',
+      step3Description: 'Track your streak, set intentions, and watch your path. The more you write, the more styles and deeper frameworks you unlock.',
+      step4Title: 'Honest and private',
+      step4Description: 'Your pages live on this device unless you choose to sign in. Export them anytime, and delete everything whenever you want.',
+      step: 'Step {current} of {total}',
+      next: 'Next',
+      back: 'Back',
+      getStarted: 'Get started',
+      skip: 'Skip onboarding',
     },
     common: {
       cancel: 'Cancel',
@@ -1604,6 +1634,21 @@ export const translations: Record<Language, Translations> = {
       intentions: 'intenciones cumplidas',
       streak: 'racha de días',
       unlocked: 'Desbloqueado',
+    },
+    onboarding: {
+      step1Title: 'Bienvenido a Journal',
+      step1Description: 'Un espacio privado de journaling basado en evidencia. Nada está inventado. Cada método está respaldado por investigación o claramente marcado como tradición.',
+      step2Title: 'Una página al día',
+      step2Description: 'Empieza desde Hoy. La app sugiere un estilo según la hora, tu estado de ánimo y tus intenciones abiertas. Solo escribe unos minutos.',
+      step3Title: 'Tu práctica',
+      step3Description: 'Sigue tu racha, establece intenciones y mira tu camino. Cuanto más escribes, más estilos y marcos profundos desbloqueas.',
+      step4Title: 'Honesto y privado',
+      step4Description: 'Tus páginas viven en este dispositivo a menos que elijas iniciar sesión. Expórtalas cuando quieras y borra todo cuando desees.',
+      step: 'Paso {current} de {total}',
+      next: 'Siguiente',
+      back: 'Atrás',
+      getStarted: 'Empezar',
+      skip: 'Saltar onboarding',
     },
     common: {
       cancel: 'Cancelar',
