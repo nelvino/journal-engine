@@ -54,7 +54,7 @@ export default function ReaderPage() {
   if (!entry) {
     return (
       <Shell>
-        <div className="px-[26px] sm:px-[34px] md:px-8 pt-6">
+        <div className="pt-6">
           <p className="font-serif text-[17px] leading-[27px] text-ink-secondary mb-6">
             {t.common.search} not found.
           </p>
@@ -88,7 +88,7 @@ export default function ReaderPage() {
         onConfirm={handleDelete}
       />
 
-      <div className="max-w-[430px] md:max-w-[620px] lg:max-w-[680px] mx-auto px-[26px] sm:px-[34px] md:px-0 pt-6 pb-12">
+      <div className="max-w-[430px] md:max-w-[620px] lg:max-w-[680px] mx-auto pt-6 pb-12">
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => router.push('/pages')}
