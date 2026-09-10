@@ -17,8 +17,8 @@ test('new entry shows three-step wizard', async ({ page }) => {
 test('shows locked and unlocked styles on first visit', async ({ page }) => {
   await page.goto('/journal/new');
 
-  await expect(page.getByRole('button', { name: 'Expressive Writing' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Gratitude' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Expressive Writing/i }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: /Gratitude/i }).first()).toBeVisible();
   // Locked styles show the level tag and are disabled
-  await expect(page.getByRole('button', { name: /CBT Thought Record/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /CBT Thought Record/i }).first()).toBeVisible();
 });
