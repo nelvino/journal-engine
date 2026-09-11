@@ -1,4 +1,4 @@
-import { toLocalISODate, toDate, getEntryDateISO } from '@/lib/utils';
+import { toLocalISODate, toDate, getEntryDateISO, localDateFromISO } from '@/lib/utils';
 import type { JournalEntry } from '@/types';
 
 export type HomeHeroState =
@@ -52,8 +52,13 @@ export function homeHero(
 
   const lastEntry = sorted[0];
   const todayEntry = entries.find((e) => getEntryDateISO(e) === todayISO);
-  const uniqueDates = new Set(entries.map((e) => getEntryDateISO(e)).filter(Boolean));
-  const dayCount = uniqueDates.size;
+
+  const firstDateISO = entries
+    .map(getEntryDateISO)
+    .filter((d): d is string => Boolean(d))
+    .sort()[0];
+  const firstDate = firstDateISO ? localDateFromISO(firstDateISO) : now;
+  const dayCount = Math.max(1, daysBetween(firstDate, now) + 1);
 
   const lastEntryDate = toDate(lastEntry?.createdAt) ?? toDate(lastEntry?.date);
 
