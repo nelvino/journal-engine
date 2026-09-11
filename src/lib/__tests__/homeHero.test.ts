@@ -53,4 +53,40 @@ describe('homeHero', () => {
     const { state } = homeHero(now, [makeEntry()], draft);
     expect(state).toBe('unfinished');
   });
+
+  it('recognizes a today entry with a Firestore Timestamp createdAt', () => {
+    const createdAt = { toDate: () => now };
+    const { state, stats } = homeHero(now, [makeEntry({ date: undefined as any, createdAt })]);
+    expect(state).toBe('written');
+    expect(stats.todayEntry).toBeDefined();
+  });
+
+  it('recognizes a today entry with a Date object date field', () => {
+    const { state, stats } = homeHero(now, [makeEntry({ date: now })]);
+    expect(state).toBe('written');
+    expect(stats.todayEntry).toBeDefined();
+  });
+
+  it('counts unique dates from mixed date formats', () => {
+    const day1 = { toDate: () => new Date('2026-09-09T08:00:00') };
+    const day2 = { toDate: () => new Date('2026-09-10T19:00:00') };
+    const entries = [
+      makeEntry({ id: '1', date: '2026-09-09', createdAt: day1 }),
+      makeEntry({ id: '2', date: '2026-09-09', createdAt: day1 }),
+      makeEntry({ id: '3', date: '2026-09-10', createdAt: day2 }),
+    ];
+    const { stats } = homeHero(now, entries);
+    expect(stats.dayCount).toBe(2);
+  });
+
+  it('sorts correctly with Firestore Timestamps for createdAt', () => {
+    const older = { toDate: () => new Date('2026-09-09T08:00:00') };
+    const newer = { toDate: () => new Date('2026-09-10T19:00:00') };
+    const entries = [
+      makeEntry({ id: '1', createdAt: older }),
+      makeEntry({ id: '2', createdAt: newer }),
+    ];
+    const { stats } = homeHero(now, entries);
+    expect(stats.lastEntry?.id).toBe('2');
+  });
 });
