@@ -39,15 +39,15 @@ function NavLink({ item, layout }: { item: NavItem; layout: 'bottom' | 'rail' })
         'group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
         rail
           ? 'flex flex-col items-center justify-center py-4 px-2 h-20 w-20 border-l-2'
-          : 'relative flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-[var(--dur)]',
+          : 'relative z-10 flex flex-col items-center justify-center w-12 h-14 rounded-2xl transition-colors duration-300',
         rail && (active ? 'border-accent text-accent' : 'border-transparent text-ink-caption hover:text-ink')
       )}
     >
       <Icon
         className={cn(
-          'w-[21px] h-[21px]',
-          rail && 'mb-0.5',
-          bottom && (active ? 'text-paper' : 'text-ink-caption group-hover:text-ink')
+          'w-5 h-5 transition-transform duration-300',
+          rail && 'w-[21px] h-[21px] mb-0.5',
+          bottom && (active ? 'text-paper scale-110' : 'text-ink-caption group-hover:text-ink')
         )}
         strokeWidth={1.5}
       />
@@ -57,10 +57,15 @@ function NavLink({ item, layout }: { item: NavItem; layout: 'bottom' | 'rail' })
         </span>
       )}
       {bottom && (
-        <span className="sr-only">{item.label}</span>
-      )}
-      {bottom && active && (
-        <span className="absolute inset-0 -z-10 rounded-full bg-ink" aria-hidden="true" />
+        <span
+          className={cn(
+            'font-sans text-[9px] font-medium leading-3 tracking-[0.02em] transition-colors duration-300',
+            active ? 'text-paper' : 'text-ink-caption group-hover:text-ink'
+          )}
+          aria-hidden="true"
+        >
+          {item.label}
+        </span>
       )}
     </Link>
   );
@@ -71,6 +76,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const { user, loading } = useAuth();
   const storage = useStorage();
   const { addToast } = useToast();
+  const pathname = usePathname();
 
   const nav: NavItem[] = useMemo(
     () => [
@@ -81,6 +87,15 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     ],
     [t.nav]
   );
+
+  const activeIndex = useMemo(
+    () => nav.findIndex((item) => isActive(item.href, pathname)),
+    [nav, pathname]
+  );
+  const itemSize = 48;
+  const gap = 4;
+  const paddingX = 8;
+  const paddingTop = 8;
 
   useEffect(() => {
     let mounted = true;
@@ -138,9 +153,19 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     {/* Bottom tab bar for mobile */}
     <nav
-      className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-paper border border-rule rounded-full px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
+      className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-paper/85 backdrop-blur-md border border-rule rounded-full px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
       aria-label="Primary"
     >
+      {activeIndex !== -1 && (
+        <div
+          className="absolute z-0 w-12 h-14 rounded-2xl bg-ink transition-[left,opacity] duration-300 ease-out"
+          style={{
+            left: paddingX + activeIndex * (itemSize + gap),
+            top: paddingTop,
+          }}
+          aria-hidden="true"
+        />
+      )}
       {nav.map((item) => (
         <NavLink key={item.id} item={item} layout="bottom" />
       ))}

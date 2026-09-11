@@ -219,7 +219,7 @@ export default function ReaderPage() {
             <button
               type="button"
               onClick={handleSaveEdit}
-              className="h-11 flex items-center gap-2 font-sans text-[14px] text-accent hover:text-ink transition-colors duration-[var(--dur)]"
+              className="h-11 flex items-center gap-2 font-sans text-[14px] text-accent hover:text-ink transition-colors duration-[var(--dur)] mr-14 md:mr-0"
             >
               <Check className="w-4 h-4" strokeWidth={1.5} />
               {t.common.save}

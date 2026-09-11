@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Pencil, Check, Trash2, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { Shell } from '@/components/design/Shell';
 import { Loading } from '@/components/design/Loading';
@@ -350,6 +350,9 @@ function IntentionsView() {
   const [newText, setNewText] = useState('');
   const [newTarget, setNewTarget] = useState('4');
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
+  const [editTarget, setEditTarget] = useState('4');
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -399,6 +402,58 @@ function IntentionsView() {
     });
     setIntentions(updated);
     await storage.set('intentions', updated);
+  };
+
+  const handleMarkAchieved = async (id: string) => {
+    const today = new Date().toISOString().split('T')[0];
+    const updated = intentions.map((i) =>
+      i.id === id ? { ...i, current: i.target, keptAt: today } : i
+    );
+    setIntentions(updated);
+    await storage.set('intentions', updated);
+  };
+
+  const handleReopen = async (id: string) => {
+    const updated = intentions.map((i) =>
+      i.id === id ? { ...i, current: 0, keptAt: undefined } : i
+    );
+    setIntentions(updated);
+    await storage.set('intentions', updated);
+  };
+
+  const handleStartEdit = (id: string) => {
+    const i = intentions.find((x) => x.id === id);
+    if (!i) return;
+    setEditingId(id);
+    setEditText(i.text);
+    setEditTarget(String(i.target));
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText('');
+    setEditTarget('4');
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingId) return;
+    const text = editText.trim();
+    const target = parseInt(editTarget, 10);
+    if (!text || target < 1) return;
+    const updated = intentions.map((i) => {
+      if (i.id !== editingId) return i;
+      const nextCurrent = Math.min(i.current, target);
+      return {
+        ...i,
+        text,
+        target,
+        current: nextCurrent,
+        keptAt: i.keptAt && nextCurrent >= target ? i.keptAt : undefined,
+      };
+    });
+    setIntentions(updated);
+    await storage.set('intentions', updated);
+    handleCancelEdit();
   };
 
   const stats = useMemo(() => {
@@ -511,40 +566,82 @@ function IntentionsView() {
             {t.practice.open}
           </h2>
           <div className="divide-y divide-rule border-b border-rule">
-            {openIntensions.map((i) => (
-              <div key={i.id} className="py-4">
-                <div className="flex items-start justify-between gap-3 mb-1">
-                  <h3 className="font-serif text-[19px] leading-[25px] text-ink">{i.text}</h3>
-                  <span className="font-sans text-[11px] text-ink-caption shrink-0">
-                    {i.current === 0
-                      ? t.practice.notStarted
-                      : `${i.current} ${t.common.of} ${i.target}`}
-                  </span>
-                </div>
-                <p className="font-sans text-[11px] text-ink-caption mb-3">
-                  {t.practice.setIn.replace('{month}', formatMonth(i.createdAt, language))}
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <Pips current={i.current} target={i.target} kept={false} />
+            {openIntensions.map((i) =>
+              editingId === i.id ? (
+                <div key={i.id} className="py-4 space-y-4">
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    aria-label={t.practice.editIntention}
+                    className="w-full bg-transparent font-serif text-[19px] leading-[25px] text-ink placeholder:text-ink-decorative border-b-2 border-ink py-3 focus:outline-none focus:border-accent"
+                  />
+                  <SelectRow
+                    label={t.practice.target}
+                    value={editTarget}
+                    onChange={setEditTarget}
+                    options={targetOptions}
+                  />
+                  <div className="flex gap-3">
+                    <Button variant="outline" onClick={handleCancelEdit}>
+                      {t.common.cancel}
+                    </Button>
+                    <Button variant="dark" size="lg" className="flex-1" onClick={handleSaveEdit}>
+                      {t.common.save}
+                    </Button>
                   </div>
-                  <button
-                    onClick={() => handleKeep(i.id)}
-                    className="w-11 h-11 flex items-center justify-center border border-ink text-ink hover:bg-paper-raised focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                    aria-label={t.practice.saveIntention}
-                  >
-                    <Plus className="w-4 h-4" strokeWidth={1.5} />
-                  </button>
-                  <button
-                    onClick={() => setDeleteId(i.id)}
-                    className="w-11 h-11 flex items-center justify-center text-ink-caption hover:text-danger focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                    aria-label={t.journal.list.deleteEntry}
-                  >
-                    ×
-                  </button>
                 </div>
-              </div>
-            ))}
+              ) : (
+                <div key={i.id} className="py-4">
+                  <div className="flex items-start justify-between gap-3 mb-1">
+                    <h3 className="font-serif text-[19px] leading-[25px] text-ink">{i.text}</h3>
+                    <span className="font-sans text-[11px] text-ink-caption shrink-0">
+                      {i.current === 0
+                        ? t.practice.notStarted
+                        : `${i.current} ${t.common.of} ${i.target}`}
+                    </span>
+                  </div>
+                  <p className="font-sans text-[11px] text-ink-caption mb-3">
+                    {t.practice.setIn.replace('{month}', formatMonth(i.createdAt, language))}
+                  </p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex-1 min-w-[120px]">
+                      <Pips current={i.current} target={i.target} kept={false} />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleKeep(i.id)}
+                        className="w-11 h-11 flex items-center justify-center border border-ink text-ink hover:bg-paper-raised focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        aria-label={t.practice.saveIntention}
+                      >
+                        <Plus className="w-4 h-4" strokeWidth={1.5} />
+                      </button>
+                      <button
+                        onClick={() => handleMarkAchieved(i.id)}
+                        className="w-11 h-11 flex items-center justify-center border border-ink text-ink hover:bg-paper-raised focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        aria-label={t.practice.markAsAchieved}
+                      >
+                        <Check className="w-4 h-4" strokeWidth={1.5} />
+                      </button>
+                      <button
+                        onClick={() => handleStartEdit(i.id)}
+                        className="w-11 h-11 flex items-center justify-center border border-ink text-ink hover:bg-paper-raised focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        aria-label={t.common.edit}
+                      >
+                        <Pencil className="w-4 h-4" strokeWidth={1.5} />
+                      </button>
+                      <button
+                        onClick={() => setDeleteId(i.id)}
+                        className="w-11 h-11 flex items-center justify-center border border-ink text-ink-caption hover:text-danger focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        aria-label={t.journal.list.deleteEntry}
+                      >
+                        <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
           </div>
         </div>
       )}
@@ -563,17 +660,26 @@ function IntentionsView() {
                     {t.practice.keptIn.replace('{month}', formatMonth(i.keptAt || i.createdAt, language))}
                   </span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex-1 min-w-[120px]">
                     <Pips current={i.target} target={i.target} kept />
                   </div>
-                  <button
-                    onClick={() => setDeleteId(i.id)}
-                    className="w-11 h-11 flex items-center justify-center text-ink-caption hover:text-danger focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                    aria-label={t.journal.list.deleteEntry}
-                  >
-                    ×
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleReopen(i.id)}
+                      className="w-11 h-11 flex items-center justify-center border border-ink text-ink hover:bg-paper-raised focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      aria-label={t.practice.reopenIntention}
+                    >
+                      <RotateCcw className="w-4 h-4" strokeWidth={1.5} />
+                    </button>
+                    <button
+                      onClick={() => setDeleteId(i.id)}
+                      className="w-11 h-11 flex items-center justify-center border border-ink text-ink-caption hover:text-danger focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      aria-label={t.journal.list.deleteEntry}
+                    >
+                      <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

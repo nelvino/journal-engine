@@ -219,6 +219,9 @@ export interface Translations {
     keptIn: string;
     notStarted: string;
     setIn: string;
+    editIntention: string;
+    markAsAchieved: string;
+    reopenIntention: string;
   };
   settings: {
     title: string;
@@ -748,6 +751,9 @@ export const translations: Record<Language, Translations> = {
       keptIn: 'Kept in {month}',
       notStarted: 'Not started',
       setIn: 'Set in {month}',
+      editIntention: 'Edit intention',
+      markAsAchieved: 'Mark as achieved',
+      reopenIntention: 'Reopen intention',
     },
     settings: {
       title: 'You',
@@ -1619,6 +1625,9 @@ export const translations: Record<Language, Translations> = {
       keptIn: 'Cumplida en {month}',
       notStarted: 'Sin empezar',
       setIn: 'Establecida en {month}',
+      editIntention: 'Editar intención',
+      markAsAchieved: 'Marcar como cumplida',
+      reopenIntention: 'Reabrir intención',
     },
     settings: {
       title: 'Tú',
