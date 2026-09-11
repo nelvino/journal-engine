@@ -13,7 +13,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useOnboarding } from '@/context/OnboardingContext';
 import { useStorage } from '@/lib/useStorage';
 import { useToast } from '@/context/ToastContext';
-import { localDateFromISO } from '@/lib/utils';
+import { localDateFromISO, toDate } from '@/lib/utils';
 import { Download, HelpCircle, LogIn, LogOut, Trash2 } from 'lucide-react';
 import type { JournalEntry } from '@/types';
 
@@ -116,21 +116,21 @@ export default function YouPage() {
   }, [eveningReminder, morningPages, monthlyReread, hidePreviews, session, loaded, storage]);
 
   const writingSince = useMemo(() => {
-    const oldest = entries[entries.length - 1];
-    const since =
-      user?.metadata?.creationTime ||
-      (oldest ? oldest.date || oldest.createdAt : undefined);
-    if (!since) return '';
-    const d =
-      typeof since === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(since)
-        ? localDateFromISO(since)
-        : new Date(since);
-    return d.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-GB', {
+    if (entries.length === 0) return '';
+    const oldest = entries.reduce((earliest, e) => {
+      const d =
+        toDate(e.createdAt) ??
+        (typeof e.date === 'string' ? localDateFromISO(e.date) : toDate(e.date)) ??
+        earliest;
+      return d.getTime() < earliest.getTime() ? d : earliest;
+    }, new Date());
+    if (isNaN(oldest.getTime())) return '';
+    return oldest.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-GB', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
-  }, [user, entries, language]);
+  }, [entries, language]);
 
   const handleExport = () => {
     const lines = entries.map((entry) => {
