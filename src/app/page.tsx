@@ -15,6 +15,11 @@ import type { JournalEntry } from '@/types';
 
 const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
+function truncate(text: string, max = 80) {
+  if (text.length <= max) return text;
+  return text.slice(0, max).trimEnd() + '...';
+}
+
 export default function TodayPage() {
   const { t } = useLanguage();
   const storage = useStorage();
@@ -97,13 +102,8 @@ export default function TodayPage() {
             const d = localDateFromISO(dateISO);
             const day = String(d.getDate()).padStart(2, '0');
             const month = d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
-            const title = hidePreviews
-              ? t.entryTypes[entry.entryType].label
-              : (entry.content?.text?.split('\n')[0].trim().slice(0, 120) ||
-                t.entryTypes[entry.entryType].label);
-            const excerpt = hidePreviews
-              ? ''
-              : (entry.content?.text?.split('\n')[1]?.trim().slice(0, 140) || '');
+            const title = t.entryTypes[entry.entryType]?.label || entry.entryType;
+            const excerpt = hidePreviews ? '' : truncate(entry.content?.text || '', 90);
             const words = entry.sessionData?.wordCount ?? 0;
             const meta = `${t.entryTypes[entry.entryType].label} · ${words} ${t.common.words}`;
             return (
