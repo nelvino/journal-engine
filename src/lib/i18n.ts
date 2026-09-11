@@ -346,6 +346,8 @@ export interface Translations {
     alreadyTodayDescription: string;
     unlocksAt: string;
     availableNow: string;
+    favorite: string;
+    unfavorite: string;
     showCommon: string;
     showAll: string;
     applyFramework: string;
@@ -877,6 +879,8 @@ export const translations: Record<Language, Translations> = {
       alreadyTodayDescription: 'You already wrote this style today. Each style is meant to be used once a day. Choose a different one or come back tomorrow.',
       unlocksAt: 'Unlocks at level {level}',
       availableNow: 'Available now',
+      favorite: 'Add to favorites',
+      unfavorite: 'Remove from favorites',
       showCommon: 'Show only common options',
       showAll: 'Show all {count} entry types',
       applyFramework: 'Apply a Framework (optional)',
@@ -1738,6 +1742,8 @@ export const translations: Record<Language, Translations> = {
       alreadyTodayDescription: 'Ya escribiste este estilo hoy. Cada estilo está pensado para usarse una vez al día. Elige otro o vuelve mañana.',
       unlocksAt: 'Se desbloquea en el nivel {level}',
       availableNow: 'Disponible ahora',
+      favorite: 'Añadir a favoritos',
+      unfavorite: 'Quitar de favoritos',
       showCommon: 'Mostrar solo opciones comunes',
       showAll: 'Mostrar todas las {count} opciones',
       applyFramework: 'Aplicar un Marco (opcional)',

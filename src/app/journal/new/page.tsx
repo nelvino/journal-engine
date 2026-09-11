@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 import { cn, toLocalISODate } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 import { useStorage } from '@/lib/useStorage';
 import { useToast } from '@/context/ToastContext';
 import { frameworks } from '@/data/frameworks';
@@ -37,6 +38,7 @@ const validEntryTypes: EntryType[] = [
 
 function NewEntryContent() {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const router = useRouter();
   const storage = useStorage();
   const { addToast } = useToast();
@@ -47,6 +49,7 @@ function NewEntryContent() {
   const [showLeave, setShowLeave] = useState(false);
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [intentions, setIntentions] = useState<Intention[]>([]);
+  const [favorites, setFavorites] = useState<EntryType[]>([]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -63,7 +66,14 @@ function NewEntryContent() {
     storage.get<Intention[]>('intentions').then((loaded) => {
       setIntentions(loaded || []);
     });
-  }, [storage]);
+    if (user) {
+      storage.get<EntryType[]>('favorite_entry_types').then((loaded) => {
+        const list = Array.isArray(loaded) ? loaded : [];
+        const valid = list.filter((x): x is EntryType => validEntryTypes.includes(x));
+        setFavorites(valid);
+      });
+    }
+  }, [storage, user]);
 
   const [frameworkId, setFrameworkId] = useState('');
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -74,6 +84,14 @@ function NewEntryContent() {
   const [sessionStart] = useState(new Date());
 
   const allTypes = useMemo(() => Object.keys(t.entryTypes) as EntryType[], [t.entryTypes]);
+  const sortedAllTypes = useMemo(() => {
+    const set = new Set(favorites);
+    return [...allTypes].sort((a, b) => {
+      const aFav = set.has(a) ? -1 : 1;
+      const bFav = set.has(b) ? -1 : 1;
+      return aFav - bFav;
+    });
+  }, [allTypes, favorites]);
   const today = useMemo(() => toLocalISODate(new Date()), []);
   const todayTypes = useMemo(
     () => new Set(entries.filter((e) => e.date === today).map((e) => e.entryType)),
@@ -82,16 +100,16 @@ function NewEntryContent() {
 
   useEffect(() => {
     if (todayTypes.has(entryType)) {
-      const next = allTypes.find((type) => !todayTypes.has(type));
+      const next = sortedAllTypes.find((type) => !todayTypes.has(type));
       if (next) setEntryType(next);
     }
-  }, [todayTypes, entryType, allTypes]);
+  }, [todayTypes, entryType, sortedAllTypes]);
 
   const filteredTypes = useMemo(() => {
-    let list = showAll ? allTypes : allTypes.slice(0, 4);
+    let list = showAll ? sortedAllTypes : sortedAllTypes.slice(0, 4);
     const term = search.trim().toLowerCase();
     if (term) {
-      list = allTypes.filter((type) => {
+      list = sortedAllTypes.filter((type) => {
         const info = t.entryTypes[type];
         return (
           info.label.toLowerCase().includes(term) ||
@@ -101,7 +119,26 @@ function NewEntryContent() {
       });
     }
     return list;
-  }, [allTypes, showAll, search, t.entryTypes]);
+  }, [sortedAllTypes, showAll, search, t.entryTypes]);
+
+  const initialFavorites = useRef(true);
+  useEffect(() => {
+    if (!user || initialFavorites.current) {
+      initialFavorites.current = false;
+      return;
+    }
+    storage.set('favorite_entry_types', favorites);
+  }, [favorites, storage, user]);
+
+  const toggleFavorite = (type: EntryType) => {
+    if (!user) return;
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(type)) next.delete(type);
+      else next.add(type);
+      return Array.from(next) as EntryType[];
+    });
+  };
 
   const frameworkOptions = useMemo(
     () => [
@@ -245,12 +282,13 @@ function NewEntryContent() {
             </div>
 
             <div className="divide-y divide-rule border-b border-rule">
-              {filteredTypes.map((type, i) => {
+              {filteredTypes.map((type) => {
                 const locked = todayTypes.has(type);
+                const isFavorite = favorites.includes(type);
                 return (
                   <TypeRow
                     key={type}
-                    num={String(i + 1).padStart(2, '0')}
+                    num={String(allTypes.indexOf(type) + 1).padStart(2, '0')}
                     title={t.entryTypes[type].label}
                     description={t.entryTypes[type].description}
                     tags={locked ? t.newEntry.alreadyToday : t.entryTypes[type].useFor}
@@ -259,6 +297,13 @@ function NewEntryContent() {
                     onClick={() => setEntryType(type)}
                     onInfo={() => setInfoType(type)}
                     infoLabel={t.newEntry.moreInfo.replace('{style}', t.entryTypes[type].label)}
+                    favorite={user ? isFavorite : undefined}
+                    onFavorite={user ? () => toggleFavorite(type) : undefined}
+                    favoriteLabel={
+                      user
+                        ? (isFavorite ? t.newEntry.unfavorite : t.newEntry.favorite)
+                        : undefined
+                    }
                   />
                 );
               })}
