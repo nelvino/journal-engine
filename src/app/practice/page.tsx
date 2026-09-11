@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { Shell } from '@/components/design/Shell';
+import { Loading } from '@/components/design/Loading';
 import { Segmented } from '@/components/design/Segmented';
 import { Button } from '@/components/design/Button';
 import { SelectRow } from '@/components/design/SelectRow';
@@ -112,13 +113,16 @@ function RecordView() {
   const storage = useStorage();
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [intentions, setIntentions] = useState<Intention[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    storage.get<JournalEntry[]>('journal_entries').then((loaded) => {
-      setEntries(loaded || []);
-    });
-    storage.get<Intention[]>('intentions').then((loaded) => {
-      setIntentions(loaded || []);
+    Promise.all([
+      storage.get<JournalEntry[]>('journal_entries'),
+      storage.get<Intention[]>('intentions'),
+    ]).then(([loadedEntries, loadedIntentions]) => {
+      setEntries(loadedEntries || []);
+      setIntentions(loadedIntentions || []);
+      setLoaded(true);
     });
   }, [storage]);
 
@@ -191,6 +195,10 @@ function RecordView() {
       </div>
     </div>
   );
+
+  if (!loaded) {
+    return <Loading />;
+  }
 
   return (
     <div className="space-y-8">
@@ -342,10 +350,12 @@ function IntentionsView() {
   const [newText, setNewText] = useState('');
   const [newTarget, setNewTarget] = useState('4');
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     storage.get<Intention[]>('intentions').then((loaded) => {
       setIntentions(loaded || []);
+      setLoaded(true);
     });
   }, [storage]);
 
@@ -411,6 +421,10 @@ function IntentionsView() {
 
   const openIntensions = intentions.filter((i) => !i.keptAt);
   const keptIntentions = intentions.filter((i) => i.keptAt);
+
+  if (!loaded) {
+    return <Loading />;
+  }
 
   return (
     <div className="space-y-8">

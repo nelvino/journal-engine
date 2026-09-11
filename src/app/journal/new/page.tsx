@@ -82,6 +82,8 @@ function NewEntryContent() {
   const [showAll, setShowAll] = useState(false);
   const [infoType, setInfoType] = useState<EntryType | null>(null);
   const [sessionStart] = useState(new Date());
+  const writeTimeRef = useRef(0);
+  const writeStartRef = useRef<Date | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [goalMet, setGoalMet] = useState(false);
 
@@ -108,16 +110,28 @@ function NewEntryContent() {
   }, [todayTypes, entryType, sortedAllTypes]);
 
   useEffect(() => {
+    if (step !== 3) {
+      if (writeStartRef.current) {
+        const sessionSeconds = Math.floor((Date.now() - writeStartRef.current.getTime()) / 1000);
+        writeTimeRef.current += sessionSeconds;
+        writeStartRef.current = null;
+        setElapsed(writeTimeRef.current);
+      }
+      return;
+    }
+    if (!writeStartRef.current) writeStartRef.current = new Date();
     const target = Number(session) * 60;
-    setElapsed(0);
-    setGoalMet(false);
     const interval = setInterval(() => {
-      const seconds = Math.floor((Date.now() - sessionStart.getTime()) / 1000);
-      setElapsed(seconds);
-      if (seconds >= target) setGoalMet(true);
+      const current =
+        writeTimeRef.current +
+        (writeStartRef.current
+          ? Math.floor((Date.now() - writeStartRef.current.getTime()) / 1000)
+          : 0);
+      setElapsed(current);
+      setGoalMet(current >= target);
     }, 1000);
     return () => clearInterval(interval);
-  }, [session, sessionStart]);
+  }, [step, session]);
 
   const filteredTypes = useMemo(() => {
     let list = showAll ? sortedAllTypes : sortedAllTypes.slice(0, 4);
