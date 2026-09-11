@@ -395,6 +395,8 @@ export interface Translations {
     awayShort: string;
     awayLong: string;
     unknownTopic: string;
+    deviceOnly: string;
+    cloudAndDevice: string;
     states: Record<
       HomeHeroState,
       {
@@ -842,7 +844,7 @@ export const translations: Record<Language, Translations> = {
       step3Title: 'Your practice',
       step3Description: 'Track your streak, set intentions, and watch your path. The more you write, the more styles and deeper frameworks you unlock.',
       step4Title: 'Honest and private',
-      step4Description: 'Your pages stay on this device. Sign in prepares a future cloud account, but cloud sync is not enabled in this build. Export or delete anytime.',
+      step4Description: 'Your pages stay on this device. Sign in to connect your account. Export or delete anytime.',
       step: 'Step {current} of {total}',
       next: 'Next',
       back: 'Back',
@@ -938,6 +940,8 @@ export const translations: Record<Language, Translations> = {
       awayShort: 'a while',
       awayLong: 'a fortnight',
       unknownTopic: 'the last thing you wrote',
+      deviceOnly: 'this device',
+      cloudAndDevice: 'your account and this device',
       states: {
         coldStart: {
           eyebrow: 'Journal',
@@ -983,7 +987,7 @@ export const translations: Record<Language, Translations> = {
           body: '{{typeLabel}}, {{time}} — {{words}} {{wordsLabel}} in {{minutes}} {{minutesLabel}}.',
           cta: 'Add to today',
           secondary: 'Read it back',
-          note: 'Your page is saved on this device. Cloud sync is not enabled.',
+          note: 'Your page is saved on {{where}}.',
         },
         unfinished: {
           eyebrow: '{{date}}',
@@ -1705,7 +1709,7 @@ export const translations: Record<Language, Translations> = {
       step3Title: 'Tu práctica',
       step3Description: 'Sigue tu racha, establece intenciones y mira tu camino. Cuanto más escribes, más estilos y marcos profundos desbloqueas.',
       step4Title: 'Honesto y privado',
-      step4Description: 'Tus páginas se quedan en este dispositivo. Iniciar sesión prepara una cuenta en la nube para el futuro, pero la sincronización no está activada en esta versión. Exporta o borra cuando quieras.',
+      step4Description: 'Tus páginas se quedan en este dispositivo. Inicia sesión para conectar tu cuenta. Exporta o borra cuando quieras.',
       step: 'Paso {current} de {total}',
       next: 'Siguiente',
       back: 'Atrás',
@@ -1801,6 +1805,8 @@ export const translations: Record<Language, Translations> = {
       awayShort: 'un tiempo',
       awayLong: 'quince días',
       unknownTopic: 'lo último que escribiste',
+      deviceOnly: 'este dispositivo',
+      cloudAndDevice: 'tu cuenta y este dispositivo',
       states: {
         coldStart: {
           eyebrow: 'Diario',
@@ -1846,7 +1852,7 @@ export const translations: Record<Language, Translations> = {
           body: '{{typeLabel}}, {{time}} — {{words}} {{wordsLabel}} en {{minutes}} {{minutesLabel}}.',
           cta: 'Agregar a hoy',
           secondary: 'Leerla de nuevo',
-          note: 'Tu página está guardada en este dispositivo. La sincronización en la nube no está activada.',
+          note: 'Tu página está guardada en {{where}}.',
         },
         unfinished: {
           eyebrow: '{{date}}',

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { cn, toDate } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/design/Button';
 import type { HomeHeroState, HomeHeroStats } from '@/lib/homeHero';
 
@@ -29,6 +30,7 @@ function parseTitle(template: string, values: Record<string, string | number>): 
 export const HomeHero: React.FC<HomeHeroProps> = ({ state, stats }) => {
   const router = useRouter();
   const { t, language } = useLanguage();
+  const { user } = useAuth();
 
   const locale = language === 'es' ? 'es-ES' : 'en-GB';
   const dateLabel = stats.now.toLocaleDateString(locale, {
@@ -212,9 +214,7 @@ export const HomeHero: React.FC<HomeHeroProps> = ({ state, stats }) => {
       case 'written':
         if (!stats.todayEntry) return null;
         const type = t.entryTypes[stats.todayEntry.entryType]?.label || stats.todayEntry.entryType;
-        const writtenAt = stats.todayEntry.createdAt
-          ? new Date(stats.todayEntry.createdAt)
-          : new Date();
+        const writtenAt = toDate(stats.todayEntry.createdAt) ?? new Date();
         const time = writtenAt.toLocaleTimeString(locale, {
           hour: 'numeric',
           minute: '2-digit',
@@ -233,6 +233,9 @@ export const HomeHero: React.FC<HomeHeroProps> = ({ state, stats }) => {
           minutesLabel,
         };
         const titleValues = { ...common, dayCount: stats.dayCount, dayText };
+        const useFirebase = process.env.NEXT_PUBLIC_USE_FIREBASE === 'true';
+        const where = user && useFirebase ? t.homeHero.cloudAndDevice : t.homeHero.deviceOnly;
+        const noteValues = { ...common, where };
         return (
           <div>
             {renderEyebrow(format(s.eyebrow ?? '', common))}
@@ -256,7 +259,7 @@ export const HomeHero: React.FC<HomeHeroProps> = ({ state, stats }) => {
                 </Button>
               </>
             )}
-            {renderNote(format(s.note ?? '', common))}
+            {renderNote(format(s.note ?? '', noteValues))}
           </div>
         );
 

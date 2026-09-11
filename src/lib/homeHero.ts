@@ -1,4 +1,4 @@
-import { toLocalISODate } from '@/lib/utils';
+import { toLocalISODate, toDate } from '@/lib/utils';
 import type { JournalEntry } from '@/types';
 
 export type HomeHeroState =
@@ -55,11 +55,7 @@ export function homeHero(
   const uniqueDates = new Set(entries.map((e) => e.date).filter(Boolean));
   const dayCount = uniqueDates.size;
 
-  const lastEntryDate = lastEntry?.createdAt
-    ? new Date(lastEntry.createdAt)
-    : lastEntry?.date
-    ? new Date(lastEntry.date)
-    : undefined;
+  const lastEntryDate = toDate(lastEntry?.createdAt) ?? toDate(lastEntry?.date);
 
   const lastEntryDaysAgo = lastEntryDate ? daysBetween(lastEntryDate, now) : 0;
 
