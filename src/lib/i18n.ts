@@ -328,6 +328,7 @@ export interface Translations {
     back: string;
     save: string;
     edit: string;
+    more: string;
     saving: string;
     close: string;
     hint: string;
@@ -866,6 +867,7 @@ export const translations: Record<Language, Translations> = {
       back: 'Back',
       save: 'Save',
       edit: 'Edit',
+      more: 'More actions',
       saving: 'Saving...',
       close: 'Close',
       hint: 'Hint',
@@ -1734,6 +1736,7 @@ export const translations: Record<Language, Translations> = {
       back: 'Atrás',
       save: 'Guardar',
       edit: 'Editar',
+      more: 'Más acciones',
       saving: 'Guardando...',
       close: 'Cerrar',
       hint: 'Consejo',

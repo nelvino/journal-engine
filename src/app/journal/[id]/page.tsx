@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ChevronLeft, Pencil, X, Check, Trash2 } from 'lucide-react';
+import { ChevronLeft, Pencil, X, Check, Trash2, MoreHorizontal } from 'lucide-react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { Shell } from '@/components/design/Shell';
@@ -22,6 +22,7 @@ export default function ReaderPage() {
   const [editOldEntries, setEditOldEntries] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
@@ -127,56 +128,76 @@ export default function ReaderPage() {
 
       <div className="max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto pb-12">
         <div className="flex items-center justify-between mb-8">
-          <button
-            onClick={() => router.push('/pages')}
-            className="h-11 flex items-center gap-2 font-sans text-[14px] text-ink hover:text-accent transition-colors duration-[var(--dur)]"
-          >
-            <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
-            {t.common.back}
-          </button>
-          {isEditing ? (
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            {isEditing ? (
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-ink transition-colors duration-[var(--dur)]"
-                aria-label={t.common.cancel}
-                title={t.common.cancel}
+                className="h-11 flex items-center gap-2 font-sans text-[14px] text-ink hover:text-accent transition-colors duration-[var(--dur)]"
               >
                 <X className="w-4 h-4" strokeWidth={1.5} />
+                {t.common.cancel}
               </button>
+            ) : (
               <button
-                type="button"
-                onClick={handleSaveEdit}
-                className="h-11 w-11 flex items-center justify-center text-accent hover:text-ink transition-colors duration-[var(--dur)]"
-                aria-label={t.common.save}
-                title={t.common.save}
+                onClick={() => router.push('/pages')}
+                className="h-11 flex items-center gap-2 font-sans text-[14px] text-ink hover:text-accent transition-colors duration-[var(--dur)]"
               >
-                <Check className="w-4 h-4" strokeWidth={1.5} />
+                <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
+                {t.common.back}
               </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              {editOldEntries && (
+            )}
+            {!isEditing && (
+              <div className="relative">
                 <button
                   type="button"
-                  onClick={handleStartEdit}
-                  className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-accent transition-colors duration-[var(--dur)]"
-                  aria-label={t.common.edit}
-                  title={t.common.edit}
+                  onClick={() => setMenuOpen((v) => !v)}
+                  className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-ink transition-colors duration-[var(--dur)]"
+                  aria-label={t.common.more}
+                  title={t.common.more}
                 >
-                  <Pencil className="w-4 h-4" strokeWidth={1.5} />
+                  <MoreHorizontal className="w-4 h-4" strokeWidth={1.5} />
                 </button>
-              )}
-              <button
-                onClick={() => setShowDelete(true)}
-                className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-danger transition-colors duration-[var(--dur)]"
-                aria-label={t.journal.list.deleteEntry}
-                title={t.journal.list.deleteEntry}
-              >
-                <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-              </button>
-            </div>
+                {menuOpen && (
+                  <div className="absolute top-full left-0 mt-1 min-w-[160px] bg-paper border border-ink z-50">
+                    {editOldEntries && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMenuOpen(false);
+                          handleStartEdit();
+                        }}
+                        className="w-full h-10 px-4 flex items-center gap-3 font-sans text-[13px] text-ink hover:bg-paper-raised transition-colors duration-[var(--dur)]"
+                      >
+                        <Pencil className="w-4 h-4" strokeWidth={1.5} />
+                        {t.common.edit}
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setShowDelete(true);
+                      }}
+                      className="w-full h-10 px-4 flex items-center gap-3 font-sans text-[13px] text-danger hover:bg-paper-raised transition-colors duration-[var(--dur)]"
+                    >
+                      <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+                      {t.journal.list.deleteEntry}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          {isEditing && (
+            <button
+              type="button"
+              onClick={handleSaveEdit}
+              className="h-11 flex items-center gap-2 font-sans text-[14px] text-accent hover:text-ink transition-colors duration-[var(--dur)]"
+            >
+              <Check className="w-4 h-4" strokeWidth={1.5} />
+              {t.common.save}
+            </button>
           )}
         </div>
 
