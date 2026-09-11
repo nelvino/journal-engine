@@ -47,7 +47,7 @@ export default function TodayPage() {
 
   const days = useMemo(() => {
     if (!now) {
-      return [] as { label: string; day: string; state: 'today' | 'written' | 'empty' }[];
+      return [] as { label: string; day: string; state: 'written' | 'empty' | 'future'; isToday?: boolean }[];
     }
     const dayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1;
     const weekStart = new Date(now);
@@ -59,15 +59,17 @@ export default function TodayPage() {
       const iso = toLocalISODate(d);
       const hasEntry = entries.some((e) => getEntryDateISO(e) === iso);
       const isToday = i === dayIndex;
-      const state: 'today' | 'written' | 'empty' = isToday
-        ? 'today'
-        : hasEntry
+      const isFuture = !isToday && i > dayIndex;
+      const state: 'written' | 'empty' | 'future' = hasEntry
         ? 'written'
+        : isFuture
+        ? 'future'
         : 'empty';
       return {
         label: labels[i],
         day: String(d.getDate()).padStart(2, '0'),
         state,
+        isToday,
       };
     });
   }, [now, entries]);

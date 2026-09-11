@@ -115,7 +115,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     {/* Main content */}
     <main className="flex-1 w-full md:pl-20">
       <div className="min-h-screen w-full px-[26px] sm:px-[34px] md:px-8 lg:px-0 pt-6 pb-[calc(7rem+env(safe-area-inset-bottom))] md:pb-6">
-        <div className="w-full md:max-w-[620px] lg:max-w-[680px] md:mx-auto">
+        <div className="w-full md:max-w-[720px] lg:max-w-[900px] md:mx-auto">
           {children}
         </div>
       </div>

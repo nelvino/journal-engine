@@ -88,7 +88,7 @@ export default function ReaderPage() {
         onConfirm={handleDelete}
       />
 
-      <div className="max-w-[430px] md:max-w-[620px] lg:max-w-[680px] mx-auto pt-6 pb-12">
+      <div className="max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto pt-6 pb-12">
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => router.push('/pages')}

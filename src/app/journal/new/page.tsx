@@ -228,7 +228,7 @@ function NewEntryContent() {
 
   return (
     <div className="min-h-screen bg-paper">
-      <div className="w-full px-[26px] sm:px-[34px] md:px-0 pt-6 pb-[calc(8rem+env(safe-area-inset-bottom))] md:pb-12 max-w-[430px] md:max-w-[620px] lg:max-w-[680px] mx-auto">
+      <div className="w-full px-[26px] sm:px-[34px] md:px-0 pt-6 pb-[calc(8rem+env(safe-area-inset-bottom))] md:pb-12 max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex-1">
@@ -320,7 +320,7 @@ function NewEntryContent() {
 
             <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40"
               style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
-              <div className="w-full max-w-[430px] sm:max-w-[430px] md:max-w-[680px] mx-auto">
+              <div className="w-full max-w-[430px] sm:max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto">
                 <Button
                   variant="primary"
                   size="lg"
@@ -369,7 +369,7 @@ function NewEntryContent() {
 
             <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40"
               style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
-              <div className="flex gap-3 w-full max-w-[430px] sm:max-w-[430px] md:max-w-[680px] mx-auto">
+              <div className="flex gap-3 w-full max-w-[430px] sm:max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto">
                 <Button
                   variant="outline"
                   size="lg"
@@ -431,7 +431,7 @@ function NewEntryContent() {
 
             <div className="fixed bottom-0 left-0 right-0 p-4 bg-paper border-t border-rule md:static md:border-0 md:p-0 md:mt-6 z-40"
               style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
-              <div className="flex gap-3 w-full max-w-[430px] sm:max-w-[430px] md:max-w-[680px] mx-auto">
+              <div className="flex gap-3 w-full max-w-[430px] sm:max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto">
                 <Button
                   variant="outline"
                   size="lg"
