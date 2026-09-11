@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { Shell } from '@/components/design/Shell';
+import { Loading } from '@/components/design/Loading';
 import { Segmented } from '@/components/design/Segmented';
 import { SelectRow } from '@/components/design/SelectRow';
 import { Button } from '@/components/design/Button';
@@ -73,7 +74,7 @@ function ToggleRow({
 export default function YouPage() {
   const { t, language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
-  const { user, loginWithGoogle, logout } = useAuth();
+  const { user, loading: authLoading, loginWithGoogle, logout } = useAuth();
   const { restartOnboarding } = useOnboarding();
   const storage = useStorage();
   const { addToast } = useToast();
@@ -191,6 +192,14 @@ export default function YouPage() {
   };
 
   const name = user?.displayName || '';
+
+  if (!loaded || authLoading) {
+    return (
+      <Shell>
+        <Loading />
+      </Shell>
+    );
+  }
 
   return (
     <Shell>

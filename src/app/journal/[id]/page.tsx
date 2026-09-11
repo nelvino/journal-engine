@@ -6,6 +6,7 @@ import { ChevronLeft, Pencil, X, Check, Trash2, MoreHorizontal } from 'lucide-re
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { Shell } from '@/components/design/Shell';
+import { Loading } from '@/components/design/Loading';
 import { Button } from '@/components/design/Button';
 import { RuledField } from '@/components/design/RuledField';
 import { ConfirmDialog } from '@/components/design/ConfirmDialog';
@@ -107,7 +108,11 @@ export default function ReaderPage() {
   const questions = entry?.content?.questions ?? prompts.map((p) => p.label);
 
   if (entries === null) {
-    return <div className="min-h-screen bg-paper" />;
+    return (
+      <Shell>
+        <Loading />
+      </Shell>
+    );
   }
 
   if (!entry) {

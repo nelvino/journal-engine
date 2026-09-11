@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Plus, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Shell } from '@/components/design/Shell';
+import { Loading } from '@/components/design/Loading';
 import { SectionRule } from '@/components/design/SectionRule';
 import { LedgerRow } from '@/components/design/LedgerRow';
 import { useStorage } from '@/lib/useStorage';
@@ -44,6 +45,7 @@ export default function PagesPage() {
   const [styleFilter, setStyleFilter] = useState<string>(ALL_STYLES);
   const [showAllStyles, setShowAllStyles] = useState(false);
   const [hidePreviews, setHidePreviews] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -52,6 +54,7 @@ export default function PagesPage() {
     ]).then(([loadedEntries, loadedSettings]) => {
       setEntries(loadedEntries || []);
       setHidePreviews(loadedSettings?.hidePreviews ?? false);
+      setLoaded(true);
     });
   }, [storage]);
 
@@ -106,6 +109,14 @@ export default function PagesPage() {
     const remaining = sortedTypes.length - topTypes.length;
     return { topTypes, visibleTypes, remaining };
   }, [entries, t.entryTypes, showAllStyles]);
+
+  if (!loaded) {
+    return (
+      <Shell>
+        <Loading />
+      </Shell>
+    );
+  }
 
   return (
     <Shell>

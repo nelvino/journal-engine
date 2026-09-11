@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen, Calendar, LogIn, User } from 'lucide-react';
+import { Home, BookOpen, Calendar, LogIn, Loader2, User } from 'lucide-react';
 import { cn, toLocalISODate } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
@@ -68,7 +68,7 @@ function NavLink({ item, layout }: { item: NavItem; layout: 'bottom' | 'rail' })
 
 export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const storage = useStorage();
   const { addToast } = useToast();
 
@@ -150,10 +150,12 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     <Link
       href="/you"
       className="fixed top-6 right-4 md:top-6 md:right-6 z-50 w-11 h-11 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-      aria-label={user ? t.settings.account : t.settings.signIn}
-      title={user ? (user.email ?? t.settings.account) : t.settings.signIn}
+      aria-label={loading ? 'Loading' : user ? t.settings.account : t.settings.signIn}
+      title={loading ? 'Loading' : user ? (user.email ?? t.settings.account) : t.settings.signIn}
     >
-      {user?.photoURL ? (
+      {loading ? (
+        <Loader2 className="w-5 h-5 text-ink-caption animate-spin" strokeWidth={1.5} aria-hidden="true" />
+      ) : user?.photoURL ? (
         <img
           src={user.photoURL}
           alt=""

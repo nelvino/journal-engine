@@ -365,6 +365,7 @@ export interface Translations {
     startAnywhere: string;
     whyThisWorks: string;
     evidence: string;
+    goalReached: string;
     leaveDraft: string;
     leaveTitle: string;
     leave: string;
@@ -909,6 +910,7 @@ export const translations: Record<Language, Translations> = {
       leaveTitle: 'Leave this entry?',
       leave: 'Leave',
       defaultSession: 'Default session',
+      goalReached: 'Well done — you have reached your daily time goal',
       bestUsedFor: 'Best used for:',
       yourEntry: 'Your Entry',
       wordCount: '{count} words',
@@ -1779,6 +1781,7 @@ export const translations: Record<Language, Translations> = {
       leaveTitle: '¿Salir de esta entrada?',
       leave: 'Salir',
       defaultSession: 'Sesión predeterminada',
+      goalReached: 'Bien hecho — has alcanzado tu objetivo de tiempo diario',
       bestUsedFor: 'Mejor para:',
       yourEntry: 'Tu Entrada',
       wordCount: '{count} palabras',

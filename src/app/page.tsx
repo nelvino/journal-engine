@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Shell } from '@/components/design/Shell';
+import { Loading } from '@/components/design/Loading';
 import { SectionRule } from '@/components/design/SectionRule';
 import { LedgerRow } from '@/components/design/LedgerRow';
 import { WeekStrip } from '@/components/design/WeekStrip';
@@ -27,6 +28,7 @@ export default function TodayPage() {
   const [now, setNow] = useState<Date | null>(null);
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [hidePreviews, setHidePreviews] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setNow(new Date());
@@ -36,6 +38,7 @@ export default function TodayPage() {
     ]).then(([data, settings]) => {
       setEntries(data || []);
       setHidePreviews(settings?.hidePreviews ?? false);
+      setLoaded(true);
     });
   }, [storage]);
 
@@ -79,8 +82,12 @@ export default function TodayPage() {
     });
   }, [now, entries]);
 
-  if (!now || !stats) {
-    return <div className="min-h-screen bg-paper" />;
+  if (!loaded || !now || !stats) {
+    return (
+      <Shell>
+        <Loading />
+      </Shell>
+    );
   }
 
   return (

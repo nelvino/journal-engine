@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Clock } from 'lucide-react';
 import { cn, toLocalISODate } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
@@ -82,6 +82,8 @@ function NewEntryContent() {
   const [showAll, setShowAll] = useState(false);
   const [infoType, setInfoType] = useState<EntryType | null>(null);
   const [sessionStart] = useState(new Date());
+  const [secondsLeft, setSecondsLeft] = useState(Number(session) * 60);
+  const [goalMet, setGoalMet] = useState(false);
 
   const allTypes = useMemo(() => Object.keys(t.entryTypes) as EntryType[], [t.entryTypes]);
   const sortedAllTypes = useMemo(() => {
@@ -104,6 +106,19 @@ function NewEntryContent() {
       if (next) setEntryType(next);
     }
   }, [todayTypes, entryType, sortedAllTypes]);
+
+  useEffect(() => {
+    const total = Number(session) * 60;
+    setSecondsLeft(total);
+    setGoalMet(false);
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - sessionStart.getTime()) / 1000);
+      const remaining = Math.max(0, total - elapsed);
+      setSecondsLeft(remaining);
+      if (remaining <= 0) setGoalMet(true);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [session, sessionStart]);
 
   const filteredTypes = useMemo(() => {
     let list = showAll ? sortedAllTypes : sortedAllTypes.slice(0, 4);
@@ -235,9 +250,23 @@ function NewEntryContent() {
             <h1 className="font-serif text-[30px] leading-[34px] text-ink mb-2">
               {t.newEntry.title}
             </h1>
-            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4 mb-3">
-              {t.newEntry.stepOf.replace('{step}', String(step))} · {t.newEntry.defaultSession} {session} min
-            </p>
+            <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mb-3">
+              <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4">
+                {t.newEntry.stepOf.replace('{step}', String(step))} · {t.newEntry.defaultSession} {session} min
+              </p>
+              {goalMet ? (
+                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-accent leading-4">
+                  {t.newEntry.goalReached}
+                </p>
+              ) : step >= 2 ? (
+                <div className="flex items-center gap-1 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4">
+                  <Clock className="w-3 h-3" strokeWidth={1.5} />
+                  <span>
+                    {String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:{String(secondsLeft % 60).padStart(2, '0')}
+                  </span>
+                </div>
+              ) : null}
+            </div>
             <div className="flex gap-1.5">
               {progress.map((filled, i) => (
                 <div
