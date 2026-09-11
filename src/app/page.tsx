@@ -9,7 +9,7 @@ import { WeekStrip } from '@/components/design/WeekStrip';
 import { HomeHero } from '@/components/design/HomeHero';
 import { useLanguage } from '@/context/LanguageContext';
 import { useStorage } from '@/lib/useStorage';
-import { localDateFromISO, toLocalISODate } from '@/lib/utils';
+import { localDateFromISO, toLocalISODate, getEntryDateISO } from '@/lib/utils';
 import { homeHero } from '@/lib/homeHero';
 import type { JournalEntry } from '@/types';
 
@@ -57,7 +57,7 @@ export default function TodayPage() {
       const d = new Date(weekStart);
       d.setDate(weekStart.getDate() + i);
       const iso = toLocalISODate(d);
-      const hasEntry = entries.some((e) => e.date === iso);
+      const hasEntry = entries.some((e) => getEntryDateISO(e) === iso);
       const isToday = i === dayIndex;
       const state: 'today' | 'written' | 'empty' = isToday
         ? 'today'
@@ -91,7 +91,8 @@ export default function TodayPage() {
           </p>
         ) : (
           recent.map((entry) => {
-            const d = localDateFromISO(entry.date);
+            const dateISO = getEntryDateISO(entry) ?? toLocalISODate(new Date());
+            const d = localDateFromISO(dateISO);
             const day = String(d.getDate()).padStart(2, '0');
             const month = d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
             const title = hidePreviews

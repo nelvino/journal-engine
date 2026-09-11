@@ -26,3 +26,10 @@ export function toDate(value: unknown): Date | undefined {
   if (typeof asAny.seconds === 'number') return new Date(asAny.seconds * 1000 + (asAny.nanoseconds ?? 0) / 1_000_000);
   return undefined;
 }
+
+export function getEntryDateISO(e: { date?: unknown; createdAt?: unknown }): string | undefined {
+  if (typeof e.date === 'string' && e.date) return e.date;
+  const d = toDate(e.date) ?? toDate(e.createdAt);
+  if (!d) return undefined;
+  return toLocalISODate(d);
+}

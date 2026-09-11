@@ -1,4 +1,4 @@
-import { toLocalISODate, toDate } from '@/lib/utils';
+import { toLocalISODate, toDate, getEntryDateISO } from '@/lib/utils';
 import type { JournalEntry } from '@/types';
 
 export type HomeHeroState =
@@ -45,14 +45,14 @@ export function homeHero(
   const todayISO = toLocalISODate(now);
 
   const sorted = [...entries].sort((a, b) => {
-    const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-    const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    const aTime = toDate(a.createdAt)?.getTime() ?? 0;
+    const bTime = toDate(b.createdAt)?.getTime() ?? 0;
     return bTime - aTime;
   });
 
   const lastEntry = sorted[0];
-  const todayEntry = entries.find((e) => e.date === todayISO);
-  const uniqueDates = new Set(entries.map((e) => e.date).filter(Boolean));
+  const todayEntry = entries.find((e) => getEntryDateISO(e) === todayISO);
+  const uniqueDates = new Set(entries.map((e) => getEntryDateISO(e)).filter(Boolean));
   const dayCount = uniqueDates.size;
 
   const lastEntryDate = toDate(lastEntry?.createdAt) ?? toDate(lastEntry?.date);
