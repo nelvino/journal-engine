@@ -214,91 +214,6 @@ export default function YouPage() {
 
       <div className="space-y-10">
         <section>
-          <SectionHeading>{t.settings.readingAndWriting}</SectionHeading>
-          <div className="mb-6">
-            <h3 className="font-sans text-[11px] leading-4 uppercase tracking-[0.13em] text-ink-caption mb-3">
-              {t.settings.language}
-            </h3>
-            <Segmented
-              value={language}
-              options={[
-                { value: 'en', label: t.settings.english },
-                { value: 'es', label: t.settings.spanish },
-              ]}
-              onChange={(v) => setLanguage(v as 'en' | 'es')}
-            />
-          </div>
-        </section>
-
-        <section>
-          <SectionHeading>{t.settings.appearance}</SectionHeading>
-          <SelectRow
-            label={t.settings.theme}
-            value={theme}
-            onChange={(v) => setTheme(v as 'light' | 'dark' | 'system')}
-            options={[
-              { value: 'light', label: t.settings.light },
-              { value: 'dark', label: t.settings.dark },
-              { value: 'system', label: t.settings.system },
-            ]}
-          />
-        </section>
-
-        <section>
-          <SectionHeading>{t.settings.defaultSession}</SectionHeading>
-          <SelectRow
-            label={t.settings.defaultSessionDuration}
-            value={session}
-            onChange={setSession}
-            options={[
-              { value: '5', label: `5 ${t.settings.minutes}` },
-              { value: '10', label: `10 ${t.settings.minutes}` },
-              { value: '15', label: `15 ${t.settings.minutes}` },
-              { value: '20', label: `20 ${t.settings.minutes}` },
-              { value: '30', label: `30 ${t.settings.minutes}` },
-            ]}
-          />
-        </section>
-
-        <section>
-          <SectionHeading>{t.settings.reminders}</SectionHeading>
-          <ToggleRow
-            label={t.settings.eveningReminder}
-            caption={t.settings.everyDayAt}
-            checked={eveningReminder}
-            onChange={setEveningReminder}
-          />
-          <ToggleRow
-            label={t.settings.morningPages}
-            caption={t.settings.morningPagesDescription}
-            checked={morningPages}
-            onChange={setMorningPages}
-          />
-          <ToggleRow
-            label={t.settings.monthlyReread}
-            caption={t.settings.lastDayOfMonth}
-            checked={monthlyReread}
-            onChange={setMonthlyReread}
-          />
-        </section>
-
-        <section>
-          <SectionHeading>{t.settings.privacy}</SectionHeading>
-          <ToggleRow
-            label={t.settings.hideEntryTextInPreviews}
-            caption={t.settings.titlesOnlyOnPagesList}
-            checked={hidePreviews}
-            onChange={setHidePreviews}
-          />
-          <ToggleRow
-            label={t.settings.editOldEntries}
-            caption={t.settings.editOldEntriesDescription}
-            checked={editOldEntries}
-            onChange={setEditOldEntries}
-          />
-        </section>
-
-        <section>
           <SectionHeading>{t.settings.account}</SectionHeading>
           <div className="space-y-3">
             {user ? (
@@ -334,7 +249,88 @@ export default function YouPage() {
         </section>
 
         <section>
-          <SectionHeading>{t.settings.yourWriting}</SectionHeading>
+          <SectionHeading>{t.settings.journal}</SectionHeading>
+          <div className="mb-6">
+            <h3 className="font-sans text-[11px] leading-4 uppercase tracking-[0.13em] text-ink-caption mb-3">
+              {t.settings.language}
+            </h3>
+            <Segmented
+              value={language}
+              options={[
+                { value: 'en', label: t.settings.english },
+                { value: 'es', label: t.settings.spanish },
+              ]}
+              onChange={(v) => setLanguage(v as 'en' | 'es')}
+            />
+          </div>
+          <SelectRow
+            label={t.settings.defaultSessionDuration}
+            value={session}
+            onChange={setSession}
+            options={[
+              { value: '5', label: `5 ${t.settings.minutes}` },
+              { value: '10', label: `10 ${t.settings.minutes}` },
+              { value: '15', label: `15 ${t.settings.minutes}` },
+              { value: '20', label: `20 ${t.settings.minutes}` },
+              { value: '30', label: `30 ${t.settings.minutes}` },
+            ]}
+          />
+          <ToggleRow
+            label={t.settings.editOldEntries}
+            caption={t.settings.editOldEntriesDescription}
+            checked={editOldEntries}
+            onChange={setEditOldEntries}
+          />
+        </section>
+
+        <section>
+          <SectionHeading>{t.settings.privacy}</SectionHeading>
+          <ToggleRow
+            label={t.settings.hideEntryTextInPreviews}
+            caption={t.settings.titlesOnlyOnPagesList}
+            checked={hidePreviews}
+            onChange={setHidePreviews}
+          />
+        </section>
+
+        <section>
+          <SectionHeading>{t.settings.reminders}</SectionHeading>
+          <ToggleRow
+            label={t.settings.eveningReminder}
+            caption={t.settings.everyDayAt}
+            checked={eveningReminder}
+            onChange={setEveningReminder}
+          />
+          <ToggleRow
+            label={t.settings.morningPages}
+            caption={t.settings.morningPagesDescription}
+            checked={morningPages}
+            onChange={setMorningPages}
+          />
+          <ToggleRow
+            label={t.settings.monthlyReread}
+            caption={t.settings.lastDayOfMonth}
+            checked={monthlyReread}
+            onChange={setMonthlyReread}
+          />
+        </section>
+
+        <section>
+          <SectionHeading>{t.settings.appearance}</SectionHeading>
+          <SelectRow
+            label={t.settings.theme}
+            value={theme}
+            onChange={(v) => setTheme(v as 'light' | 'dark' | 'system')}
+            options={[
+              { value: 'light', label: t.settings.light },
+              { value: 'dark', label: t.settings.dark },
+              { value: 'system', label: t.settings.system },
+            ]}
+          />
+        </section>
+
+        <section>
+          <SectionHeading>{t.settings.data}</SectionHeading>
           <div className="space-y-3">
             <Button
               variant="outline"

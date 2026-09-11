@@ -28,25 +28,40 @@ function NavLink({ item, layout }: { item: NavItem; layout: 'bottom' | 'rail' })
   const Icon = item.icon;
   const active = isActive(item.href, pathname);
   const rail = layout === 'rail';
+  const bottom = layout === 'bottom';
 
   return (
     <Link
       href={item.href}
+      aria-label={item.label}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+        'group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent',
         rail
-          ? 'flex-col justify-center py-4 px-2 h-20 w-20 border-l-2'
-          : 'flex-col justify-start h-16 pb-5 pt-2 flex-1 border-t-2',
-        active
-          ? 'border-accent text-accent'
-          : 'border-transparent text-ink-caption hover:text-ink'
+          ? 'flex flex-col items-center justify-center py-4 px-2 h-20 w-20 border-l-2'
+          : 'relative flex items-center justify-center w-11 h-11 rounded-full transition-colors duration-[var(--dur)]',
+        rail && (active ? 'border-accent text-accent' : 'border-transparent text-ink-caption hover:text-ink')
       )}
     >
-      <Icon className="w-[21px] h-[21px] mb-0.5" strokeWidth={1.5} />
-      <span className="font-sans text-[11px] font-medium leading-4 tracking-[0.02em] truncate max-w-full px-1">
-        {item.label}
-      </span>
+      <Icon
+        className={cn(
+          'w-[21px] h-[21px]',
+          rail && 'mb-0.5',
+          bottom && (active ? 'text-paper' : 'text-ink-caption group-hover:text-ink')
+        )}
+        strokeWidth={1.5}
+      />
+      {rail && (
+        <span className="font-sans text-[11px] font-medium leading-4 tracking-[0.02em] truncate max-w-full px-1">
+          {item.label}
+        </span>
+      )}
+      {bottom && (
+        <span className="sr-only">{item.label}</span>
+      )}
+      {bottom && active && (
+        <span className="absolute inset-0 -z-10 rounded-full bg-ink" aria-hidden="true" />
+      )}
     </Link>
   );
 }
@@ -114,7 +129,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     {/* Main content */}
     <main className="flex-1 w-full md:pl-20">
-      <div className="min-h-screen w-full px-[26px] sm:px-[34px] md:px-8 lg:px-0 pt-6 pb-[calc(7rem+env(safe-area-inset-bottom))] md:pb-6">
+      <div className="min-h-screen w-full px-[26px] sm:px-[34px] md:px-8 lg:px-0 pt-6 pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-6">
         <div className="w-full md:max-w-[720px] lg:max-w-[900px] md:mx-auto">
           {children}
         </div>
@@ -123,7 +138,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     {/* Bottom tab bar for mobile */}
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 bg-paper border-t border-rule flex z-50 pb-[env(safe-area-inset-bottom)]"
+      className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 bg-paper border border-rule rounded-full px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
       aria-label="Primary"
     >
       {nav.map((item) => (

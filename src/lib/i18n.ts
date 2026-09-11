@@ -265,6 +265,7 @@ export interface Translations {
     anonymous: string;
     writingSince: string;
     readingAndWriting: string;
+    journal: string;
     appearance: string;
     defaultSession: string;
     reminders: string;
@@ -792,6 +793,7 @@ export const translations: Record<Language, Translations> = {
       anonymous: 'You',
       writingSince: 'writing since {date}',
       readingAndWriting: 'Reading and Writing',
+      journal: 'Journal',
       appearance: 'Appearance',
       defaultSession: 'Default session',
       reminders: 'Reminders',
@@ -1661,6 +1663,7 @@ export const translations: Record<Language, Translations> = {
       anonymous: 'Tú',
       writingSince: 'escribiendo desde {date}',
       readingAndWriting: 'Lectura y Escritura',
+      journal: 'Diario',
       appearance: 'Apariencia',
       defaultSession: 'Sesión predeterminada',
       reminders: 'Recordatorios',
