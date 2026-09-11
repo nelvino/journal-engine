@@ -32,6 +32,7 @@ interface UserSettings {
   morningPages: boolean;
   monthlyReread: boolean;
   hidePreviews: boolean;
+  editOldEntries: boolean;
   session: string;
 }
 
@@ -84,6 +85,7 @@ export default function YouPage() {
   const [morningPages, setMorningPages] = useState(false);
   const [monthlyReread, setMonthlyReread] = useState(true);
   const [hidePreviews, setHidePreviews] = useState(false);
+  const [editOldEntries, setEditOldEntries] = useState(false);
   const [session, setSession] = useState('10');
 
   useEffect(() => {
@@ -97,6 +99,7 @@ export default function YouPage() {
         setMorningPages(loadedSettings.morningPages ?? false);
         setMonthlyReread(loadedSettings.monthlyReread ?? true);
         setHidePreviews(loadedSettings.hidePreviews ?? false);
+        setEditOldEntries(loadedSettings.editOldEntries ?? false);
         setSession(loadedSettings.session ?? '10');
       }
       setLoaded(true);
@@ -110,10 +113,11 @@ export default function YouPage() {
       morningPages,
       monthlyReread,
       hidePreviews,
+      editOldEntries,
       session,
     };
     storage.set('user_settings', settings);
-  }, [eveningReminder, morningPages, monthlyReread, hidePreviews, session, loaded, storage]);
+  }, [eveningReminder, morningPages, monthlyReread, hidePreviews, editOldEntries, session, loaded, storage]);
 
   const writingSince = useMemo(() => {
     if (entries.length === 0) return '';
@@ -285,6 +289,12 @@ export default function YouPage() {
             caption={t.settings.titlesOnlyOnPagesList}
             checked={hidePreviews}
             onChange={setHidePreviews}
+          />
+          <ToggleRow
+            label={t.settings.editOldEntries}
+            caption={t.settings.editOldEntriesDescription}
+            checked={editOldEntries}
+            onChange={setEditOldEntries}
           />
         </section>
 

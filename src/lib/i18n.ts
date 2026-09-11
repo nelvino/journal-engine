@@ -252,6 +252,8 @@ export interface Translations {
     };
     hideEntryTextInPreviews: string;
     titlesOnlyOnPagesList: string;
+    editOldEntries: string;
+    editOldEntriesDescription: string;
     data: string;
     exportData: string;
     clearAllData: string;
@@ -325,6 +327,7 @@ export interface Translations {
     cancel: string;
     back: string;
     save: string;
+    edit: string;
     saving: string;
     close: string;
     hint: string;
@@ -775,6 +778,8 @@ export const translations: Record<Language, Translations> = {
       },
       hideEntryTextInPreviews: 'Hide entry text in previews',
       titlesOnlyOnPagesList: 'Titles only on the Pages list',
+      editOldEntries: 'Edit old entries',
+      editOldEntriesDescription: 'Allow editing pages after they are saved',
       data: 'Data',
       exportData: 'Export every page',
       clearAllData: 'Delete everything',
@@ -860,6 +865,7 @@ export const translations: Record<Language, Translations> = {
       cancel: 'Cancel',
       back: 'Back',
       save: 'Save',
+      edit: 'Edit',
       saving: 'Saving...',
       close: 'Close',
       hint: 'Hint',
@@ -1640,6 +1646,8 @@ export const translations: Record<Language, Translations> = {
       },
       hideEntryTextInPreviews: 'Ocultar texto de entradas en vistas previas',
       titlesOnlyOnPagesList: 'Solo títulos en la lista de Páginas',
+      editOldEntries: 'Editar entradas antiguas',
+      editOldEntriesDescription: 'Permitir editar páginas después de guardarlas',
       data: 'Datos',
       exportData: 'Exportar todas las páginas',
       clearAllData: 'Borrar todo',
@@ -1725,6 +1733,7 @@ export const translations: Record<Language, Translations> = {
       cancel: 'Cancelar',
       back: 'Atrás',
       save: 'Guardar',
+      edit: 'Editar',
       saving: 'Guardando...',
       close: 'Cerrar',
       hint: 'Consejo',

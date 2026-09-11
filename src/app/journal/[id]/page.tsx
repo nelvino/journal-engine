@@ -2,13 +2,14 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ChevronLeft, Trash2 } from 'lucide-react';
+import { ChevronLeft, Pencil, X, Check, Trash2 } from 'lucide-react';
 import { useStorage } from '@/lib/useStorage';
 import { useLanguage } from '@/context/LanguageContext';
 import { Shell } from '@/components/design/Shell';
 import { Button } from '@/components/design/Button';
+import { RuledField } from '@/components/design/RuledField';
 import { ConfirmDialog } from '@/components/design/ConfirmDialog';
-import { localDateFromISO } from '@/lib/utils';
+import { localDateFromISO, toLocalISODate, getEntryDateISO } from '@/lib/utils';
 import { getStylePrompts } from '@/lib/prompts';
 import type { JournalEntry } from '@/types';
 
@@ -18,11 +19,18 @@ export default function ReaderPage() {
   const router = useRouter();
   const storage = useStorage();
   const [entries, setEntries] = useState<JournalEntry[] | null>(null);
+  const [editOldEntries, setEditOldEntries] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState('');
   const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
-    storage.get<JournalEntry[]>('journal_entries').then((loaded) => {
+    Promise.all([
+      storage.get<JournalEntry[]>('journal_entries'),
+      storage.get<any>('user_settings'),
+    ]).then(([loaded, settings]) => {
       setEntries(loaded || []);
+      setEditOldEntries(settings?.editOldEntries ?? false);
     });
   }, [storage]);
 
@@ -35,6 +43,35 @@ export default function ReaderPage() {
     await storage.set('journal_entries', updated);
     setShowDelete(false);
     router.push('/pages');
+  };
+
+  const handleStartEdit = () => {
+    setEditedText(entry?.content?.text || '');
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedText('');
+  };
+
+  const handleSaveEdit = async () => {
+    if (!entry) return;
+    const newWordCount = editedText.trim().split(/\s+/).filter(Boolean).length;
+    const updated = (entries || []).map((e) => {
+      if (String(e.id) !== id) return e;
+      const base = { ...e };
+      base.content = { ...base.content, text: editedText };
+      base.sessionData = base.sessionData
+        ? { ...base.sessionData, wordCount: newWordCount, endTime: new Date() }
+        : { duration: 0, startTime: new Date(), endTime: new Date(), wordCount: newWordCount };
+      base.updatedAt = new Date();
+      return base;
+    });
+    await storage.set('journal_entries', updated);
+    setEntries(updated);
+    setIsEditing(false);
+    setEditedText('');
   };
 
   const prompts = useMemo(
@@ -54,7 +91,7 @@ export default function ReaderPage() {
   if (!entry) {
     return (
       <Shell>
-        <div className="pt-6">
+        <div>
           <p className="font-serif text-[17px] leading-[27px] text-ink-secondary mb-6">
             {t.common.search} not found.
           </p>
@@ -71,7 +108,7 @@ export default function ReaderPage() {
     entry.content?.text?.trim().split(/\s+/).filter(Boolean).length ??
     0;
 
-  const date = localDateFromISO(entry.date);
+  const date = localDateFromISO(getEntryDateISO(entry) ?? (typeof entry.date === 'string' ? entry.date : toLocalISODate(new Date())));
   const day = date.getDate().toString().padStart(2, '0');
   const month = date.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
 
@@ -88,7 +125,7 @@ export default function ReaderPage() {
         onConfirm={handleDelete}
       />
 
-      <div className="max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto pt-6 pb-12">
+      <div className="max-w-[430px] md:max-w-[720px] lg:max-w-[900px] mx-auto pb-12">
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => router.push('/pages')}
@@ -97,14 +134,50 @@ export default function ReaderPage() {
             <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
             {t.common.back}
           </button>
-          <button
-            onClick={() => setShowDelete(true)}
-            className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-danger transition-colors duration-[var(--dur)]"
-            aria-label={t.journal.list.deleteEntry}
-            title={t.journal.list.deleteEntry}
-          >
-            <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-          </button>
+          {isEditing ? (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleCancelEdit}
+                className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-ink transition-colors duration-[var(--dur)]"
+                aria-label={t.common.cancel}
+                title={t.common.cancel}
+              >
+                <X className="w-4 h-4" strokeWidth={1.5} />
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveEdit}
+                className="h-11 w-11 flex items-center justify-center text-accent hover:text-ink transition-colors duration-[var(--dur)]"
+                aria-label={t.common.save}
+                title={t.common.save}
+              >
+                <Check className="w-4 h-4" strokeWidth={1.5} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              {editOldEntries && (
+                <button
+                  type="button"
+                  onClick={handleStartEdit}
+                  className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-accent transition-colors duration-[var(--dur)]"
+                  aria-label={t.common.edit}
+                  title={t.common.edit}
+                >
+                  <Pencil className="w-4 h-4" strokeWidth={1.5} />
+                </button>
+              )}
+              <button
+                onClick={() => setShowDelete(true)}
+                className="h-11 w-11 flex items-center justify-center text-ink-caption hover:text-danger transition-colors duration-[var(--dur)]"
+                aria-label={t.journal.list.deleteEntry}
+                title={t.journal.list.deleteEntry}
+              >
+                <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-[54px_1fr] items-start mb-8">
@@ -125,20 +198,39 @@ export default function ReaderPage() {
           </div>
         </div>
 
-        <div className="space-y-8">
-          {parts.map((text, i) => (
-            <div key={i}>
-              {questions[i] ? (
-                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4 mb-2">
-                  {questions[i]}
-                </p>
-              ) : null}
-              <p className="font-serif text-[17px] leading-[27px] text-ink-secondary whitespace-pre-wrap">
-                {text}
-              </p>
+        {isEditing ? (
+          <div className="space-y-6">
+            <RuledField
+              value={editedText}
+              onChange={(e) => setEditedText(e.target.value)}
+              minHeight={240}
+              placeholder={t.newEntry.startAnywhere}
+            />
+            <div className="flex items-center justify-between border-t border-rule pt-4">
+              <span className="font-sans text-[11px] leading-4 text-ink-caption">
+                {editedText.trim().split(/\s+/).filter(Boolean).length} {t.common.words}
+              </span>
+              <span className="font-sans text-[11px] leading-4 text-ink-caption">
+                {t.newEntry.autosaving}
+              </span>
             </div>
-          ))}
-        </div>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {parts.map((text, i) => (
+              <div key={i}>
+                {questions[i] ? (
+                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4 mb-2">
+                    {questions[i]}
+                  </p>
+                ) : null}
+                <p className="font-serif text-[17px] leading-[27px] text-ink-secondary whitespace-pre-wrap">
+                  {text}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
     </Shell>

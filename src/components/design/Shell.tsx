@@ -134,7 +134,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     {/* Account indicator */}
     <Link
       href="/you"
-      className="fixed top-4 right-4 md:top-6 md:right-6 z-50 w-11 h-11 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      className="fixed top-6 right-4 md:top-6 md:right-6 z-50 w-11 h-11 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       aria-label={user ? t.settings.account : t.settings.signIn}
       title={user ? (user.email ?? t.settings.account) : t.settings.signIn}
     >
