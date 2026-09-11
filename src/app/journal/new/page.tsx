@@ -82,7 +82,7 @@ function NewEntryContent() {
   const [showAll, setShowAll] = useState(false);
   const [infoType, setInfoType] = useState<EntryType | null>(null);
   const [sessionStart] = useState(new Date());
-  const [secondsLeft, setSecondsLeft] = useState(Number(session) * 60);
+  const [elapsed, setElapsed] = useState(0);
   const [goalMet, setGoalMet] = useState(false);
 
   const allTypes = useMemo(() => Object.keys(t.entryTypes) as EntryType[], [t.entryTypes]);
@@ -108,14 +108,13 @@ function NewEntryContent() {
   }, [todayTypes, entryType, sortedAllTypes]);
 
   useEffect(() => {
-    const total = Number(session) * 60;
-    setSecondsLeft(total);
+    const target = Number(session) * 60;
+    setElapsed(0);
     setGoalMet(false);
     const interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - sessionStart.getTime()) / 1000);
-      const remaining = Math.max(0, total - elapsed);
-      setSecondsLeft(remaining);
-      if (remaining <= 0) setGoalMet(true);
+      const seconds = Math.floor((Date.now() - sessionStart.getTime()) / 1000);
+      setElapsed(seconds);
+      if (seconds >= target) setGoalMet(true);
     }, 1000);
     return () => clearInterval(interval);
   }, [session, sessionStart]);
@@ -262,7 +261,7 @@ function NewEntryContent() {
                 <div className="flex items-center gap-1 font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4">
                   <Clock className="w-3 h-3" strokeWidth={1.5} />
                   <span>
-                    {String(Math.floor(secondsLeft / 60)).padStart(2, '0')}:{String(secondsLeft % 60).padStart(2, '0')}
+                    {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
                   </span>
                 </div>
               ) : null}
