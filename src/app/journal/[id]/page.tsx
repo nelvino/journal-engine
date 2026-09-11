@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ChevronLeft, Pencil, X, Check, Trash2, MoreHorizontal } from 'lucide-react';
 import { useStorage } from '@/lib/useStorage';
@@ -21,9 +21,10 @@ export default function ReaderPage() {
   const [entries, setEntries] = useState<JournalEntry[] | null>(null);
   const [editOldEntries, setEditOldEntries] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedText, setEditedText] = useState('');
+  const [draftParts, setDraftParts] = useState<string[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     Promise.all([
@@ -34,6 +35,17 @@ export default function ReaderPage() {
       setEditOldEntries(settings?.editOldEntries ?? false);
     });
   }, [storage]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, [menuOpen]);
 
   const entry = useMemo(() => {
     return (entries || []).find((e) => String(e.id) === id);
@@ -47,22 +59,31 @@ export default function ReaderPage() {
   };
 
   const handleStartEdit = () => {
-    setEditedText(entry?.content?.text || '');
+    setDraftParts(parts);
     setIsEditing(true);
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setEditedText('');
+    setDraftParts([]);
+  };
+
+  const handleChangePart = (index: number, value: string) => {
+    setDraftParts((prev) => {
+      const next = [...prev];
+      next[index] = value;
+      return next;
+    });
   };
 
   const handleSaveEdit = async () => {
     if (!entry) return;
-    const newWordCount = editedText.trim().split(/\s+/).filter(Boolean).length;
+    const text = draftParts.join('\n\n');
+    const newWordCount = text.trim().split(/\s+/).filter(Boolean).length;
     const updated = (entries || []).map((e) => {
       if (String(e.id) !== id) return e;
       const base = { ...e };
-      base.content = { ...base.content, text: editedText };
+      base.content = { ...base.content, text };
       base.sessionData = base.sessionData
         ? { ...base.sessionData, wordCount: newWordCount, endTime: new Date() }
         : { duration: 0, startTime: new Date(), endTime: new Date(), wordCount: newWordCount };
@@ -72,7 +93,7 @@ export default function ReaderPage() {
     await storage.set('journal_entries', updated);
     setEntries(updated);
     setIsEditing(false);
-    setEditedText('');
+    setDraftParts([]);
   };
 
   const prompts = useMemo(
@@ -148,7 +169,7 @@ export default function ReaderPage() {
               </button>
             )}
             {!isEditing && (
-              <div className="relative">
+              <div ref={menuRef} className="relative">
                 <button
                   type="button"
                   onClick={() => setMenuOpen((v) => !v)}
@@ -220,16 +241,25 @@ export default function ReaderPage() {
         </div>
 
         {isEditing ? (
-          <div className="space-y-6">
-            <RuledField
-              value={editedText}
-              onChange={(e) => setEditedText(e.target.value)}
-              minHeight={240}
-              placeholder={t.newEntry.startAnywhere}
-            />
+          <div className="space-y-8">
+            {parts.map((_, i) => (
+              <div key={i}>
+                {questions[i] ? (
+                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-caption leading-4 mb-2">
+                    {questions[i]}
+                  </p>
+                ) : null}
+                <RuledField
+                  value={draftParts[i] ?? parts[i]}
+                  onChange={(e) => handleChangePart(i, e.target.value)}
+                  minHeight={120}
+                  placeholder={t.newEntry.startAnywhere}
+                />
+              </div>
+            ))}
             <div className="flex items-center justify-between border-t border-rule pt-4">
               <span className="font-sans text-[11px] leading-4 text-ink-caption">
-                {editedText.trim().split(/\s+/).filter(Boolean).length} {t.common.words}
+                {draftParts.join(' ').trim().split(/\s+/).filter(Boolean).length} {t.common.words}
               </span>
               <span className="font-sans text-[11px] leading-4 text-ink-caption">
                 {t.newEntry.autosaving}
